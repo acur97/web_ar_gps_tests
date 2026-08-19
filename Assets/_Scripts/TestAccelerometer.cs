@@ -7,7 +7,9 @@ public class TestAccelerometer : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
 
-    private void Start()
+    private bool enabledSensors = false;
+
+    public void OnStart()
     {
         Debug.Log("Start Sensors...");
 
@@ -54,10 +56,14 @@ public class TestAccelerometer : MonoBehaviour
         }
 
         Debug.Log("Finish Sensors.");
+        enabledSensors = true;
     }
 
     private void Update()
     {
+        if (!enabledSensors)
+            return;
+
         //if (Accelerometer.current != null)
         //{
         //    //gameObject.transform.rotation = AttitudeSensor.current.attitude.ReadValue();
