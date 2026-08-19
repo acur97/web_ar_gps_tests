@@ -18,6 +18,12 @@ public class TestAccelerometer : MonoBehaviour
         {
             InputSystem.EnableDevice(Accelerometer.current);
             Debug.Log("Enabled Accelerometer");
+            Debug.Log(Accelerometer.current.device);
+            Debug.Log(Accelerometer.current.description);
+            Debug.Log(Accelerometer.current.device);
+            Debug.Log(Accelerometer.current.deviceId);
+            Debug.Log(Accelerometer.current.displayName);
+            Debug.Log(Accelerometer.current.shortDisplayName);
         }
 
         Debug.Log($"AttitudeSensor - {AttitudeSensor.current}");
@@ -25,6 +31,12 @@ public class TestAccelerometer : MonoBehaviour
         {
             InputSystem.EnableDevice(AttitudeSensor.current);
             Debug.Log("Enabled AttitudeSensor");
+            Debug.Log(AttitudeSensor.current.device);
+            Debug.Log(AttitudeSensor.current.description);
+            Debug.Log(AttitudeSensor.current.device);
+            Debug.Log(AttitudeSensor.current.deviceId);
+            Debug.Log(AttitudeSensor.current.displayName);
+            Debug.Log(AttitudeSensor.current.shortDisplayName);
         }
 
         Debug.Log($"GravitySensor - {GravitySensor.current}");
@@ -32,6 +44,12 @@ public class TestAccelerometer : MonoBehaviour
         {
             InputSystem.EnableDevice(GravitySensor.current);
             Debug.Log("Enabled GravitySensor");
+            Debug.Log(GravitySensor.current.device);
+            Debug.Log(GravitySensor.current.description);
+            Debug.Log(GravitySensor.current.device);
+            Debug.Log(GravitySensor.current.deviceId);
+            Debug.Log(GravitySensor.current.displayName);
+            Debug.Log(GravitySensor.current.shortDisplayName);
         }
 
         Debug.Log($"Gyroscope - {Gyroscope.current}");
@@ -39,6 +57,12 @@ public class TestAccelerometer : MonoBehaviour
         {
             InputSystem.EnableDevice(Gyroscope.current);
             Debug.Log("Enabled Gyroscope");
+            Debug.Log(Gyroscope.current.device);
+            Debug.Log(Gyroscope.current.description);
+            Debug.Log(Gyroscope.current.device);
+            Debug.Log(Gyroscope.current.deviceId);
+            Debug.Log(Gyroscope.current.displayName);
+            Debug.Log(Gyroscope.current.shortDisplayName);
         }
 
         Debug.Log($"LinearAccelerationSensor - {LinearAccelerationSensor.current}");
@@ -46,6 +70,12 @@ public class TestAccelerometer : MonoBehaviour
         {
             InputSystem.EnableDevice(LinearAccelerationSensor.current);
             Debug.Log("Enabled LinearAccelerationSensor");
+            Debug.Log(LinearAccelerationSensor.current.device);
+            Debug.Log(LinearAccelerationSensor.current.description);
+            Debug.Log(LinearAccelerationSensor.current.device);
+            Debug.Log(LinearAccelerationSensor.current.deviceId);
+            Debug.Log(LinearAccelerationSensor.current.displayName);
+            Debug.Log(LinearAccelerationSensor.current.shortDisplayName);
         }
 
         Debug.Log($"MagneticFieldSensor - {MagneticFieldSensor.current}");
@@ -53,6 +83,12 @@ public class TestAccelerometer : MonoBehaviour
         {
             InputSystem.EnableDevice(MagneticFieldSensor.current);
             Debug.Log("Enabled MagneticFieldSensor");
+            Debug.Log(MagneticFieldSensor.current.device);
+            Debug.Log(MagneticFieldSensor.current.description);
+            Debug.Log(MagneticFieldSensor.current.device);
+            Debug.Log(MagneticFieldSensor.current.deviceId);
+            Debug.Log(MagneticFieldSensor.current.displayName);
+            Debug.Log(MagneticFieldSensor.current.shortDisplayName);
         }
 
         Debug.Log("Finish Sensors.");
@@ -78,32 +114,33 @@ public class TestAccelerometer : MonoBehaviour
 
         text.text = "";
 
-        if (Accelerometer.current != null)
+        // en pc sale error en todos
+        if (Accelerometer.current != null) // funciona en los dos, orientacion, vector3
         {
             text.text += $"Accelerometer: {Accelerometer.current.acceleration.ReadValue()} \n";
         }
 
-        if (AttitudeSensor.current != null)
+        if (AttitudeSensor.current != null) // solo funciona en moderno, quaternio?, 
         {
             text.text += $"AttitudeSensor: {AttitudeSensor.current.attitude.ReadValue()} \n";
         }
 
-        if (GravitySensor.current != null)
+        if (GravitySensor.current != null) // funciona en los dos, parece igual que Accelerometer, vector3
         {
             text.text += $"GravitySensor: {GravitySensor.current.gravity.ReadValue()} \n";
         }
 
-        if (Gyroscope.current != null)
+        if (Gyroscope.current != null) // solo funciona en moderno, cantidad de giro, vector3
         {
             text.text += $"Gyroscope: {Gyroscope.current.angularVelocity.ReadValue()} \n";
         }
 
-        if (LinearAccelerationSensor.current != null)
+        if (LinearAccelerationSensor.current != null) // solo funciona en moderno, un suavizado de no se que, parece Gyroscope, vector3
         {
             text.text += $"LinearAccelerationSensor: {LinearAccelerationSensor.current.acceleration.ReadValue()} \n";
         }
 
-        if (MagneticFieldSensor.current != null)
+        if (MagneticFieldSensor.current != null) // error en viejo, en nuevo nada, no muestra en ninguno de los dos
         {
             text.text += $"MagneticFieldSensor: {MagneticFieldSensor.current.magneticField.ReadValue()}";
         }
