@@ -13,82 +13,48 @@ public class TestAccelerometer : MonoBehaviour
     {
         Debug.Log("Start Sensors...");
 
+        Debug.Log($"Supports Accelerometer: {SystemInfo.supportsAccelerometer}");
         Debug.Log($"Accelerometer - {Accelerometer.current}");
         if (Accelerometer.current != null)
         {
             InputSystem.EnableDevice(Accelerometer.current);
-            Debug.Log("Enabled Accelerometer");
-            Debug.Log(Accelerometer.current.device);
-            Debug.Log(Accelerometer.current.description);
-            Debug.Log(Accelerometer.current.device);
-            Debug.Log(Accelerometer.current.deviceId);
-            Debug.Log(Accelerometer.current.displayName);
-            Debug.Log(Accelerometer.current.shortDisplayName);
+            Debug.Log($"Enabled {Accelerometer.current.description}");
         }
 
         Debug.Log($"AttitudeSensor - {AttitudeSensor.current}");
         if (AttitudeSensor.current != null)
         {
             InputSystem.EnableDevice(AttitudeSensor.current);
-            Debug.Log("Enabled AttitudeSensor");
-            Debug.Log(AttitudeSensor.current.device);
-            Debug.Log(AttitudeSensor.current.description);
-            Debug.Log(AttitudeSensor.current.device);
-            Debug.Log(AttitudeSensor.current.deviceId);
-            Debug.Log(AttitudeSensor.current.displayName);
-            Debug.Log(AttitudeSensor.current.shortDisplayName);
+            Debug.Log($"Enabled {AttitudeSensor.current.description}");
         }
 
         Debug.Log($"GravitySensor - {GravitySensor.current}");
         if (GravitySensor.current != null)
         {
             InputSystem.EnableDevice(GravitySensor.current);
-            Debug.Log("Enabled GravitySensor");
-            Debug.Log(GravitySensor.current.device);
-            Debug.Log(GravitySensor.current.description);
-            Debug.Log(GravitySensor.current.device);
-            Debug.Log(GravitySensor.current.deviceId);
-            Debug.Log(GravitySensor.current.displayName);
-            Debug.Log(GravitySensor.current.shortDisplayName);
+            Debug.Log($"Enabled {GravitySensor.current.description}");
         }
 
+        Debug.Log($"Supports Gyroscope: {SystemInfo.supportsGyroscope}");
         Debug.Log($"Gyroscope - {Gyroscope.current}");
         if (Gyroscope.current != null)
         {
             InputSystem.EnableDevice(Gyroscope.current);
-            Debug.Log("Enabled Gyroscope");
-            Debug.Log(Gyroscope.current.device);
-            Debug.Log(Gyroscope.current.description);
-            Debug.Log(Gyroscope.current.device);
-            Debug.Log(Gyroscope.current.deviceId);
-            Debug.Log(Gyroscope.current.displayName);
-            Debug.Log(Gyroscope.current.shortDisplayName);
+            Debug.Log($"Enabled {Gyroscope.current.description}");
         }
 
         Debug.Log($"LinearAccelerationSensor - {LinearAccelerationSensor.current}");
         if (LinearAccelerationSensor.current != null)
         {
             InputSystem.EnableDevice(LinearAccelerationSensor.current);
-            Debug.Log("Enabled LinearAccelerationSensor");
-            Debug.Log(LinearAccelerationSensor.current.device);
-            Debug.Log(LinearAccelerationSensor.current.description);
-            Debug.Log(LinearAccelerationSensor.current.device);
-            Debug.Log(LinearAccelerationSensor.current.deviceId);
-            Debug.Log(LinearAccelerationSensor.current.displayName);
-            Debug.Log(LinearAccelerationSensor.current.shortDisplayName);
+            Debug.Log($"Enabled {LinearAccelerationSensor.current.description}");
         }
 
         Debug.Log($"MagneticFieldSensor - {MagneticFieldSensor.current}");
         if (MagneticFieldSensor.current != null)
         {
             InputSystem.EnableDevice(MagneticFieldSensor.current);
-            Debug.Log("Enabled MagneticFieldSensor");
-            Debug.Log(MagneticFieldSensor.current.device);
-            Debug.Log(MagneticFieldSensor.current.description);
-            Debug.Log(MagneticFieldSensor.current.device);
-            Debug.Log(MagneticFieldSensor.current.deviceId);
-            Debug.Log(MagneticFieldSensor.current.displayName);
-            Debug.Log(MagneticFieldSensor.current.shortDisplayName);
+            Debug.Log($"Enabled {MagneticFieldSensor.current.description}");
         }
 
         Debug.Log("Finish Sensors.");
@@ -115,7 +81,7 @@ public class TestAccelerometer : MonoBehaviour
         text.text = "";
 
         // en pc sale error en todos
-        if (Accelerometer.current != null) // funciona en los dos, orientacion, vector3
+        if (Accelerometer.current != null && Accelerometer.current.enabled) // funciona en los dos, orientacion, vector3
         {
             text.text += $"Accelerometer: {Accelerometer.current.acceleration.ReadValue()} \n";
         }

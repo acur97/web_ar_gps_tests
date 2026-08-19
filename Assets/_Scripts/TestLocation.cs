@@ -20,6 +20,8 @@ public class TestLocation : MonoBehaviour
 
     public void CheckLocationStart()
     {
+        Debug.Log($"Supports Location: {SystemInfo.supportsLocationService}");
+
         text.text = Input.location.status.ToString();
     }
 
