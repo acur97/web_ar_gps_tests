@@ -148,8 +148,10 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 0.0.1
-  preloadedAssets: []
+  bundleVersion: 0.0.2
+  preloadedAssets:
+  - {fileID: -944628639613478452, guid: 6433497f10c30d940be52e7e24a17faa, type: 3}
+  - {fileID: 11400000, guid: dc96d84a4c62b334cb9c774d5af96733, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   xboxOneDisableKinectGpuReservation: 1
@@ -955,7 +957,7 @@ PlayerSettings:
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
-  activeInputHandler: 0
+  activeInputHandler: 2
   windowsGamepadBackendHint: 0
   enableDirectStorage: 0
   cloudProjectId: 

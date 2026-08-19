@@ -1,7 +1,7 @@
 Library: D:\Unity_Projects\Github_Projects\web_ar_gps_tests\Temp\BurstOutput\Data\Plugins\lib_burst_generated
 --platform=Wasm
 --minimum-os-version=
---backend=burst-llvm-19
+--backend=burst-llvm-21
 --target=WASM32
 --global-safety-checks-setting=Off
 --meta-data-generation=False
@@ -12,7 +12,7 @@ Library: D:\Unity_Projects\Github_Projects\web_ar_gps_tests\Temp\BurstOutput\Dat
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=D:\Unity_Projects\Github_Projects\web_ar_gps_tests\Temp\Burst
 --generate-static-linkage-methods
---key-folder=C:/Program Files/Unity/Hub/Editor/6000.5.4f1/Editor/Data/PlaybackEngines/WebGLSupport
+--key-folder=C:/Program Files/Unity/Hub/Editor/6000.5.8f1/Editor/Data/PlaybackEngines/WebGLSupport
 --decode-folder=D:\Unity_Projects\Github_Projects\web_ar_gps_tests\Library\Burst
 --output=D:\Unity_Projects\Github_Projects\web_ar_gps_tests\Temp\BurstOutput\Data\Plugins\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
@@ -111,7 +111,7 @@ Library: D:\Unity_Projects\Github_Projects\web_ar_gps_tests\Temp\BurstOutput\Dat
 --method=Unity.Jobs.IJobExtensions+JobStruct`1[[Unity.Collections.NativeStream+ConstructJob, Unity.Collections, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::Execute(Unity.Collections.NativeStream+ConstructJob&, Unity.Collections, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|Unity.Jobs.LowLevel.Unsafe.JobRanges&, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)--b78f808503c8b5fe97a83e833bd5871d
 --platform=Wasm
 --minimum-os-version=
---backend=burst-llvm-19
+--backend=burst-llvm-21
 --target=WASM32
 --global-safety-checks-setting=Off
 --disable-safety-checks
@@ -122,7 +122,7 @@ Library: D:\Unity_Projects\Github_Projects\web_ar_gps_tests\Temp\BurstOutput\Dat
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=D:\Unity_Projects\Github_Projects\web_ar_gps_tests\Temp\Burst
 --generate-static-linkage-methods
---key-folder=C:/Program Files/Unity/Hub/Editor/6000.5.4f1/Editor/Data/PlaybackEngines/WebGLSupport
+--key-folder=C:/Program Files/Unity/Hub/Editor/6000.5.8f1/Editor/Data/PlaybackEngines/WebGLSupport
 --decode-folder=D:\Unity_Projects\Github_Projects\web_ar_gps_tests\Library\Burst
 --output=D:\Unity_Projects\Github_Projects\web_ar_gps_tests\Temp\BurstOutput\Data\Plugins\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
