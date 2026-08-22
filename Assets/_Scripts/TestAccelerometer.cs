@@ -9,6 +9,10 @@ public class TestAccelerometer : MonoBehaviour
 
     [Space]
     [SerializeField] private Transform cube;
+    [SerializeField] private float sensitivity = 1f;
+    [SerializeField] private float smooth = 10f;
+
+    private Quaternion targetRotation;
 
     private bool enabledSensors = false;
 
@@ -116,13 +120,37 @@ public class TestAccelerometer : MonoBehaviour
 
         if (Accelerometer.current != null)
         {
-            //cube.localEulerAngles = new Vector3(
-            //    Accelerometer.current.acceleration.ReadValue().z * 90,
-            //    Accelerometer.current.acceleration.ReadValue().y * 90,
-            //    -Accelerometer.current.acceleration.ReadValue().x * 90);
+            Vector3 acceleration = Accelerometer.current.acceleration.ReadValue();
 
-            Vector3 value = Accelerometer.current.acceleration.ReadValue() * 90;
-            cube.localRotation = Quaternion.Euler(value);
+            if (acceleration.sqrMagnitude < 0.01f)
+                return;
+
+            acceleration.Normalize();
+
+            float pitch = Mathf.Atan2(
+                acceleration.x,
+                Mathf.Sqrt(
+                    acceleration.y * acceleration.y +
+                    acceleration.z * acceleration.z
+                )
+            ) * Mathf.Rad2Deg;
+
+            float roll = Mathf.Atan2(
+                acceleration.z,
+                acceleration.y
+            ) * Mathf.Rad2Deg;
+
+            targetRotation = Quaternion.Euler(
+                pitch * sensitivity,
+                0f,
+                roll * sensitivity
+            );
+
+            cube.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                smooth * Time.deltaTime
+            );
         }
     }
 }
