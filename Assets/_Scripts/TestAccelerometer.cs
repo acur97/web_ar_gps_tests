@@ -7,6 +7,9 @@ public class TestAccelerometer : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
 
+    [Space]
+    [SerializeField] private Transform cube;
+
     private bool enabledSensors = false;
 
     public void OnStart()
@@ -81,7 +84,7 @@ public class TestAccelerometer : MonoBehaviour
         text.text = "";
 
         // en pc sale error en todos
-        if (Accelerometer.current != null && Accelerometer.current.enabled) // funciona en los dos, orientacion, vector3
+        if (Accelerometer.current != null) // funciona en los dos, orientacion, vector3
         {
             text.text += $"Accelerometer: {Accelerometer.current.acceleration.ReadValue()} \n";
         }
@@ -109,6 +112,14 @@ public class TestAccelerometer : MonoBehaviour
         if (MagneticFieldSensor.current != null) // error en viejo, en nuevo nada, no muestra en ninguno de los dos
         {
             text.text += $"MagneticFieldSensor: {MagneticFieldSensor.current.magneticField.ReadValue()}";
+        }
+
+        if (Accelerometer.current != null)
+        {
+            cube.localEulerAngles = new Vector3(
+                Accelerometer.current.acceleration.ReadValue().y * 90,
+                Accelerometer.current.acceleration.ReadValue().z * 90,
+                Accelerometer.current.acceleration.ReadValue().x * 90);
         }
     }
 }
