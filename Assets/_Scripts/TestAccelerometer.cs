@@ -121,7 +121,7 @@ public class TestAccelerometer : MonoBehaviour
             //    Accelerometer.current.acceleration.ReadValue().y * 90,
             //    -Accelerometer.current.acceleration.ReadValue().x * 90);
 
-            Vector3 value = Accelerometer.current.acceleration.ReadValue();
+            Vector3 value = Accelerometer.current.acceleration.ReadValue() * 90;
             cube.localRotation = Quaternion.Euler(value);
         }
     }
