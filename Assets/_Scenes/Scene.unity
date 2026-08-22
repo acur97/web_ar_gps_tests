@@ -1970,6 +1970,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TestAccelerometer
   text: {fileID: 1529649777}
   cube: {fileID: 476487638}
+  smooth: 1
 --- !u!114 &1312154008
 MonoBehaviour:
   m_ObjectHideFlags: 0

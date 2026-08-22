@@ -9,6 +9,8 @@ public class TestAccelerometer : MonoBehaviour
 
     [Space]
     [SerializeField] private Transform cube;
+    [SerializeField] private float smooth = 10f;
+    private Vector3 filteredAcceleration;
 
     private bool enabledSensors = false;
 
@@ -118,10 +120,33 @@ public class TestAccelerometer : MonoBehaviour
         {
             Vector3 acceleration = Accelerometer.current.acceleration.ReadValue();
 
-            if (acceleration.sqrMagnitude < 0.01f)
-                return;
+            // Low-pass filter
+            filteredAcceleration = Vector3.Lerp(
+                filteredAcceleration,
+                acceleration,
+                smooth * Time.deltaTime
+            );
 
-            transform.rotation = Quaternion.FromToRotation(Vector3.up, -acceleration.normalized);
+            // Dirección de "arriba" según la gravedad
+            Vector3 up = -filteredAcceleration.normalized;
+
+            // Dirección que queremos mantener como forward
+            Vector3 forward = Vector3.ProjectOnPlane(
+                Vector3.forward,
+                up
+            ).normalized;
+
+            // Crear orientación usando ambos vectores
+            Quaternion targetRotation = Quaternion.LookRotation(
+                forward,
+                up
+            );
+
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                smooth * Time.deltaTime
+            );
         }
     }
 }
