@@ -117,8 +117,8 @@ public class TestAccelerometer : MonoBehaviour
         if (Accelerometer.current != null)
         {
             cube.localEulerAngles = new Vector3(
-                Accelerometer.current.acceleration.ReadValue().y * 90,
                 Accelerometer.current.acceleration.ReadValue().z * 90,
+                Accelerometer.current.acceleration.ReadValue().y * 90,
                 Accelerometer.current.acceleration.ReadValue().x * 90);
         }
     }
