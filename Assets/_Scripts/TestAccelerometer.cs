@@ -9,10 +9,6 @@ public class TestAccelerometer : MonoBehaviour
 
     [Space]
     [SerializeField] private Transform cube;
-    [SerializeField] private float sensitivity = 1f;
-    [SerializeField] private float smooth = 10f;
-
-    private Quaternion targetRotation;
 
     private bool enabledSensors = false;
 
@@ -125,32 +121,7 @@ public class TestAccelerometer : MonoBehaviour
             if (acceleration.sqrMagnitude < 0.01f)
                 return;
 
-            acceleration.Normalize();
-
-            float pitch = Mathf.Atan2(
-                acceleration.x,
-                Mathf.Sqrt(
-                    acceleration.y * acceleration.y +
-                    acceleration.z * acceleration.z
-                )
-            ) * Mathf.Rad2Deg;
-
-            float roll = Mathf.Atan2(
-                acceleration.z,
-                acceleration.y
-            ) * Mathf.Rad2Deg;
-
-            targetRotation = Quaternion.Euler(
-                pitch * sensitivity,
-                0f,
-                roll * sensitivity
-            );
-
-            cube.rotation = Quaternion.Slerp(
-                transform.rotation,
-                targetRotation,
-                smooth * Time.deltaTime
-            );
+            transform.rotation = Quaternion.FromToRotation(Vector3.up, -acceleration.normalized);
         }
     }
 }
