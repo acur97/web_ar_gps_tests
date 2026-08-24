@@ -116,7 +116,7 @@ public class TestAccelerometer : MonoBehaviour
 
         if (Accelerometer.current != null)
         {
-            Vector3 value = Accelerometer.current.acceleration.ReadValue();
+            Vector3 value = -Accelerometer.current.acceleration.ReadValue();
 
             if (value.sqrMagnitude > 0.01f)
             {
