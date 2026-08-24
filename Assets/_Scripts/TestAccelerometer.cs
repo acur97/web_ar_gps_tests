@@ -116,16 +116,11 @@ public class TestAccelerometer : MonoBehaviour
 
         if (Accelerometer.current != null)
         {
-            //cube.localEulerAngles = new Vector3(
-            //    Accelerometer.current.acceleration.ReadValue().z * 90,
-            //    Accelerometer.current.acceleration.ReadValue().y * 90,
-            //    -Accelerometer.current.acceleration.ReadValue().x * 90);
-
-            Vector3 value = Accelerometer.current.acceleration.ReadValue() * 90;
+            Vector3 value = Accelerometer.current.acceleration.ReadValue();
 
             if (value.sqrMagnitude > 0.01f)
             {
-                transform.rotation = Quaternion.LookRotation(value);
+                cube.rotation = Quaternion.LookRotation(value);
             }
         }
     }
