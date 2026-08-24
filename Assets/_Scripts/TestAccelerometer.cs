@@ -143,34 +143,34 @@ public class TestAccelerometer : MonoBehaviour
             #endregion
 
             #region segunda version funcinal, pero se va desfazando
-            //Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
-            //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
-
-            //if (gravity.sqrMagnitude > 0.01f)
-            //{
-            //    gravity.Normalize();
-
-            //    Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
-            //    cube.rotation = tilt * cube.rotation;
-            //}
-            #endregion
-
-            #region
             Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
             Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
 
-            if (gravity.sqrMagnitude < 0.01f)
-                return;
+            if (gravity.sqrMagnitude > 0.01f)
+            {
+                gravity.Normalize();
 
-            gravity.Normalize();
+                Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
+                cube.rotation = tilt * cube.rotation;
+            }
+            #endregion
 
-            // El eje Y del cubo debe apuntar contrario a la gravedad.
-            Quaternion tilt = Quaternion.FromToRotation(
-                baseRotation * Vector3.up,
-                -gravity
-            );
+            #region
+            //Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
+            //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
 
-            cube.rotation = tilt * baseRotation;
+            //if (gravity.sqrMagnitude < 0.01f)
+            //    return;
+
+            //gravity.Normalize();
+
+            //// El eje Y del cubo debe apuntar contrario a la gravedad.
+            //Quaternion tilt = Quaternion.FromToRotation(
+            //    baseRotation * Vector3.up,
+            //    -gravity
+            //);
+
+            //cube.rotation = tilt * baseRotation;
             #endregion
         }
     }
