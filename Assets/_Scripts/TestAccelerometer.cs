@@ -11,6 +11,7 @@ public class TestAccelerometer : MonoBehaviour
     [SerializeField] private Transform cube;
 
     private bool enabledSensors = false;
+    private Quaternion baseRotation;
 
     public void OnStart()
     {
@@ -68,6 +69,9 @@ public class TestAccelerometer : MonoBehaviour
         }
 
         Debug.Log("Finish Sensors.");
+
+        baseRotation = cube.rotation;
+
         enabledSensors = true;
     }
 
@@ -147,7 +151,7 @@ public class TestAccelerometer : MonoBehaviour
                 gravity.Normalize();
 
                 Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
-                cube.rotation = tilt * Quaternion.identity /*cube.rotation*/;
+                cube.rotation = tilt * baseRotation;
             }
             #endregion
 
