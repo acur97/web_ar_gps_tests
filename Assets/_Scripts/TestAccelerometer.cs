@@ -61,11 +61,11 @@ public class TestAccelerometer : MonoBehaviour
         }
 
         Debug.Log($"Compass - {Input.compass}");
-        //if (MagneticFieldSensor.current != null)
-        //{
-        //    InputSystem.EnableDevice(MagneticFieldSensor.current);
-        //    Debug.Log($"Enabled {MagneticFieldSensor.current.description}");
-        //}
+        if (Input.compass != null)
+        {
+            Input.compass.enabled = true;
+            Debug.Log($"Enabled {Input.compass.headingAccuracy}");
+        }
 
         Debug.Log("Finish Sensors.");
         enabledSensors = true;
@@ -121,6 +121,11 @@ public class TestAccelerometer : MonoBehaviour
             text.text += $"MagneticFieldSensor: {MagneticFieldSensor.current.magneticField.ReadValue()}";
         }
 
+        if (Input.compass != null) // error en viejo, en nuevo nada, no muestra en ninguno de los dos
+        {
+            text.text += $"compass: {Input.compass.rawVector}";
+        }
+
         if (Accelerometer.current != null)
         {
             #region primera version funcional, al tener vertical el telefono se descontrola
@@ -154,7 +159,14 @@ public class TestAccelerometer : MonoBehaviour
             {
                 gravity.Normalize();
 
-                cube.rotation = Quaternion.FromToRotation(cube.up, gravity);
+                Vector3 forward = Vector3.ProjectOnPlane(cube.forward, gravity);
+
+                if (forward.sqrMagnitude > 0.001f)
+                {
+                    forward.Normalize();
+
+                    cube.rotation = Quaternion.LookRotation(forward, -gravity);
+                }
             }
         }
     }
