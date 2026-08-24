@@ -5,16 +5,12 @@ using Gyroscope = UnityEngine.InputSystem.Gyroscope;
 
 public class TestAccelerometer : MonoBehaviour
 {
-    [SerializeField] private Vector3 simulatedSensor;
     [SerializeField] private TextMeshProUGUI text;
 
     [Space]
     [SerializeField] private Transform cube;
 
     private bool enabledSensors = false;
-    private bool invertX = false;
-    private bool invertY = false;
-    private bool invertZ = false;
 
     public void OnStart()
     {
@@ -66,19 +62,6 @@ public class TestAccelerometer : MonoBehaviour
 
         Debug.Log("Finish Sensors.");
         enabledSensors = true;
-    }
-
-    public void InvertX(bool on)
-    {
-        invertX = on;
-    }
-    public void InvertY(bool on)
-    {
-        invertY = on;
-    }
-    public void InvertZ(bool on)
-    {
-        invertZ = on;
     }
 
     private void Update()
@@ -133,16 +116,23 @@ public class TestAccelerometer : MonoBehaviour
 
         if (Accelerometer.current != null)
         {
-            Vector3 value = Accelerometer.current.acceleration.ReadValue();
-            //Vector3 value = simulatedSensor;
-            Vector3 value2 = new(
-                invertX ? -value.x : value.x,
-                invertY ? -value.y : value.y,
-                invertZ ? -value.z : value.z);
+            //Vector3 value = Accelerometer.current.acceleration.ReadValue();
+            //Vector3 value2 = new(-value.x, -value.y, value.z);
 
-            if (value2.sqrMagnitude > 0.01f)
+            //if (value2.sqrMagnitude > 0.01f)
+            //{
+            //    cube.rotation = Quaternion.LookRotation(value2);
+            //}
+
+            Vector3 acceleration = Accelerometer.current.acceleration.ReadValue();
+            Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
+
+            if (gravity.sqrMagnitude > 0.01f)
             {
-                cube.rotation = Quaternion.LookRotation(value2);
+                gravity.Normalize();
+
+                Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
+                cube.rotation = tilt * cube.rotation;
             }
         }
     }
