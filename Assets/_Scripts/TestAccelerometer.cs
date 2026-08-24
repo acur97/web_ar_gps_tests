@@ -5,12 +5,16 @@ using Gyroscope = UnityEngine.InputSystem.Gyroscope;
 
 public class TestAccelerometer : MonoBehaviour
 {
+    [SerializeField] private Vector3 simulatedSensor;
     [SerializeField] private TextMeshProUGUI text;
 
     [Space]
     [SerializeField] private Transform cube;
 
     private bool enabledSensors = false;
+    private bool invertX = false;
+    private bool invertY = false;
+    private bool invertZ = false;
 
     public void OnStart()
     {
@@ -62,6 +66,19 @@ public class TestAccelerometer : MonoBehaviour
 
         Debug.Log("Finish Sensors.");
         enabledSensors = true;
+    }
+
+    public void InvertX(bool on)
+    {
+        invertX = on;
+    }
+    public void InvertY(bool on)
+    {
+        invertY = on;
+    }
+    public void InvertZ(bool on)
+    {
+        invertZ = on;
     }
 
     private void Update()
@@ -116,11 +133,16 @@ public class TestAccelerometer : MonoBehaviour
 
         if (Accelerometer.current != null)
         {
-            Vector3 value = -Accelerometer.current.acceleration.ReadValue();
+            Vector3 value = Accelerometer.current.acceleration.ReadValue();
+            //Vector3 value = simulatedSensor;
+            Vector3 value2 = new(
+                invertX ? -value.x : value.x,
+                invertY ? -value.y : value.y,
+                invertZ ? -value.z : value.z);
 
-            if (value.sqrMagnitude > 0.01f)
+            if (value2.sqrMagnitude > 0.01f)
             {
-                cube.rotation = Quaternion.LookRotation(value);
+                cube.rotation = Quaternion.LookRotation(value2);
             }
         }
     }
