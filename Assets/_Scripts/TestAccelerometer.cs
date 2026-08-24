@@ -150,7 +150,7 @@ public class TestAccelerometer : MonoBehaviour
             {
                 gravity.Normalize();
 
-                Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
+                Quaternion tilt = Quaternion.FromToRotation(Vector3.up, gravity);
                 cube.rotation = tilt * cube.rotation;
             }
             #endregion
