@@ -60,6 +60,13 @@ public class TestAccelerometer : MonoBehaviour
             Debug.Log($"Enabled {MagneticFieldSensor.current.description}");
         }
 
+        Debug.Log($"Compass - {Input.compass}");
+        //if (MagneticFieldSensor.current != null)
+        //{
+        //    InputSystem.EnableDevice(MagneticFieldSensor.current);
+        //    Debug.Log($"Enabled {MagneticFieldSensor.current.description}");
+        //}
+
         Debug.Log("Finish Sensors.");
         enabledSensors = true;
     }
@@ -116,6 +123,7 @@ public class TestAccelerometer : MonoBehaviour
 
         if (Accelerometer.current != null)
         {
+            #region primera version funcional, al tener vertical el telefono se descontrola
             //Vector3 value = Accelerometer.current.acceleration.ReadValue();
             //Vector3 value2 = new(-value.x, -value.y, value.z);
 
@@ -123,6 +131,21 @@ public class TestAccelerometer : MonoBehaviour
             //{
             //    cube.rotation = Quaternion.LookRotation(value2);
             //}
+            #endregion
+
+            #region segunda version funcinal, pero se va desfazando
+            //Vector3 acceleration = Accelerometer.current.acceleration.ReadValue();
+            //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
+
+            //if (gravity.sqrMagnitude > 0.01f)
+            //{
+            //    gravity.Normalize();
+
+            //    Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
+            //    cube.rotation = tilt * cube.rotation;
+            //}
+            #endregion
+
 
             Vector3 acceleration = Accelerometer.current.acceleration.ReadValue();
             Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
@@ -131,8 +154,7 @@ public class TestAccelerometer : MonoBehaviour
             {
                 gravity.Normalize();
 
-                Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
-                cube.rotation = tilt * cube.rotation;
+                cube.rotation = Quaternion.FromToRotation(cube.up, gravity);
             }
         }
     }
