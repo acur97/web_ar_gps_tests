@@ -134,7 +134,7 @@ public class TestAccelerometer : MonoBehaviour
         {
             Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
             //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
-            Vector3 gravity = new(acceleration.x, acceleration.y, acceleration.z); // no se invierte si giramos es la camara
+            Vector3 gravity = new(-acceleration.x, acceleration.y, acceleration.z); // no se invierte si giramos es la camara
 
             #region v1, al tener vertical el telefono se descontrola el cubo
             //if (gravity.sqrMagnitude > 0.01f)

@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,9 +14,12 @@ public class TestCamera : MonoBehaviour
     [SerializeField] private int cameraIndex = -1;
     private WebCamDevice[] devices;
 
+    private CancellationTokenSource token;
+
     public void CameraIndex(string index)
     {
-        cameraIndex = int.Parse(index);
+        if (!string.IsNullOrEmpty(index))
+            cameraIndex = int.Parse(index);
     }
 
     public void StartCamera()
@@ -35,15 +39,19 @@ public class TestCamera : MonoBehaviour
 
     public async UniTaskVoid StartAwaitCamera()
     {
+        token?.Cancel();
+        token = new CancellationTokenSource();
+
         rImage.enabled = true;
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
 
+        if (webCamTexture != null)
+            webCamTexture.Stop();
+
         webCamTexture = new WebCamTexture();
 
-        webCamTexture.Stop();
-
         while (WebCamTexture.devices.Length == 0)
-            await UniTask.NextFrame();
+            await UniTask.NextFrame(token.Token);
 
         devices = WebCamTexture.devices;
 
@@ -69,13 +77,16 @@ public class TestCamera : MonoBehaviour
         Debug.Log("Play");
         webCamTexture.Play();
 
-        while (webCamTexture.width < 32)
-            await UniTask.NextFrame();
+        await UniTask.NextFrame(token.Token);
 
-        Debug.Log($"resolution: {webCamTexture.width}x{webCamTexture.height} {webCamTexture.requestedFPS}fps.");
+        Debug.Log($"resolution: {webCamTexture.width}x{webCamTexture.height}.");
+        Debug.Log($"resolution2: {webCamTexture.requestedWidth}x{webCamTexture.requestedHeight} {webCamTexture.requestedFPS}fps.");
 
         aspectFitter.aspectRatio = webCamTexture.width / webCamTexture.height;
         rImage.texture = webCamTexture;
+
+        Debug.Log(webCamTexture.updateCount);
+        Debug.Log(webCamTexture.deviceName);
 
         //bool vflip = webCamTexture.videoVerticallyMirrored;
         //Vector2 scale = new(1, vflip ? -1 : 1);
