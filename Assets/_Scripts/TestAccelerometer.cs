@@ -132,7 +132,7 @@ public class TestAccelerometer : MonoBehaviour
 
         if (GravitySensor.current != null)
         {
-            #region primera version funcional, al tener vertical el telefono se descontrola
+            #region v1, al tener vertical el telefono se descontrola el cubo
             //Vector3 value = GravitySensor.current.gravity.ReadValue();
             //Vector3 value2 = new(-value.x, -value.y, value.z);
 
@@ -142,7 +142,7 @@ public class TestAccelerometer : MonoBehaviour
             //}
             #endregion
 
-            #region segunda version funcinal, pero se va desfazando
+            #region v2, se va desfazando
             //Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
             //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
 
@@ -155,7 +155,20 @@ public class TestAccelerometer : MonoBehaviour
             //}
             #endregion
 
-            #region
+            #region v3, no desfasa pero girar a los lados gira mal
+            //Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
+            //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
+
+            //if (gravity.sqrMagnitude > 0.01f)
+            //{
+            //    gravity.Normalize();
+
+            //    Quaternion tilt = Quaternion.FromToRotation(baseRotation * Vector3.up, gravity);
+            //    cube.rotation = tilt * baseRotation;
+            //}
+            #endregion
+
+            #region v4, 
             Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
             Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
 
@@ -163,9 +176,7 @@ public class TestAccelerometer : MonoBehaviour
             {
                 gravity.Normalize();
 
-                Quaternion tilt = Quaternion.FromToRotation(baseRotation * Vector3.up, gravity
-                );
-
+                Quaternion tilt = Quaternion.FromToRotation(Vector3.up, gravity);
                 cube.rotation = tilt * baseRotation;
             }
             #endregion
