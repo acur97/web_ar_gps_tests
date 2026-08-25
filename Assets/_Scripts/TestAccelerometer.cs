@@ -125,7 +125,7 @@ public class TestAccelerometer : MonoBehaviour
             text.text += $"MagneticFieldSensor: {MagneticFieldSensor.current.magneticField.ReadValue()}";
         }
 
-        if (Input.compass != null) // vacio, vector3
+        if (Input.compass != null) // solo funciona en moderno, vacio vector3, funciona float, funciona float
         {
             text.text += $"compass: {Input.compass.rawVector} {Input.compass.magneticHeading} {Input.compass.trueHeading}";
         }
@@ -143,6 +143,19 @@ public class TestAccelerometer : MonoBehaviour
             #endregion
 
             #region segunda version funcinal, pero se va desfazando
+            //Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
+            //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
+
+            //if (gravity.sqrMagnitude > 0.01f)
+            //{
+            //    gravity.Normalize();
+
+            //    Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
+            //    cube.rotation = tilt * cube.rotation;
+            //}
+            #endregion
+
+            #region
             Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
             Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
 
@@ -150,27 +163,11 @@ public class TestAccelerometer : MonoBehaviour
             {
                 gravity.Normalize();
 
-                Quaternion tilt = Quaternion.FromToRotation(Vector3.up, gravity);
-                cube.rotation = tilt * cube.rotation;
+                Quaternion tilt = Quaternion.FromToRotation(baseRotation * Vector3.up, gravity
+                );
+
+                cube.rotation = tilt * baseRotation;
             }
-            #endregion
-
-            #region
-            //Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
-            //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
-
-            //if (gravity.sqrMagnitude < 0.01f)
-            //    return;
-
-            //gravity.Normalize();
-
-            //// El eje Y del cubo debe apuntar contrario a la gravedad.
-            //Quaternion tilt = Quaternion.FromToRotation(
-            //    baseRotation * Vector3.up,
-            //    -gravity
-            //);
-
-            //cube.rotation = tilt * baseRotation;
             #endregion
         }
     }
