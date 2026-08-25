@@ -132,20 +132,18 @@ public class TestAccelerometer : MonoBehaviour
 
         if (GravitySensor.current != null)
         {
-            #region v1, al tener vertical el telefono se descontrola el cubo
-            //Vector3 value = GravitySensor.current.gravity.ReadValue();
-            //Vector3 value2 = new(-value.x, -value.y, value.z);
+            Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
+            //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
+            Vector3 gravity = new(acceleration.x, acceleration.y, acceleration.z);
 
-            //if (value2.sqrMagnitude > 0.01f)
+            #region v1, al tener vertical el telefono se descontrola el cubo
+            //if (gravity.sqrMagnitude > 0.01f)
             //{
-            //    cube.rotation = Quaternion.LookRotation(value2);
+            //    cube.rotation = Quaternion.LookRotation(gravity);
             //}
             #endregion
 
             #region v2, se va desfazando
-            Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
-            Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
-
             if (gravity.sqrMagnitude > 0.01f)
             {
                 gravity.Normalize();
@@ -156,9 +154,6 @@ public class TestAccelerometer : MonoBehaviour
             #endregion
 
             #region v3, no desfasa pero girar a los lados gira mal
-            //Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
-            //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
-
             //if (gravity.sqrMagnitude > 0.01f)
             //{
             //    gravity.Normalize();
@@ -168,10 +163,7 @@ public class TestAccelerometer : MonoBehaviour
             //}
             #endregion
 
-            #region v4, 
-            //Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
-            //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
-
+            #region v4
             //if (gravity.sqrMagnitude > 0.01f)
             //{
             //    gravity.Normalize();

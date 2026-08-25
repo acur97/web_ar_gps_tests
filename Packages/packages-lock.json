@@ -155,6 +155,13 @@
         "com.unity.modules.physics": "1.0.0"
       }
     },
+    "com.yasirkula.ingamedebugconsole": {
+      "version": "https://github.com/yasirkula/UnityIngameDebugConsole.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "4467c225eaaf5c0db62a11e2c6851a9fdb64763c"
+    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,
