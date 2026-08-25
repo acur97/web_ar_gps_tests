@@ -144,11 +144,21 @@ public class TestAccelerometer : MonoBehaviour
             #endregion
 
             #region v2, se va desfazando, --- el mejor por ahora ---
+            //if (gravity.sqrMagnitude > 0.01f)
+            //{
+            //    gravity.Normalize();
+
+            //    Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
+            //    cube.rotation = tilt * cube.rotation;
+            //}
+            #endregion
+
+            #region v2.1
             if (gravity.sqrMagnitude > 0.01f)
             {
                 gravity.Normalize();
 
-                Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
+                Quaternion tilt = Quaternion.FromToRotation(-cube.up, gravity);
                 cube.rotation = tilt * cube.rotation;
             }
             #endregion
