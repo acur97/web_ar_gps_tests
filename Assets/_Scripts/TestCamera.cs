@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 
 public class TestCamera : MonoBehaviour
 {
@@ -9,7 +9,14 @@ public class TestCamera : MonoBehaviour
     [SerializeField] private AspectRatioFitter aspectFitter;
 
     [Space]
-    [SerializeField] private WebCamTexture _webcam;
+    [SerializeField] private WebCamTexture webCamTexture;
+    [SerializeField] private int cameraIndex = -1;
+    private WebCamDevice[] devices;
+
+    public void CameraIndex(string index)
+    {
+        cameraIndex = int.Parse(index);
+    }
 
     public void StartCamera()
     {
@@ -28,12 +35,19 @@ public class TestCamera : MonoBehaviour
 
     public async UniTaskVoid StartAwaitCamera()
     {
+        rImage.enabled = true;
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
 
-        //_webcam = new WebCamTexture("OBS Virtual Camera"); // con el string se cambia entre diferentes camaras, vacio es la primera
-        _webcam = new WebCamTexture();
+        webCamTexture = new WebCamTexture();
 
-        foreach (WebCamDevice device in WebCamTexture.devices)
+        webCamTexture.Stop();
+
+        while (WebCamTexture.devices.Length == 0)
+            await Awaitable.NextFrameAsync();
+
+        devices = WebCamTexture.devices;
+
+        foreach (WebCamDevice device in devices)
         {
             string desc = $"name: {device.name}. type: {device.kind}. ";
 
@@ -51,18 +65,16 @@ public class TestCamera : MonoBehaviour
             Debug.LogWarning(desc);
         }
 
-        _webcam.Play();
+        webCamTexture.deviceName = devices[cameraIndex].name;
+        Debug.Log("Play");
+        webCamTexture.Play();
 
-        while (_webcam.width < 32)
-            await UniTask.NextFrame();
+        Debug.Log($"resolution: {webCamTexture.width}x{webCamTexture.height} {webCamTexture.requestedFPS}fps.");
 
-        Debug.Log($"resolution: {_webcam.width}x{_webcam.height} {_webcam.requestedFPS}fps.");
+        aspectFitter.aspectRatio = webCamTexture.width / webCamTexture.height;
+        rImage.texture = webCamTexture;
 
-        aspectFitter.aspectRatio = _webcam.width / _webcam.height;
-        rImage.texture = _webcam;
-        rImage.enabled = true;
-
-        //bool vflip = _webcam.videoVerticallyMirrored;
+        //bool vflip = webCamTexture.videoVerticallyMirrored;
         //Vector2 scale = new(1, vflip ? -1 : 1);
         //Vector2 offset = new(0, vflip ? 1 : 0);
     }

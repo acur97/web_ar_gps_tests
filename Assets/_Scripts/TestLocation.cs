@@ -7,6 +7,7 @@ public class TestLocation : MonoBehaviour
 
     public void IsEnabledByUser()
     {
+        Debug.Log($"Supports Location: {SystemInfo.supportsLocationService}");
         text.text = Input.location.isEnabledByUser.ToString();
     }
 
@@ -20,8 +21,6 @@ public class TestLocation : MonoBehaviour
 
     public void CheckLocationStart()
     {
-        Debug.Log($"Supports Location: {SystemInfo.supportsLocationService}");
-
         text.text = Input.location.status.ToString();
     }
 
