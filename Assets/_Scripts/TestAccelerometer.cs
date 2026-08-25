@@ -143,16 +143,16 @@ public class TestAccelerometer : MonoBehaviour
             #endregion
 
             #region v2, se va desfazando
-            //Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
-            //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
+            Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
+            Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
 
-            //if (gravity.sqrMagnitude > 0.01f)
-            //{
-            //    gravity.Normalize();
+            if (gravity.sqrMagnitude > 0.01f)
+            {
+                gravity.Normalize();
 
-            //    Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
-            //    cube.rotation = tilt * cube.rotation;
-            //}
+                Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
+                cube.rotation = tilt * cube.rotation;
+            }
             #endregion
 
             #region v3, no desfasa pero girar a los lados gira mal
@@ -169,16 +169,16 @@ public class TestAccelerometer : MonoBehaviour
             #endregion
 
             #region v4, 
-            Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
-            Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
+            //Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
+            //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
 
-            if (gravity.sqrMagnitude > 0.01f)
-            {
-                gravity.Normalize();
+            //if (gravity.sqrMagnitude > 0.01f)
+            //{
+            //    gravity.Normalize();
 
-                Quaternion tilt = Quaternion.FromToRotation(Vector3.up, gravity);
-                cube.rotation = tilt * baseRotation;
-            }
+            //    Quaternion tilt = Quaternion.FromToRotation(Vector3.up, gravity);
+            //    cube.rotation = tilt * baseRotation;
+            //}
             #endregion
         }
     }
