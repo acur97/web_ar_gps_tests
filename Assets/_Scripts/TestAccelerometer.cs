@@ -134,7 +134,7 @@ public class TestAccelerometer : MonoBehaviour
         {
             Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
             //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
-            Vector3 gravity = new(acceleration.x, acceleration.y, acceleration.z);
+            Vector3 gravity = new(acceleration.x, acceleration.y, acceleration.z); // no se invierte si giramos es la camara
 
             #region v1, al tener vertical el telefono se descontrola el cubo
             //if (gravity.sqrMagnitude > 0.01f)
@@ -143,7 +143,7 @@ public class TestAccelerometer : MonoBehaviour
             //}
             #endregion
 
-            #region v2, se va desfazando
+            #region v2, se va desfazando, --- el mejor por ahora ---
             //if (gravity.sqrMagnitude > 0.01f)
             //{
             //    gravity.Normalize();
@@ -154,23 +154,23 @@ public class TestAccelerometer : MonoBehaviour
             #endregion
 
             #region v3, no desfasa pero girar a los lados gira mal
-            if (gravity.sqrMagnitude > 0.01f)
-            {
-                gravity.Normalize();
-
-                Quaternion tilt = Quaternion.FromToRotation(baseRotation * Vector3.up, gravity);
-                cube.rotation = tilt * baseRotation;
-            }
-            #endregion
-
-            #region v4
             //if (gravity.sqrMagnitude > 0.01f)
             //{
             //    gravity.Normalize();
 
-            //    Quaternion tilt = Quaternion.FromToRotation(Vector3.up, gravity);
+            //    Quaternion tilt = Quaternion.FromToRotation(baseRotation * Vector3.up, gravity);
             //    cube.rotation = tilt * baseRotation;
             //}
+            #endregion
+
+            #region v4
+            if (gravity.sqrMagnitude > 0.01f)
+            {
+                gravity.Normalize();
+
+                Quaternion tilt = Quaternion.FromToRotation(Vector3.up, gravity);
+                cube.rotation = tilt * baseRotation;
+            }
             #endregion
         }
     }

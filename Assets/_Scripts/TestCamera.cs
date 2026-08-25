@@ -43,7 +43,7 @@ public class TestCamera : MonoBehaviour
         webCamTexture.Stop();
 
         while (WebCamTexture.devices.Length == 0)
-            await Awaitable.NextFrameAsync();
+            await UniTask.NextFrame();
 
         devices = WebCamTexture.devices;
 
@@ -68,6 +68,9 @@ public class TestCamera : MonoBehaviour
         webCamTexture.deviceName = devices[cameraIndex].name;
         Debug.Log("Play");
         webCamTexture.Play();
+
+        while (webCamTexture.width < 32)
+            await UniTask.NextFrame();
 
         Debug.Log($"resolution: {webCamTexture.width}x{webCamTexture.height} {webCamTexture.requestedFPS}fps.");
 
