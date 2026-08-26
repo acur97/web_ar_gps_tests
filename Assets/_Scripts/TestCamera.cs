@@ -54,8 +54,12 @@ public class TestCamera : MonoBehaviour
         rImage.enabled = true;
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
 
+        await UniTask.WaitForSeconds(2);
+
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0, cancellationToken: token.Token);
         await UniTask.NextFrame(token.Token);
+
+        await UniTask.WaitForSeconds(2);
 
         //if (webCamTexture != null)
         //    webCamTexture.Stop();
@@ -130,6 +134,29 @@ public class TestCamera : MonoBehaviour
     {
         SetActiveCamera(activeCameraTexture.Equals(frontCameraTexture) ?
             backCameraTexture : frontCameraTexture);
+    }
+
+    public void StopCameras()
+    {
+        token?.Cancel();
+        rImage.enabled = false;
+        rImage.texture = null;
+
+        if (activeCameraTexture != null)
+        {
+            activeCameraTexture.Stop();
+            Destroy(activeCameraTexture);
+        }
+        if (frontCameraTexture != null)
+        {
+            frontCameraTexture.Stop();
+            Destroy(frontCameraTexture);
+        }
+        if (backCameraTexture != null)
+        {
+            backCameraTexture.Stop();
+            Destroy(backCameraTexture);
+        }
     }
 
     // Make adjustments to image every frame to be safe, since Unity isn't 
