@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Linq;
+//using System.Linq;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,32 +11,40 @@ public class TestCamera : MonoBehaviour
     [SerializeField] private AspectRatioFitter aspectFitter;
 
     [Space]
-    [SerializeField] private WebCamTexture webCamTexture;
-    [SerializeField] private int cameraIndex = -1;
-    private WebCamDevice[] devices;
+    //[SerializeField] private WebCamTexture webCamTexture;
+    //[SerializeField] private int cameraIndex = -1;
+    //private WebCamDevice[] devices;
+
+    private WebCamDevice frontCameraDevice;
+    private WebCamDevice backCameraDevice;
+    private WebCamDevice activeCameraDevice;
+
+    [SerializeField] private WebCamTexture frontCameraTexture;
+    [SerializeField] private WebCamTexture backCameraTexture;
+    [SerializeField] private WebCamTexture activeCameraTexture;
 
     private CancellationTokenSource token;
 
-    public void CameraIndex(string index)
-    {
-        if (!string.IsNullOrEmpty(index))
-            cameraIndex = int.Parse(index);
-    }
+    //public void CameraIndex(string index)
+    //{
+    //    if (!string.IsNullOrEmpty(index))
+    //        cameraIndex = int.Parse(index);
+    //}
 
     public void StartCamera()
     {
         StartAwaitCamera().Forget();
     }
 
-    private string DescribeResolution(Resolution res)
-    {
-        return $"{res.width}x{res.height}@{res.refreshRateRatio.value}Hz";
-    }
+    //private string DescribeResolution(Resolution res)
+    //{
+    //    return $"{res.width}x{res.height}@{res.refreshRateRatio.value}Hz";
+    //}
 
-    private string DescribeResolutions(WebCamDevice dev)
-    {
-        return string.Join(", ", dev.availableResolutions.Select(res => DescribeResolution(res)));
-    }
+    //private string DescribeResolutions(WebCamDevice dev)
+    //{
+    //    return string.Join(", ", dev.availableResolutions.Select(res => DescribeResolution(res)));
+    //}
 
     public async UniTaskVoid StartAwaitCamera()
     {
@@ -45,51 +54,110 @@ public class TestCamera : MonoBehaviour
         rImage.enabled = true;
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
 
-        if (webCamTexture != null)
-            webCamTexture.Stop();
-
-        webCamTexture = new WebCamTexture();
-
-        while (WebCamTexture.devices.Length == 0)
-            await UniTask.NextFrame(token.Token);
-
-        devices = WebCamTexture.devices;
-
-        foreach (WebCamDevice device in devices)
-        {
-            string desc = $"name: {device.name}. type: {device.kind}. ";
-
-            if (device.depthCameraName != null)
-                desc += $"Depth support: ({device.depthCameraName}). ";
-
-            desc += $"Direction: {(device.isFrontFacing ? "Front" : "Rear")}. ";
-
-            if (device.isAutoFocusPointSupported)
-                desc += "Auto focus support. ";
-
-            if (device.availableResolutions != null)
-                desc += $"Supported resolutions: {DescribeResolutions(device)}. ";
-
-            Debug.LogWarning(desc);
-        }
-
-        webCamTexture.deviceName = devices[cameraIndex].name;
-        Debug.Log("Play");
-        webCamTexture.Play();
-
+        await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0, cancellationToken: token.Token);
         await UniTask.NextFrame(token.Token);
 
-        Debug.Log($"resolution: {webCamTexture.width}x{webCamTexture.height}.");
-        Debug.Log($"resolution2: {webCamTexture.requestedWidth}x{webCamTexture.requestedHeight} {webCamTexture.requestedFPS}fps.");
+        //if (webCamTexture != null)
+        //    webCamTexture.Stop();
 
-        aspectFitter.aspectRatio = webCamTexture.width / webCamTexture.height;
-        rImage.texture = webCamTexture;
+        // Get the device's cameras and create WebCamTextures with them
+        frontCameraDevice = WebCamTexture.devices.Last();
+        backCameraDevice = WebCamTexture.devices.First();
 
-        Debug.Log(webCamTexture.updateCount);
-        Debug.Log(webCamTexture.deviceName);
+        frontCameraTexture = new WebCamTexture(frontCameraDevice.name);
+        backCameraTexture = new WebCamTexture(backCameraDevice.name);
+
+        SetActiveCamera(backCameraTexture);
+
+        //webCamTexture = new WebCamTexture();
+
+        //devices = WebCamTexture.devices;
+
+        //foreach (WebCamDevice device in devices)
+        //{
+        //    string desc = $"name: {device.name}. type: {device.kind}. ";
+
+        //    if (device.depthCameraName != null)
+        //        desc += $"Depth support: ({device.depthCameraName}). ";
+
+        //    desc += $"Direction: {(device.isFrontFacing ? "Front" : "Rear")}. ";
+
+        //    if (device.isAutoFocusPointSupported)
+        //        desc += "Auto focus support. ";
+
+        //    if (device.availableResolutions != null)
+        //        desc += $"Supported resolutions: {DescribeResolutions(device)}. ";
+
+        //    Debug.LogWarning(desc);
+        //}
+
+        //webCamTexture.deviceName = devices[cameraIndex].name;
+        //Debug.Log("Play");
+        //webCamTexture.Play();
+
+        //await UniTask.WaitUntil(() => webCamTexture.width > 0);
+        //await UniTask.NextFrame(token.Token);
+
+        //Debug.Log($"resolution: {webCamTexture.width}x{webCamTexture.height}."); // 16x16
+        //Debug.Log($"resolution2: {webCamTexture.requestedWidth}x{webCamTexture.requestedHeight} {webCamTexture.requestedFPS}fps."); // 0x0 0fps.
+
+        //aspectFitter.aspectRatio = webCamTexture.width / webCamTexture.height;
+        //rImage.texture = webCamTexture;
+
+        //Debug.Log(webCamTexture.deviceName); // camera 1, facing front
 
         //bool vflip = webCamTexture.videoVerticallyMirrored;
         //Vector2 scale = new(1, vflip ? -1 : 1);
         //Vector2 offset = new(0, vflip ? 1 : 0);
     }
+
+    private void SetActiveCamera(WebCamTexture cameraToUse)
+    {
+        if (activeCameraTexture != null)
+            activeCameraTexture.Stop();
+
+        activeCameraTexture = cameraToUse;
+        activeCameraDevice = WebCamTexture.devices.FirstOrDefault(device =>
+            device.name == cameraToUse.deviceName);
+
+        rImage.texture = activeCameraTexture;
+
+        activeCameraTexture.Play();
+    }
+
+    // Switch between the device's front and back camera
+    public void SwitchCamera()
+    {
+        SetActiveCamera(activeCameraTexture.Equals(frontCameraTexture) ?
+            backCameraTexture : frontCameraTexture);
+    }
+
+    // Make adjustments to image every frame to be safe, since Unity isn't 
+    // guaranteed to report correct data as soon as device camera is started
+    //void Update()
+    //{
+    //    // Skip making adjustment for incorrect camera data
+    //    if (activeCameraTexture.width < 100)
+    //    {
+    //        Debug.Log("Still waiting another frame for correct info...");
+    //        return;
+    //    }
+
+    //    // Rotate image to show correct orientation 
+    //    rotationVector.z = -activeCameraTexture.videoRotationAngle;
+    //    image.rectTransform.localEulerAngles = rotationVector;
+
+    //    // Set AspectRatioFitter's ratio
+    //    float videoRatio =
+    //        (float)activeCameraTexture.width / (float)activeCameraTexture.height;
+    //    imageFitter.aspectRatio = videoRatio;
+
+    //    // Unflip if vertically flipped
+    //    image.uvRect =
+    //        activeCameraTexture.videoVerticallyMirrored ? fixedRect : defaultRect;
+
+    //    // Mirror front-facing camera's image horizontally to look more natural
+    //    imageParent.localScale =
+    //        activeCameraDevice.isFrontFacing ? fixedScale : defaultScale;
+    //}
 }
