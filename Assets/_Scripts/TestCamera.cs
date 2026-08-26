@@ -52,22 +52,30 @@ public class TestCamera : MonoBehaviour
         token?.Cancel();
         token = new CancellationTokenSource();
 
+        Debug.Log("Find webcams before RequestUserAuthorization");
+        foreach (WebCamDevice device in WebCamTexture.devices)
+        {
+            Debug.Log("Name: " + device.name);
+        }
+
         rImage.enabled = true;
         Debug.Log("RequestUserAuthorization");
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
 
-        await UniTask.WaitForSeconds(1, cancellationToken: token.Token);
+        Debug.Log("WaitUntil HasUserAuthorization");
+        await UniTask.WaitUntil(() => Application.HasUserAuthorization(UserAuthorization.WebCam), cancellationToken: token.Token);
+
+        Debug.Log("WaitUntil NextFrame");
+        await UniTask.NextFrame(token.Token);
+
+        //WebCamTexture.allowThreadedTextureCreation = false;
 
         Debug.Log("WaitUntil WebCamTexture.devices");
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0, cancellationToken: token.Token);
+        Debug.Log("WaitUntil NextFrame");
         await UniTask.NextFrame(token.Token);
 
-        await UniTask.WaitForSeconds(1, cancellationToken: token.Token);
-
-        //if (webCamTexture != null)
-        //    webCamTexture.Stop();
-
-        // Get the device's cameras and create WebCamTextures with them
+        Debug.Log("devices.First and Last");
         frontCameraDevice = WebCamTexture.devices.First();
         backCameraDevice = WebCamTexture.devices.Last();
 
@@ -77,10 +85,6 @@ public class TestCamera : MonoBehaviour
         backCameraTexture = new WebCamTexture(backCameraDevice.name);
 
         SetActiveCamera(backCameraTexture);
-
-        //webCamTexture = new WebCamTexture();
-
-        //devices = WebCamTexture.devices;
 
         //foreach (WebCamDevice device in devices)
         //{
@@ -100,21 +104,6 @@ public class TestCamera : MonoBehaviour
         //    Debug.LogWarning(desc);
         //}
 
-        //webCamTexture.deviceName = devices[cameraIndex].name;
-        //Debug.Log("Play");
-        //webCamTexture.Play();
-
-        //await UniTask.WaitUntil(() => webCamTexture.width > 0);
-        //await UniTask.NextFrame(token.Token);
-
-        //Debug.Log($"resolution: {webCamTexture.width}x{webCamTexture.height}."); // 16x16
-        //Debug.Log($"resolution2: {webCamTexture.requestedWidth}x{webCamTexture.requestedHeight} {webCamTexture.requestedFPS}fps."); // 0x0 0fps.
-
-        //aspectFitter.aspectRatio = webCamTexture.width / webCamTexture.height;
-        //rImage.texture = webCamTexture;
-
-        //Debug.Log(webCamTexture.deviceName); // camera 1, facing front
-
         //bool vflip = webCamTexture.videoVerticallyMirrored;
         //Vector2 scale = new(1, vflip ? -1 : 1);
         //Vector2 offset = new(0, vflip ? 1 : 0);
@@ -122,14 +111,12 @@ public class TestCamera : MonoBehaviour
 
     private void SetActiveCamera(WebCamTexture cameraToUse)
     {
-        Debug.Log($"SetActiveCamera {cameraToUse}");
+        Debug.Log($"SetActiveCamera {cameraToUse.name}");
 
         if (activeCameraTexture != null)
             activeCameraTexture.Stop();
 
         activeCameraTexture = cameraToUse;
-        //activeCameraDevice = WebCamTexture.devices.FirstOrDefault(device =>
-        //    device.name == cameraToUse.deviceName);
         activeCameraDevice = cameraToUse.Equals(frontCameraTexture) ? frontCameraDevice : backCameraDevice;
 
         rImage.texture = activeCameraTexture;
@@ -185,11 +172,10 @@ public class TestCamera : MonoBehaviour
         //image.rectTransform.localEulerAngles = rotationVector;
 
         Debug.LogWarning(
-            $"resolution: {activeCameraTexture.width}x{activeCameraTexture.height} {activeCameraTexture.didUpdateThisFrame} {activeCameraTexture.isPlaying} {activeCameraTexture.texelSize}."); // 480x640
+            $"resolution: {activeCameraTexture.width}x{activeCameraTexture.height} {activeCameraTexture.didUpdateThisFrame} {activeCameraTexture.isPlaying}."); // 480x640
 
         // Set AspectRatioFitter's ratio
-        float videoRatio = activeCameraTexture.width / (float)activeCameraTexture.height;
-        aspectFitter.aspectRatio = videoRatio;
+        aspectFitter.aspectRatio = activeCameraTexture.width / (float)activeCameraTexture.height; ;
 
         // Unflip if vertically flipped
         //image.uvRect =
