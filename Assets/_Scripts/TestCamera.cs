@@ -48,30 +48,35 @@ public class TestCamera : MonoBehaviour
 
     public async UniTaskVoid StartAwaitCamera()
     {
+        Debug.Log("StartAwaitCamera");
         token?.Cancel();
         token = new CancellationTokenSource();
 
         rImage.enabled = true;
+        Debug.Log("RequestUserAuthorization");
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
 
-        await UniTask.WaitForSeconds(2);
+        await UniTask.WaitForSeconds(1, cancellationToken: token.Token);
 
+        Debug.Log("WaitUntil WebCamTexture.devices");
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0, cancellationToken: token.Token);
         await UniTask.NextFrame(token.Token);
 
-        await UniTask.WaitForSeconds(2);
+        await UniTask.WaitForSeconds(1, cancellationToken: token.Token);
 
         //if (webCamTexture != null)
         //    webCamTexture.Stop();
 
         // Get the device's cameras and create WebCamTextures with them
-        frontCameraDevice = WebCamTexture.devices.Last();
-        backCameraDevice = WebCamTexture.devices.First();
+        frontCameraDevice = WebCamTexture.devices.First();
+        backCameraDevice = WebCamTexture.devices.Last();
 
+        Debug.Log($"frontCameraDevice: {frontCameraDevice.name}");
+        Debug.Log($"backCameraDevice: {backCameraDevice.name}");
         frontCameraTexture = new WebCamTexture(frontCameraDevice.name);
         backCameraTexture = new WebCamTexture(backCameraDevice.name);
 
-        SetActiveCamera(frontCameraTexture);
+        SetActiveCamera(backCameraTexture);
 
         //webCamTexture = new WebCamTexture();
 
@@ -117,23 +122,24 @@ public class TestCamera : MonoBehaviour
 
     private void SetActiveCamera(WebCamTexture cameraToUse)
     {
+        Debug.Log($"SetActiveCamera {cameraToUse}");
+
         if (activeCameraTexture != null)
             activeCameraTexture.Stop();
 
         activeCameraTexture = cameraToUse;
-        activeCameraDevice = WebCamTexture.devices.FirstOrDefault(device =>
-            device.name == cameraToUse.deviceName);
+        //activeCameraDevice = WebCamTexture.devices.FirstOrDefault(device =>
+        //    device.name == cameraToUse.deviceName);
+        activeCameraDevice = cameraToUse.Equals(frontCameraTexture) ? frontCameraDevice : backCameraDevice;
 
         rImage.texture = activeCameraTexture;
 
         activeCameraTexture.Play();
     }
 
-    // Switch between the device's front and back camera
     public void SwitchCamera()
     {
-        SetActiveCamera(activeCameraTexture.Equals(frontCameraTexture) ?
-            backCameraTexture : frontCameraTexture);
+        SetActiveCamera(activeCameraTexture.Equals(frontCameraTexture) ? backCameraTexture : frontCameraTexture);
     }
 
     public void StopCameras()
@@ -146,22 +152,23 @@ public class TestCamera : MonoBehaviour
         {
             activeCameraTexture.Stop();
             Destroy(activeCameraTexture);
+            activeCameraDevice = default;
         }
         if (frontCameraTexture != null)
         {
             frontCameraTexture.Stop();
             Destroy(frontCameraTexture);
+            frontCameraDevice = default;
         }
         if (backCameraTexture != null)
         {
             backCameraTexture.Stop();
             Destroy(backCameraTexture);
+            backCameraDevice = default;
         }
     }
 
-    // Make adjustments to image every frame to be safe, since Unity isn't 
-    // guaranteed to report correct data as soon as device camera is started
-    void Update()
+    private void Update()
     {
         if (activeCameraTexture == null)
             return;
@@ -169,7 +176,7 @@ public class TestCamera : MonoBehaviour
         // Skip making adjustment for incorrect camera data
         if (activeCameraTexture.width < 100)
         {
-            Debug.Log("Still waiting another frame for correct info...");
+            Debug.LogWarning("Still waiting another frame for correct info...");
             return;
         }
 
@@ -177,12 +184,11 @@ public class TestCamera : MonoBehaviour
         //rotationVector.z = -activeCameraTexture.videoRotationAngle;
         //image.rectTransform.localEulerAngles = rotationVector;
 
-        Debug.Log($"resolution: {activeCameraTexture.width}x{activeCameraTexture.height}."); // 16x16
-        //Debug.Log($"resolution2: {activeCameraTexture.requestedWidth}x{activeCameraTexture.requestedHeight} {activeCameraTexture.requestedFPS}fps."); // 0x0 0fps.
+        Debug.LogWarning(
+            $"resolution: {activeCameraTexture.width}x{activeCameraTexture.height} {activeCameraTexture.didUpdateThisFrame} {activeCameraTexture.isPlaying} {activeCameraTexture.texelSize}."); // 480x640
 
         // Set AspectRatioFitter's ratio
-        float videoRatio =
-            (float)activeCameraTexture.width / (float)activeCameraTexture.height;
+        float videoRatio = activeCameraTexture.width / (float)activeCameraTexture.height;
         aspectFitter.aspectRatio = videoRatio;
 
         // Unflip if vertically flipped
