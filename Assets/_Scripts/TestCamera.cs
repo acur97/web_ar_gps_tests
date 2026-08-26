@@ -67,7 +67,7 @@ public class TestCamera : MonoBehaviour
         frontCameraTexture = new WebCamTexture(frontCameraDevice.name);
         backCameraTexture = new WebCamTexture(backCameraDevice.name);
 
-        SetActiveCamera(backCameraTexture);
+        SetActiveCamera(frontCameraTexture);
 
         //webCamTexture = new WebCamTexture();
 
@@ -134,30 +134,36 @@ public class TestCamera : MonoBehaviour
 
     // Make adjustments to image every frame to be safe, since Unity isn't 
     // guaranteed to report correct data as soon as device camera is started
-    //void Update()
-    //{
-    //    // Skip making adjustment for incorrect camera data
-    //    if (activeCameraTexture.width < 100)
-    //    {
-    //        Debug.Log("Still waiting another frame for correct info...");
-    //        return;
-    //    }
+    void Update()
+    {
+        if (activeCameraTexture == null)
+            return;
 
-    //    // Rotate image to show correct orientation 
-    //    rotationVector.z = -activeCameraTexture.videoRotationAngle;
-    //    image.rectTransform.localEulerAngles = rotationVector;
+        // Skip making adjustment for incorrect camera data
+        if (activeCameraTexture.width < 100)
+        {
+            Debug.Log("Still waiting another frame for correct info...");
+            return;
+        }
 
-    //    // Set AspectRatioFitter's ratio
-    //    float videoRatio =
-    //        (float)activeCameraTexture.width / (float)activeCameraTexture.height;
-    //    imageFitter.aspectRatio = videoRatio;
+        // Rotate image to show correct orientation 
+        //rotationVector.z = -activeCameraTexture.videoRotationAngle;
+        //image.rectTransform.localEulerAngles = rotationVector;
 
-    //    // Unflip if vertically flipped
-    //    image.uvRect =
-    //        activeCameraTexture.videoVerticallyMirrored ? fixedRect : defaultRect;
+        Debug.Log($"resolution: {activeCameraTexture.width}x{activeCameraTexture.height}."); // 16x16
+        //Debug.Log($"resolution2: {activeCameraTexture.requestedWidth}x{activeCameraTexture.requestedHeight} {activeCameraTexture.requestedFPS}fps."); // 0x0 0fps.
 
-    //    // Mirror front-facing camera's image horizontally to look more natural
-    //    imageParent.localScale =
-    //        activeCameraDevice.isFrontFacing ? fixedScale : defaultScale;
-    //}
+        // Set AspectRatioFitter's ratio
+        float videoRatio =
+            (float)activeCameraTexture.width / (float)activeCameraTexture.height;
+        aspectFitter.aspectRatio = videoRatio;
+
+        // Unflip if vertically flipped
+        //image.uvRect =
+        //    activeCameraTexture.videoVerticallyMirrored ? fixedRect : defaultRect;
+
+        // Mirror front-facing camera's image horizontally to look more natural
+        //imageParent.localScale =
+        //    activeCameraDevice.isFrontFacing ? fixedScale : defaultScale;
+    }
 }
