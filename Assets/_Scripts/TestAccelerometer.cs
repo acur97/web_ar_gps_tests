@@ -67,6 +67,7 @@ public class TestAccelerometer : MonoBehaviour
             Input.compass.enabled = true;
             Debug.Log($"Enabled {Input.compass}");
         }
+        // probar gyro desde Input.Gyro tambien
 
         Debug.Log("Finish Sensors.");
 
