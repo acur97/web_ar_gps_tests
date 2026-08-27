@@ -68,6 +68,7 @@ public class TestAccelerometer : MonoBehaviour
             Debug.Log($"Enabled {Input.compass}");
         }
         // probar gyro desde Input.Gyro tambien
+        // con el gyro u otro sensor, tengo para subir y bajar la camara?, osea altura?
 
         Debug.Log("Finish Sensors.");
 
@@ -154,17 +155,17 @@ public class TestAccelerometer : MonoBehaviour
             //}
             #endregion
 
-            #region v2.1
-            if (gravity.sqrMagnitude > 0.01f)
-            {
-                gravity.Normalize();
+            #region v3 -- ultimo --
+            //if (gravity.sqrMagnitude > 0.01f)
+            //{
+            //    gravity.Normalize();
 
-                Quaternion tilt = Quaternion.FromToRotation(-cube.up, gravity);
-                cube.rotation = tilt * cube.rotation;
-            }
+            //    Quaternion tilt = Quaternion.FromToRotation(-cube.up, gravity);
+            //    cube.rotation = tilt * cube.rotation;
+            //}
             #endregion
 
-            #region v3, no desfasa pero girar a los lados gira mal
+            #region v4, no desfasa pero girar a los lados gira mal
             //if (gravity.sqrMagnitude > 0.01f)
             //{
             //    gravity.Normalize();
@@ -174,7 +175,7 @@ public class TestAccelerometer : MonoBehaviour
             //}
             #endregion
 
-            #region v4
+            #region v5
             //if (gravity.sqrMagnitude > 0.01f)
             //{
             //    gravity.Normalize();
@@ -182,6 +183,15 @@ public class TestAccelerometer : MonoBehaviour
             //    Quaternion tilt = Quaternion.FromToRotation(Vector3.up, gravity);
             //    cube.rotation = tilt * baseRotation;
             //}
+            #endregion
+
+            #region v6
+            if (gravity.sqrMagnitude > 0.01f)
+            {
+                //gravity.Normalize();
+
+                cube.rotation = Quaternion.FromToRotation(Vector3.down, gravity);
+            }
             #endregion
         }
     }
