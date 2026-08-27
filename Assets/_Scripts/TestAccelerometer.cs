@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -194,13 +195,26 @@ public class TestAccelerometer : MonoBehaviour
             //}
             #endregion
 
-            #region v7
+            #region v7 -- se bugea arriba y abajo
+            //if (gravity.sqrMagnitude > 0.01f)
+            //{
+            //    gravity = -gravity.normalized;
+            //    Vector3 forward = Vector3.ProjectOnPlane(Vector3.forward, gravity).normalized;
+
+            //    cube.rotation = Quaternion.LookRotation(forward, gravity);
+            //}
+            #endregion
+
+            #region v8
             if (gravity.sqrMagnitude > 0.01f)
             {
-                gravity = -gravity.normalized;
-                Vector3 forward = Vector3.ProjectOnPlane(Vector3.forward, gravity).normalized;
+                float pitch = MathF.Atan2(gravity.x,
+                    MathF.Sqrt(gravity.y * gravity.y +
+                    gravity.z * gravity.z)) * Mathf.Rad2Deg;
 
-                cube.rotation = Quaternion.LookRotation(forward, gravity);
+                float roll = MathF.Atan2(gravity.y, gravity.z) * Mathf.Rad2Deg;
+
+                cube.rotation = Quaternion.Euler(pitch, 0, -roll);
             }
             #endregion
         }
