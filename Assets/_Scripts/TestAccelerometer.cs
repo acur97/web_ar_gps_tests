@@ -13,6 +13,9 @@ public class TestAccelerometer : MonoBehaviour
 
     private bool enabledSensors = false;
     private Quaternion baseRotation;
+    private Vector3 acceleration;
+    private Vector3 gravity;
+    private Vector3 filteredGravity;
 
     public void OnStart()
     {
@@ -135,86 +138,51 @@ public class TestAccelerometer : MonoBehaviour
 
         if (GravitySensor.current != null)
         {
-            Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
-            //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
-            //Vector3 gravity = new(-acceleration.x, acceleration.y, acceleration.z); // no se invierte si giramos es la camara
-            Vector3 gravity = new(-acceleration.y, -acceleration.x, acceleration.z); // version pítch y roll
-            gravity.Normalize();
+            acceleration = GravitySensor.current.gravity.ReadValue();
+            //gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
+            gravity = new(-acceleration.x, acceleration.y, acceleration.z); // no se invierte si giramos es la camara
+            //gravity.Normalize();
 
-            //Vector3 filteredGravity = Vector3.Lerp(
-            //    filteredGravity,
-            //    gravity,
-            //    1f - MathF.Exp(-20 * Time.deltaTime));
+            filteredGravity = Vector3.Lerp(
+                filteredGravity,
+                gravity,
+                1f - MathF.Exp(-20 * Time.deltaTime));
 
-            //filteredGravity.Normalize();
+            filteredGravity.Normalize();
 
             #region v1, al tener vertical el telefono se descontrola el cubo
-            //if (gravity.sqrMagnitude > 0.01f)
-            //{
-            //    cube.rotation = Quaternion.LookRotation(gravity);
-            //}
+            //cube.rotation = Quaternion.LookRotation(gravity);
             #endregion
 
             #region v2, se va desfazando, --- el mejor por ahora ---
-            //if (gravity.sqrMagnitude > 0.01f)
-            //{
-            //    Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
-            //    cube.rotation = tilt * cube.rotation;
-            //}
+            //Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
+            //cube.rotation = tilt * cube.rotation;
             #endregion
 
             #region v3 -- ultimo mejor con desfaces tambien --
-            //if (gravity.sqrMagnitude > 0.01f)
-            //{
-            //    Quaternion tilt = Quaternion.FromToRotation(-cube.up, gravity);
-            //    cube.rotation = tilt * cube.rotation;
-            //}
+            //Quaternion tilt = Quaternion.FromToRotation(-cube.up, gravity);
+            //cube.rotation = tilt * cube.rotation;
             #endregion
 
             #region v4, no desfasa pero girar a los lados gira mal
-            //if (gravity.sqrMagnitude > 0.01f)
-            //{
-            //    Quaternion tilt = Quaternion.FromToRotation(baseRotation * Vector3.up, gravity);
-            //    cube.rotation = tilt * baseRotation;
-            //}
+            //Quaternion tilt = Quaternion.FromToRotation(baseRotation * Vector3.up, gravity);
+            //cube.rotation = tilt * baseRotation;
             #endregion
 
             #region v5
-            //if (gravity.sqrMagnitude > 0.01f)
-            //{
-            //    Quaternion tilt = Quaternion.FromToRotation(Vector3.up, gravity);
-            //    cube.rotation = tilt * baseRotation;
-            //}
+            //Quaternion tilt = Quaternion.FromToRotation(Vector3.up, gravity);
+            //cube.rotation = tilt * baseRotation;
             #endregion
 
             #region v6 -- bastante bueno, no se desfasa, pero teniendo el celular acostado hace rotaciones raras, pero casi nunca se haran
-            //if (gravity.sqrMagnitude > 0.01f)
-            //{
-            //    cube.rotation = Quaternion.FromToRotation(Vector3.down, gravity);
-            //}
+            cube.rotation = Quaternion.FromToRotation(Vector3.down, filteredGravity);
             #endregion
 
             #region v7 -- se bugea arriba y abajo
-            //if (gravity.sqrMagnitude > 0.01f)
-            //{
-            //    gravity = -gravity.normalized;
-            //    Vector3 forward = Vector3.ProjectOnPlane(Vector3.forward, gravity).normalized;
+            //gravity = -gravity.normalized;
+            //Vector3 forward = Vector3.ProjectOnPlane(Vector3.forward, gravity).normalized;
 
-            //    cube.rotation = Quaternion.LookRotation(forward, gravity);
-            //}
-            #endregion
-
-            #region v8
-            if (gravity.sqrMagnitude > 0.01f)
-            {
-                float pitch = MathF.Atan2(gravity.x,
-                    MathF.Sqrt(gravity.y * gravity.y +
-                    gravity.z * gravity.z)) * Mathf.Rad2Deg;
-
-                float roll = MathF.Atan2(gravity.y, gravity.z) * Mathf.Rad2Deg;
-
-                cube.rotation = Quaternion.Euler(pitch, 0, -roll);
-            }
+            //cube.rotation = Quaternion.LookRotation(forward, gravity);
             #endregion
         }
     }
