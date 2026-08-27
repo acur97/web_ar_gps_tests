@@ -137,7 +137,16 @@ public class TestAccelerometer : MonoBehaviour
         {
             Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
             //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
-            Vector3 gravity = new(-acceleration.x, acceleration.y, acceleration.z); // no se invierte si giramos es la camara
+            //Vector3 gravity = new(-acceleration.x, acceleration.y, acceleration.z); // no se invierte si giramos es la camara
+            Vector3 gravity = new(acceleration.y, -acceleration.x, acceleration.z); // version pítch y roll
+            gravity.Normalize();
+
+            //Vector3 filteredGravity = Vector3.Lerp(
+            //    filteredGravity,
+            //    gravity,
+            //    1f - MathF.Exp(-20 * Time.deltaTime));
+
+            //filteredGravity.Normalize();
 
             #region v1, al tener vertical el telefono se descontrola el cubo
             //if (gravity.sqrMagnitude > 0.01f)
@@ -149,18 +158,14 @@ public class TestAccelerometer : MonoBehaviour
             #region v2, se va desfazando, --- el mejor por ahora ---
             //if (gravity.sqrMagnitude > 0.01f)
             //{
-            //    gravity.Normalize();
-
             //    Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
             //    cube.rotation = tilt * cube.rotation;
             //}
             #endregion
 
-            #region v3 -- ultimo --
+            #region v3 -- ultimo mejor con desfaces tambien --
             //if (gravity.sqrMagnitude > 0.01f)
             //{
-            //    gravity.Normalize();
-
             //    Quaternion tilt = Quaternion.FromToRotation(-cube.up, gravity);
             //    cube.rotation = tilt * cube.rotation;
             //}
@@ -169,8 +174,6 @@ public class TestAccelerometer : MonoBehaviour
             #region v4, no desfasa pero girar a los lados gira mal
             //if (gravity.sqrMagnitude > 0.01f)
             //{
-            //    gravity.Normalize();
-
             //    Quaternion tilt = Quaternion.FromToRotation(baseRotation * Vector3.up, gravity);
             //    cube.rotation = tilt * baseRotation;
             //}
@@ -179,8 +182,6 @@ public class TestAccelerometer : MonoBehaviour
             #region v5
             //if (gravity.sqrMagnitude > 0.01f)
             //{
-            //    gravity.Normalize();
-
             //    Quaternion tilt = Quaternion.FromToRotation(Vector3.up, gravity);
             //    cube.rotation = tilt * baseRotation;
             //}
@@ -189,8 +190,6 @@ public class TestAccelerometer : MonoBehaviour
             #region v6 -- bastante bueno, no se desfasa, pero teniendo el celular acostado hace rotaciones raras, pero casi nunca se haran
             //if (gravity.sqrMagnitude > 0.01f)
             //{
-            //    gravity.Normalize();
-
             //    cube.rotation = Quaternion.FromToRotation(Vector3.down, gravity);
             //}
             #endregion
