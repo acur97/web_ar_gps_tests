@@ -138,7 +138,7 @@ public class TestAccelerometer : MonoBehaviour
             Vector3 acceleration = GravitySensor.current.gravity.ReadValue();
             //Vector3 gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
             //Vector3 gravity = new(-acceleration.x, acceleration.y, acceleration.z); // no se invierte si giramos es la camara
-            Vector3 gravity = new(acceleration.y, -acceleration.x, acceleration.z); // version pítch y roll
+            Vector3 gravity = new(-acceleration.y, -acceleration.x, acceleration.z); // version pítch y roll
             gravity.Normalize();
 
             //Vector3 filteredGravity = Vector3.Lerp(
