@@ -108,42 +108,42 @@ public class TestAccelerometer : MonoBehaviour
         // en pc sale error en todos
         if (Accelerometer.current != null) // funciona en los dos, gravedad + aceleracion, vector3
         {
-            text.text += $"Accelerometer: {Accelerometer.current.acceleration.ReadValue()} \n";
+            text.text += $"Accelerometer: {Accelerometer.current.acceleration.ReadValue()}";
         }
 
         if (AttitudeSensor.current != null) // solo funciona en moderno, gyro, quaternio, 
         {
-            text.text += $"AttitudeSensor: {AttitudeSensor.current.attitude.ReadValue()} \n";
+            text.text += $"\nAttitudeSensor: {AttitudeSensor.current.attitude.ReadValue()}";
         }
 
         if (GravitySensor.current != null) // funciona en los dos, gravedad, vector3
         {
-            text.text += $"GravitySensor: {GravitySensor.current.gravity.ReadValue()} \n";
+            text.text += $"\nGravitySensor: {GravitySensor.current.gravity.ReadValue()}";
         }
 
         if (Gyroscope.current != null) // solo funciona en moderno, aceleracion del AttitudeSensor, vector3
         {
-            text.text += $"Gyroscope: {Gyroscope.current.angularVelocity.ReadValue()} \n";
+            text.text += $"\nGyroscope: {Gyroscope.current.angularVelocity.ReadValue()}";
         }
 
         if (LinearAccelerationSensor.current != null) // funciona en los dos, aceleracion, vector3
         {
-            text.text += $"LinearAccelerationSensor: {LinearAccelerationSensor.current.acceleration.ReadValue()} \n";
+            text.text += $"\nLinearAccelerationSensor: {LinearAccelerationSensor.current.acceleration.ReadValue()}";
         }
 
         if (MagneticFieldSensor.current != null) // error en viejo, en nuevo nada, no muestra en ninguno de los dos
         {
-            text.text += $"MagneticFieldSensor: {MagneticFieldSensor.current.magneticField.ReadValue()}";
+            text.text += $"\nMagneticFieldSensor: {MagneticFieldSensor.current.magneticField.ReadValue()}";
         }
 
         if (Input.compass != null) // solo funciona en moderno, vacio vector3, funciona float, funciona float
         {
-            text.text += $"compass: {Input.compass.rawVector} {Input.compass.magneticHeading} {Input.compass.trueHeading}";
+            text.text += $"\ncompass: {Input.compass.rawVector} {Input.compass.magneticHeading} {Input.compass.trueHeading} {Input.compass.headingAccuracy}";
         }
 
         if (Input.gyro != null) // solo funciona en moderno, vacio vector3, funciona float, funciona float
         {
-            text.text += $"gyro: {Input.gyro.rotationRate} {Input.gyro.attitude} {Input.gyro.userAcceleration} {Input.gyro.gravity} {Input.gyro.rotationRate} {Input.gyro.userAcceleration}";
+            text.text += $"\ngyro: {Input.gyro.rotationRate} {Input.gyro.userAcceleration} {Input.gyro.gravity}\n{Input.gyro.rotationRate} {Input.gyro.attitude} {Input.gyro.updateInterval}";
         }
 
         if (GravitySensor.current != null)
