@@ -78,8 +78,8 @@ public class TestCamera : MonoBehaviour
         Debug.Log($"backCameraDevice: {backCameraDevice.name}");
         //frontCameraTexture = new WebCamTexture(frontCameraDevice.name);
         //backCameraTexture = new WebCamTexture(backCameraDevice.name);
-        frontCameraTexture = new WebCamTexture(frontCameraDevice.name, 720, 1280, 60); // funcionara una mejor resolucion y mas fps?
-        backCameraTexture = new WebCamTexture(backCameraDevice.name, 720, 1280, 60);
+        frontCameraTexture = new WebCamTexture(frontCameraDevice.name, 1280, 720); // funcionara una mejor resolucion y mas fps?
+        backCameraTexture = new WebCamTexture(backCameraDevice.name, 1280, 720); // mas fps no, resolucion inversa parece
 
         SetActiveCamera(backCameraTexture);
     }

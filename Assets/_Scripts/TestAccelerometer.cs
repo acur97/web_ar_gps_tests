@@ -26,7 +26,7 @@ public class TestAccelerometer : MonoBehaviour
         if (Accelerometer.current != null)
         {
             InputSystem.EnableDevice(Accelerometer.current);
-            Debug.Log($"Enabled {Accelerometer.current.description} {Accelerometer.current.samplingFrequency}Hz");
+            Debug.Log($"Enabled {Accelerometer.current.description} {Accelerometer.current.samplingFrequency}Hz"); //60Hz
         }
 
         Debug.Log($"AttitudeSensor - {AttitudeSensor.current}");
@@ -71,12 +71,12 @@ public class TestAccelerometer : MonoBehaviour
             Input.compass.enabled = true;
             Debug.Log($"Enabled {Input.compass}");
         }
-        Debug.Log($"Input.gyro - {Input.gyro}");
-        if (Input.gyro != null)
-        {
-            Input.gyro.enabled = true;
-            Debug.Log($"Enabled {Input.gyro}");
-        }
+        //Debug.Log($"Input.gyro - {Input.gyro}");
+        //if (Input.gyro != null)
+        //{
+        //    Input.gyro.enabled = true;
+        //    Debug.Log($"Enabled {Input.gyro}");
+        //}
         // con el gyro u otro sensor, tengo para subir y bajar la camara?, osea altura?
 
         Debug.Log("Finish Sensors.");
@@ -139,12 +139,14 @@ public class TestAccelerometer : MonoBehaviour
         if (Input.compass != null) // solo funciona en moderno, vacio vector3, funciona float, funciona float
         {
             text.text += $"\ncompass: {Input.compass.rawVector} {Input.compass.magneticHeading} {Input.compass.trueHeading} {Input.compass.headingAccuracy}";
+            //                                       0, 0, 0                    float                           float                       0
         }
 
-        if (Input.gyro != null) // solo funciona en moderno, vacio vector3, funciona float, funciona float
-        {
-            text.text += $"\ngyro: {Input.gyro.rotationRate} {Input.gyro.userAcceleration} {Input.gyro.gravity}\n{Input.gyro.rotationRate} {Input.gyro.attitude} {Input.gyro.updateInterval}";
-        }
+        //if (Input.gyro != null) // solo funciona en moderno, vacio vector3, funciona float, funciona float
+        //{
+        //    text.text += $"\ngyro: {Input.gyro.rotationRate} {Input.gyro.userAcceleration} {Input.gyro.gravity}\n{Input.gyro.rotationRate} {Input.gyro.attitude} {Input.gyro.updateInterval}";
+        //    //                                 gyroscope                 linear acceleration           acceleration                                    atitude               0.016666
+        //}
 
         if (GravitySensor.current != null)
         {
@@ -156,7 +158,7 @@ public class TestAccelerometer : MonoBehaviour
             filteredGravity = Vector3.Lerp(
                 filteredGravity,
                 gravity,
-                1f - MathF.Exp(-42 * Time.deltaTime));
+                1f - MathF.Exp(-21 * Time.deltaTime));
 
             filteredGravity.Normalize();
 
