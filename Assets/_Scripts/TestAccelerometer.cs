@@ -12,7 +12,7 @@ public class TestAccelerometer : MonoBehaviour
     [SerializeField] private Transform cube;
 
     private bool enabledSensors = false;
-    private Quaternion baseRotation;
+    //private Quaternion baseRotation;
     private Vector3 acceleration;
     private Vector3 gravity;
     private Vector3 filteredGravity;
@@ -71,17 +71,11 @@ public class TestAccelerometer : MonoBehaviour
             Input.compass.enabled = true;
             Debug.Log($"Enabled {Input.compass}");
         }
-        //Debug.Log($"Input.gyro - {Input.gyro}");
-        //if (Input.gyro != null)
-        //{
-        //    Input.gyro.enabled = true;
-        //    Debug.Log($"Enabled {Input.gyro}");
-        //}
         // con el gyro u otro sensor, tengo para subir y bajar la camara?, osea altura?
 
         Debug.Log("Finish Sensors.");
 
-        baseRotation = cube.rotation;
+        //baseRotation = cube.rotation;
 
         enabledSensors = true;
     }
@@ -90,18 +84,6 @@ public class TestAccelerometer : MonoBehaviour
     {
         if (!enabledSensors)
             return;
-
-        //if (Accelerometer.current != null)
-        //{
-        //    //gameObject.transform.rotation = AttitudeSensor.current.attitude.ReadValue();
-        //    text.text = Accelerometer.current.acceleration.ReadValue().ToString();
-        //}
-        //else
-        //{
-        //    text.text = Accelerometer.current.ToString();
-        //}
-
-        //else gameObject.transform.rotation = Quaternion.Euler(0, (float)System.DateTimeOffset.Now.TimeOfDay.Milliseconds * 360 / 1000f, 0);
 
         text.text = "";
 
@@ -141,12 +123,6 @@ public class TestAccelerometer : MonoBehaviour
             text.text += $"\ncompass: {Input.compass.rawVector} {Input.compass.magneticHeading} {Input.compass.trueHeading} {Input.compass.headingAccuracy}";
             //                                       0, 0, 0                    float                           float                       0
         }
-
-        //if (Input.gyro != null) // solo funciona en moderno, vacio vector3, funciona float, funciona float
-        //{
-        //    text.text += $"\ngyro: {Input.gyro.rotationRate} {Input.gyro.userAcceleration} {Input.gyro.gravity}\n{Input.gyro.rotationRate} {Input.gyro.attitude} {Input.gyro.updateInterval}";
-        //    //                                 gyroscope                 linear acceleration           acceleration                                    atitude               0.016666
-        //}
 
         if (GravitySensor.current != null)
         {

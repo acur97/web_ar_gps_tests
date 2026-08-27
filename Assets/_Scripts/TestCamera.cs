@@ -76,10 +76,8 @@ public class TestCamera : MonoBehaviour
 
         Debug.Log($"frontCameraDevice: {frontCameraDevice.name}");
         Debug.Log($"backCameraDevice: {backCameraDevice.name}");
-        //frontCameraTexture = new WebCamTexture(frontCameraDevice.name);
-        //backCameraTexture = new WebCamTexture(backCameraDevice.name);
-        frontCameraTexture = new WebCamTexture(frontCameraDevice.name, 1280, 720); // funcionara una mejor resolucion y mas fps?
-        backCameraTexture = new WebCamTexture(backCameraDevice.name, 1280, 720); // mas fps no, resolucion inversa parece
+        frontCameraTexture = new WebCamTexture(frontCameraDevice.name); // por ahora mejor sin aumentar resolucion
+        backCameraTexture = new WebCamTexture(backCameraDevice.name);
 
         SetActiveCamera(backCameraTexture);
     }
@@ -145,7 +143,7 @@ public class TestCamera : MonoBehaviour
         //image.rectTransform.localEulerAngles = rotationVector;
 
         Debug.LogWarning(
-            $"currentResolution:{activeCameraTexture.width}x{activeCameraTexture.height} | UpdateThisFrame:{activeCameraTexture.didUpdateThisFrame} | isPlaying:{activeCameraTexture.isPlaying} | {activeCameraTexture.requestedFPS}"); // 480x640
+            $"currentResolution:{activeCameraTexture.width}x{activeCameraTexture.height} | UpdateThisFrame:{activeCameraTexture.didUpdateThisFrame} | isPlaying:{activeCameraTexture.isPlaying}"); // 480x640
 
         // Set AspectRatioFitter's ratio
         aspectFitter.aspectRatio = activeCameraTexture.width / (float)activeCameraTexture.height;
