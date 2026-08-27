@@ -185,12 +185,22 @@ public class TestAccelerometer : MonoBehaviour
             //}
             #endregion
 
-            #region v6
+            #region v6 -- bastante bueno, no se desfasa, pero teniendo el celular acostado hace rotaciones raras, pero casi nunca se haran
+            //if (gravity.sqrMagnitude > 0.01f)
+            //{
+            //    gravity.Normalize();
+
+            //    cube.rotation = Quaternion.FromToRotation(Vector3.down, gravity);
+            //}
+            #endregion
+
+            #region v7
             if (gravity.sqrMagnitude > 0.01f)
             {
-                //gravity.Normalize();
+                gravity = -gravity.normalized;
+                Vector3 forward = Vector3.ProjectOnPlane(Vector3.forward, gravity).normalized;
 
-                cube.rotation = Quaternion.FromToRotation(Vector3.down, gravity);
+                cube.rotation = Quaternion.LookRotation(forward, gravity);
             }
             #endregion
         }
