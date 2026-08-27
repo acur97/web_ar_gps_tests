@@ -26,21 +26,21 @@ public class TestAccelerometer : MonoBehaviour
         if (Accelerometer.current != null)
         {
             InputSystem.EnableDevice(Accelerometer.current);
-            Debug.Log($"Enabled {Accelerometer.current.description}");
+            Debug.Log($"Enabled {Accelerometer.current.description} {Accelerometer.current.samplingFrequency}Hz");
         }
 
         Debug.Log($"AttitudeSensor - {AttitudeSensor.current}");
         if (AttitudeSensor.current != null)
         {
             InputSystem.EnableDevice(AttitudeSensor.current);
-            Debug.Log($"Enabled {AttitudeSensor.current.description}");
+            Debug.Log($"Enabled {AttitudeSensor.current.description} {AttitudeSensor.current.samplingFrequency}Hz");
         }
 
         Debug.Log($"GravitySensor - {GravitySensor.current}");
         if (GravitySensor.current != null)
         {
             InputSystem.EnableDevice(GravitySensor.current);
-            Debug.Log($"Enabled {GravitySensor.current.description}");
+            Debug.Log($"Enabled {GravitySensor.current.description} {GravitySensor.current.samplingFrequency}Hz");
         }
 
         Debug.Log($"Supports Gyroscope: {SystemInfo.supportsGyroscope}");
@@ -48,30 +48,35 @@ public class TestAccelerometer : MonoBehaviour
         if (Gyroscope.current != null)
         {
             InputSystem.EnableDevice(Gyroscope.current);
-            Debug.Log($"Enabled {Gyroscope.current.description}");
+            Debug.Log($"Enabled {Gyroscope.current.description} {Gyroscope.current.samplingFrequency}Hz");
         }
 
         Debug.Log($"LinearAccelerationSensor - {LinearAccelerationSensor.current}");
         if (LinearAccelerationSensor.current != null)
         {
             InputSystem.EnableDevice(LinearAccelerationSensor.current);
-            Debug.Log($"Enabled {LinearAccelerationSensor.current.description}");
+            Debug.Log($"Enabled {LinearAccelerationSensor.current.description} {LinearAccelerationSensor.current.samplingFrequency}Hz");
         }
 
         Debug.Log($"MagneticFieldSensor - {MagneticFieldSensor.current}");
         if (MagneticFieldSensor.current != null)
         {
             InputSystem.EnableDevice(MagneticFieldSensor.current);
-            Debug.Log($"Enabled {MagneticFieldSensor.current.description}");
+            Debug.Log($"Enabled {MagneticFieldSensor.current.description} {MagneticFieldSensor.current.samplingFrequency}Hz");
         }
 
-        Debug.Log($"Compass - {Input.compass}");
+        Debug.Log($"Input.compass - {Input.compass}");
         if (Input.compass != null)
         {
             Input.compass.enabled = true;
             Debug.Log($"Enabled {Input.compass}");
         }
-        // probar gyro desde Input.Gyro tambien
+        Debug.Log($"Input.gyro - {Input.gyro}");
+        if (Input.gyro != null)
+        {
+            Input.gyro.enabled = true;
+            Debug.Log($"Enabled {Input.gyro}");
+        }
         // con el gyro u otro sensor, tengo para subir y bajar la camara?, osea altura?
 
         Debug.Log("Finish Sensors.");
@@ -136,6 +141,11 @@ public class TestAccelerometer : MonoBehaviour
             text.text += $"compass: {Input.compass.rawVector} {Input.compass.magneticHeading} {Input.compass.trueHeading}";
         }
 
+        if (Input.gyro != null) // solo funciona en moderno, vacio vector3, funciona float, funciona float
+        {
+            text.text += $"gyro: {Input.gyro.rotationRate} {Input.gyro.attitude} {Input.gyro.userAcceleration} {Input.gyro.gravity} {Input.gyro.rotationRate} {Input.gyro.userAcceleration}";
+        }
+
         if (GravitySensor.current != null)
         {
             acceleration = GravitySensor.current.gravity.ReadValue();
@@ -146,7 +156,7 @@ public class TestAccelerometer : MonoBehaviour
             filteredGravity = Vector3.Lerp(
                 filteredGravity,
                 gravity,
-                1f - MathF.Exp(-20 * Time.deltaTime));
+                1f - MathF.Exp(-42 * Time.deltaTime));
 
             filteredGravity.Normalize();
 
