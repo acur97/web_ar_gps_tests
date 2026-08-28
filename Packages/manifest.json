@@ -9,15 +9,9 @@
     "com.unity.test-framework": "1.7.0",
     "com.unity.ugui": "2.5.0",
     "com.yasirkula.ingamedebugconsole": "https://github.com/yasirkula/UnityIngameDebugConsole.git",
-    "com.unity.modules.androidjni": "1.0.0",
-    "com.unity.modules.animation": "1.0.0",
-    "com.unity.modules.audio": "1.0.0",
-    "com.unity.modules.imgui": "1.0.0",
     "com.unity.modules.jsonserialize": "1.0.0",
     "com.unity.modules.ui": "1.0.0",
     "com.unity.modules.uielements": "1.0.0",
-    "com.unity.modules.umbra": "1.0.0",
-    "com.unity.modules.vectorgraphics": "1.0.0",
-    "com.unity.modules.video": "1.0.0"
+    "com.unity.modules.umbra": "1.0.0"
   }
 }
