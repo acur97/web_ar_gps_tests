@@ -25,15 +25,15 @@ public class TestCamera : MonoBehaviour
         StartAwaitCamera().Forget();
     }
 
-    private string DescribeResolution(Resolution res)
-    {
-        return $"{res.width}x{res.height}@{res.refreshRateRatio.value}Hz";
-    }
+    //private string DescribeResolution(Resolution res)
+    //{
+    //    return $"{res.width}x{res.height}@{res.refreshRateRatio.value}Hz";
+    //}
 
-    private string DescribeResolutions(WebCamDevice dev)
-    {
-        return string.Join(", ", dev.availableResolutions.Select(res => DescribeResolution(res)));
-    }
+    //private string DescribeResolutions(WebCamDevice dev)
+    //{
+    //    return string.Join(", ", dev.availableResolutions.Select(res => DescribeResolution(res)));
+    //}
 
     public async UniTaskVoid StartAwaitCamera()
     {
@@ -55,18 +55,18 @@ public class TestCamera : MonoBehaviour
         Debug.Log("devices:");
         foreach (WebCamDevice device in WebCamTexture.devices)
         {
-            string desc = $"name: {device.name}. type: {device.kind}. ";
+            string desc = $"name: {device.name}. type: {device.kind}. "; // name: camera 1, facing frony. type: WideAngle.
 
-            if (device.depthCameraName != null)
-                desc += $"Depth support: ({device.depthCameraName}). ";
+            //if (device.depthCameraName != null)
+            //    desc += $"Depth support: ({device.depthCameraName}). ";
 
-            desc += $"Direction: {(device.isFrontFacing ? "Front" : "Rear")}. ";
+            desc += $"Direction: {(device.isFrontFacing ? "Front" : "Rear")}. "; // Direction: Front.
 
-            if (device.isAutoFocusPointSupported)
-                desc += "Auto focus support. ";
+            //if (device.isAutoFocusPointSupported)
+            //    desc += "Auto focus support. ";
 
-            if (device.availableResolutions != null)
-                desc += $"Supported resolutions: {DescribeResolutions(device)}. ";
+            //if (device.availableResolutions != null)
+            //    desc += $"Supported resolutions: {DescribeResolutions(device)}. ";
 
             Debug.LogWarning(desc);
         }
@@ -74,8 +74,8 @@ public class TestCamera : MonoBehaviour
         frontCameraDevice = WebCamTexture.devices.First();
         backCameraDevice = WebCamTexture.devices.Last();
 
-        Debug.Log($"frontCameraDevice: {frontCameraDevice.name}");
-        Debug.Log($"backCameraDevice: {backCameraDevice.name}");
+        Debug.Log($"frontCameraDevice: {frontCameraDevice.name}"); // camera 1, facing front
+        Debug.Log($"backCameraDevice: {backCameraDevice.name}"); // camera 0, facing back
         frontCameraTexture = new WebCamTexture(frontCameraDevice.name); // por ahora mejor sin aumentar resolucion
         backCameraTexture = new WebCamTexture(backCameraDevice.name);
 
@@ -143,7 +143,9 @@ public class TestCamera : MonoBehaviour
         //image.rectTransform.localEulerAngles = rotationVector;
 
         Debug.LogWarning(
-            $"currentResolution:{activeCameraTexture.width}x{activeCameraTexture.height} | UpdateThisFrame:{activeCameraTexture.didUpdateThisFrame} | isPlaying:{activeCameraTexture.isPlaying}"); // 480x640
+            $"currentResolution:{activeCameraTexture.width}x{activeCameraTexture.height} | UpdateThisFrame:{activeCameraTexture.didUpdateThisFrame} | isPlaying:{activeCameraTexture.isPlaying}");
+        // currentResolution:480x640 | UpdateThisFrame:True | isPlaying:True
+        // currentResolution:480x640 | UpdateThisFrame:True | isPlaying:false
 
         // Set AspectRatioFitter's ratio
         aspectFitter.aspectRatio = activeCameraTexture.width / (float)activeCameraTexture.height;

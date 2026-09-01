@@ -2,11 +2,12 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Gyroscope = UnityEngine.InputSystem.Gyroscope;
+//using Gyroscope = UnityEngine.InputSystem.Gyroscope;
 
 public class TestAccelerometer : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
+    private string _text = string.Empty;
 
     [Space]
     [SerializeField] private Transform cube;
@@ -21,13 +22,13 @@ public class TestAccelerometer : MonoBehaviour
     {
         Debug.Log("Start Sensors...");
 
-        Debug.Log($"Supports Accelerometer: {SystemInfo.supportsAccelerometer}");
-        Debug.Log($"Accelerometer - {Accelerometer.current}");
-        if (Accelerometer.current != null)
-        {
-            InputSystem.EnableDevice(Accelerometer.current);
-            Debug.Log($"Enabled {Accelerometer.current.description} {Accelerometer.current.samplingFrequency}Hz"); //60Hz
-        }
+        Debug.Log($"Supports Accelerometer: {SystemInfo.supportsAccelerometer}"); // true
+        //Debug.Log($"Accelerometer - {Accelerometer.current}"); // Accelerometer - Accelerometer:/Accelerometer
+        //if (Accelerometer.current != null)
+        //{
+        //    InputSystem.EnableDevice(Accelerometer.current);
+        //    Debug.Log($"Enabled {Accelerometer.current.description} {Accelerometer.current.samplingFrequency}Hz"); // Enabled Accelerometer (WebGL) 60Hz
+        //}
 
         Debug.Log($"AttitudeSensor - {AttitudeSensor.current}");
         if (AttitudeSensor.current != null)
@@ -44,25 +45,25 @@ public class TestAccelerometer : MonoBehaviour
         }
 
         Debug.Log($"Supports Gyroscope: {SystemInfo.supportsGyroscope}");
-        Debug.Log($"Gyroscope - {Gyroscope.current}");
-        if (Gyroscope.current != null)
-        {
-            InputSystem.EnableDevice(Gyroscope.current);
-            Debug.Log($"Enabled {Gyroscope.current.description} {Gyroscope.current.samplingFrequency}Hz");
-        }
+        //Debug.Log($"Gyroscope - {Gyroscope.current}");
+        //if (Gyroscope.current != null)
+        //{
+        //    InputSystem.EnableDevice(Gyroscope.current);
+        //    Debug.Log($"Enabled {Gyroscope.current.description} {Gyroscope.current.samplingFrequency}Hz");
+        //}
 
-        Debug.Log($"LinearAccelerationSensor - {LinearAccelerationSensor.current}");
-        if (LinearAccelerationSensor.current != null)
-        {
-            InputSystem.EnableDevice(LinearAccelerationSensor.current);
-            Debug.Log($"Enabled {LinearAccelerationSensor.current.description} {LinearAccelerationSensor.current.samplingFrequency}Hz");
-        }
+        //Debug.Log($"LinearAccelerationSensor - {LinearAccelerationSensor.current}");
+        //if (LinearAccelerationSensor.current != null)
+        //{
+        //    InputSystem.EnableDevice(LinearAccelerationSensor.current);
+        //    Debug.Log($"Enabled {LinearAccelerationSensor.current.description} {LinearAccelerationSensor.current.samplingFrequency}Hz");
+        //}
 
-        Debug.Log($"MagneticFieldSensor - {MagneticFieldSensor.current}");
-        if (MagneticFieldSensor.current != null)
+        Debug.Log($"StepCounter - {StepCounter.current}");
+        if (StepCounter.current != null)
         {
-            InputSystem.EnableDevice(MagneticFieldSensor.current);
-            Debug.Log($"Enabled {MagneticFieldSensor.current.description} {MagneticFieldSensor.current.samplingFrequency}Hz");
+            InputSystem.EnableDevice(StepCounter.current);
+            Debug.Log($"Enabled {StepCounter.current.description} {StepCounter.current.samplingFrequency}Hz");
         }
 
         Debug.Log($"Input.compass - {Input.compass}");
@@ -85,44 +86,46 @@ public class TestAccelerometer : MonoBehaviour
         if (!enabledSensors)
             return;
 
-        text.text = "";
+        _text = string.Empty;
 
         // en pc sale error en todos
-        if (Accelerometer.current != null) // funciona en los dos, gravedad + aceleracion, vector3
-        {
-            text.text += $"Accelerometer: {Accelerometer.current.acceleration.ReadValue()}";
-        }
+        //if (Accelerometer.current != null) // funciona en los dos, gravedad + aceleracion, vector3
+        //{
+        //    _text += $"Accelerometer: {Accelerometer.current.acceleration.ReadValue()}";
+        //}
 
         if (AttitudeSensor.current != null) // solo funciona en moderno, gyro, quaternio, 
         {
-            text.text += $"\nAttitudeSensor: {AttitudeSensor.current.attitude.ReadValue()}";
+            _text += $"\nAttitudeSensor: {AttitudeSensor.current.attitude.ReadValue()} {AttitudeSensor.current.lastUpdateTime} {AttitudeSensor.current.magnitude} {AttitudeSensor.current.updateBeforeRender} {AttitudeSensor.current.wasUpdatedThisFrame}";
         }
 
         if (GravitySensor.current != null) // funciona en los dos, gravedad, vector3
         {
-            text.text += $"\nGravitySensor: {GravitySensor.current.gravity.ReadValue()}";
+            _text += $"\nGravitySensor: {GravitySensor.current.gravity.ReadValue()}";
         }
 
-        if (Gyroscope.current != null) // solo funciona en moderno, aceleracion del AttitudeSensor, vector3
-        {
-            text.text += $"\nGyroscope: {Gyroscope.current.angularVelocity.ReadValue()}";
-        }
+        //if (Gyroscope.current != null) // solo funciona en moderno, aceleracion del AttitudeSensor, vector3
+        //{
+        //    _text += $"\nGyroscope: {Gyroscope.current.angularVelocity.ReadValue()}";
+        //}
 
-        if (LinearAccelerationSensor.current != null) // funciona en los dos, aceleracion, vector3
-        {
-            text.text += $"\nLinearAccelerationSensor: {LinearAccelerationSensor.current.acceleration.ReadValue()}";
-        }
+        //if (LinearAccelerationSensor.current != null) // funciona en los dos, aceleracion, vector3
+        //{
+        //    _text += $"\nLinearAccelerationSensor: {LinearAccelerationSensor.current.acceleration.ReadValue()}";
+        //}
 
-        if (MagneticFieldSensor.current != null) // error en viejo, en nuevo nada, no muestra en ninguno de los dos
+        if (StepCounter.current != null) // funciona en los dos, gravedad, vector3
         {
-            text.text += $"\nMagneticFieldSensor: {MagneticFieldSensor.current.magneticField.ReadValue()}";
+            _text += $"\nStepCounter: {StepCounter.current.stepCounter.ReadValue()}";
         }
 
         if (Input.compass != null) // solo funciona en moderno, vacio vector3, funciona float, funciona float
         {
-            text.text += $"\ncompass: {Input.compass.rawVector} {Input.compass.magneticHeading} {Input.compass.trueHeading} {Input.compass.headingAccuracy}";
-            //                                       0, 0, 0                    float                           float                       0
+            _text += $"\ncompass: {Input.compass.magneticHeading} {Input.compass.trueHeading} {Input.compass.headingAccuracy}";
+            //                     float                           float                       0  En iphone si muestra un valor de 20.03567
         }
+
+        text.SetText(_text);
 
         if (GravitySensor.current != null)
         {

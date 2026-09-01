@@ -18,7 +18,7 @@ MonoBehaviour:
   - GravitySensor
   - Gyroscope
   - LinearAccelerationSensor
-  - MagneticFieldSensor
+  - StepCounter
   m_UpdateMode: 1
   m_ScrollDeltaBehavior: 0
   m_MaxEventBytesPerUpdate: 5242880
