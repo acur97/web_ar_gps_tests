@@ -68,13 +68,13 @@ public class TestAccelerometer : MonoBehaviour
 
         if (Input.compass != null /*&& Input.compass.timestamp > 0*/) // solo funciona en moderno, vacio vector3, funciona float, funciona float
         {
-            _text += $"\ncompass: {Input.compass.magneticHeading} {Input.compass.trueHeading} {Input.compass.headingAccuracy} {Input.compass.timestamp}";
+            _text += $"\ncompass: {Input.compass.magneticHeading} {Input.compass.trueHeading} {Input.compass.headingAccuracy} {Input.compass.timestamp} {Input.compass.enabled}";
             //                     float                           float                       0  En iphone si muestra un valor de 20.03567
         }
 
         text.SetText(_text);
 
-        if (GravitySensor.current != null)
+        if (GravitySensor.current != null && GravitySensor.current.lastUpdateTime > 0)
         {
             acceleration = GravitySensor.current.gravity.ReadValue();
             gravity = new(-acceleration.x, acceleration.y, acceleration.z);
