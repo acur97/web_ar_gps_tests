@@ -2,7 +2,6 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-//using Gyroscope = UnityEngine.InputSystem.Gyroscope;
 
 public class TestAccelerometer : MonoBehaviour
 {
@@ -13,7 +12,6 @@ public class TestAccelerometer : MonoBehaviour
     [SerializeField] private Transform cube;
 
     private bool enabledSensors = false;
-    //private Quaternion baseRotation;
     private Vector3 acceleration;
     private Vector3 gravity;
     private Vector3 filteredGravity;
@@ -22,21 +20,7 @@ public class TestAccelerometer : MonoBehaviour
     {
         Debug.Log("Start Sensors...");
 
-        Debug.Log($"Supports Accelerometer: {SystemInfo.supportsAccelerometer}"); // true
-        //Debug.Log($"Accelerometer - {Accelerometer.current}"); // Accelerometer - Accelerometer:/Accelerometer
-        //if (Accelerometer.current != null)
-        //{
-        //    InputSystem.EnableDevice(Accelerometer.current);
-        //    Debug.Log($"Enabled {Accelerometer.current.description} {Accelerometer.current.samplingFrequency}Hz"); // Enabled Accelerometer (WebGL) 60Hz
-        //}
-
-        Debug.Log($"AttitudeSensor - {AttitudeSensor.current}");
-        if (AttitudeSensor.current != null)
-        {
-            InputSystem.EnableDevice(AttitudeSensor.current);
-            Debug.Log($"Enabled {AttitudeSensor.current.description} {AttitudeSensor.current.samplingFrequency}Hz");
-        }
-
+        Debug.Log($"Supports Accelerometer: {SystemInfo.supportsAccelerometer}");
         Debug.Log($"GravitySensor - {GravitySensor.current}");
         if (GravitySensor.current != null)
         {
@@ -45,25 +29,11 @@ public class TestAccelerometer : MonoBehaviour
         }
 
         Debug.Log($"Supports Gyroscope: {SystemInfo.supportsGyroscope}");
-        //Debug.Log($"Gyroscope - {Gyroscope.current}");
-        //if (Gyroscope.current != null)
-        //{
-        //    InputSystem.EnableDevice(Gyroscope.current);
-        //    Debug.Log($"Enabled {Gyroscope.current.description} {Gyroscope.current.samplingFrequency}Hz");
-        //}
-
-        //Debug.Log($"LinearAccelerationSensor - {LinearAccelerationSensor.current}");
-        //if (LinearAccelerationSensor.current != null)
-        //{
-        //    InputSystem.EnableDevice(LinearAccelerationSensor.current);
-        //    Debug.Log($"Enabled {LinearAccelerationSensor.current.description} {LinearAccelerationSensor.current.samplingFrequency}Hz");
-        //}
-
-        Debug.Log($"StepCounter - {StepCounter.current}");
-        if (StepCounter.current != null)
+        Debug.Log($"AttitudeSensor - {AttitudeSensor.current}");
+        if (AttitudeSensor.current != null)
         {
-            InputSystem.EnableDevice(StepCounter.current);
-            Debug.Log($"Enabled {StepCounter.current.description} {StepCounter.current.samplingFrequency}Hz");
+            InputSystem.EnableDevice(AttitudeSensor.current);
+            Debug.Log($"Enabled {AttitudeSensor.current.description} {AttitudeSensor.current.samplingFrequency}Hz");
         }
 
         Debug.Log($"Input.compass - {Input.compass}");
@@ -76,8 +46,6 @@ public class TestAccelerometer : MonoBehaviour
 
         Debug.Log("Finish Sensors.");
 
-        //baseRotation = cube.rotation;
-
         enabledSensors = true;
     }
 
@@ -88,40 +56,19 @@ public class TestAccelerometer : MonoBehaviour
 
         _text = string.Empty;
 
-        // en pc sale error en todos
-        //if (Accelerometer.current != null) // funciona en los dos, gravedad + aceleracion, vector3
-        //{
-        //    _text += $"Accelerometer: {Accelerometer.current.acceleration.ReadValue()}";
-        //}
-
-        if (AttitudeSensor.current != null) // solo funciona en moderno, gyro, quaternio, 
-        {
-            _text += $"\nAttitudeSensor: {AttitudeSensor.current.attitude.ReadValue()} {AttitudeSensor.current.lastUpdateTime} {AttitudeSensor.current.magnitude} {AttitudeSensor.current.updateBeforeRender} {AttitudeSensor.current.wasUpdatedThisFrame}";
-        }
-
-        if (GravitySensor.current != null) // funciona en los dos, gravedad, vector3
+        if (GravitySensor.current != null && GravitySensor.current.lastUpdateTime > 0) // funciona en los dos, gravedad, vector3
         {
             _text += $"\nGravitySensor: {GravitySensor.current.gravity.ReadValue()}";
         }
 
-        //if (Gyroscope.current != null) // solo funciona en moderno, aceleracion del AttitudeSensor, vector3
-        //{
-        //    _text += $"\nGyroscope: {Gyroscope.current.angularVelocity.ReadValue()}";
-        //}
-
-        //if (LinearAccelerationSensor.current != null) // funciona en los dos, aceleracion, vector3
-        //{
-        //    _text += $"\nLinearAccelerationSensor: {LinearAccelerationSensor.current.acceleration.ReadValue()}";
-        //}
-
-        if (StepCounter.current != null) // funciona en los dos, gravedad, vector3
+        if (AttitudeSensor.current != null && AttitudeSensor.current.lastUpdateTime > 0) // solo funciona en moderno, gyro, quaternio, 
         {
-            _text += $"\nStepCounter: {StepCounter.current.stepCounter.ReadValue()}";
+            _text += $"\nAttitudeSensor: {AttitudeSensor.current.attitude.ReadValue()}";
         }
 
-        if (Input.compass != null) // solo funciona en moderno, vacio vector3, funciona float, funciona float
+        if (Input.compass != null /*&& Input.compass.timestamp > 0*/) // solo funciona en moderno, vacio vector3, funciona float, funciona float
         {
-            _text += $"\ncompass: {Input.compass.magneticHeading} {Input.compass.trueHeading} {Input.compass.headingAccuracy}";
+            _text += $"\ncompass: {Input.compass.magneticHeading} {Input.compass.trueHeading} {Input.compass.headingAccuracy} {Input.compass.timestamp}";
             //                     float                           float                       0  En iphone si muestra un valor de 20.03567
         }
 
@@ -130,9 +77,7 @@ public class TestAccelerometer : MonoBehaviour
         if (GravitySensor.current != null)
         {
             acceleration = GravitySensor.current.gravity.ReadValue();
-            //gravity = new(-acceleration.x, -acceleration.y, acceleration.z);
-            gravity = new(-acceleration.x, acceleration.y, acceleration.z); // no se invierte si giramos es la camara
-            //gravity.Normalize();
+            gravity = new(-acceleration.x, acceleration.y, acceleration.z);
 
             filteredGravity = Vector3.Lerp(
                 filteredGravity,
@@ -172,7 +117,6 @@ public class TestAccelerometer : MonoBehaviour
             #region v7 -- se bugea arriba y abajo
             //gravity = -gravity.normalized;
             //Vector3 forward = Vector3.ProjectOnPlane(Vector3.forward, gravity).normalized;
-
             //cube.rotation = Quaternion.LookRotation(forward, gravity);
             #endregion
         }
