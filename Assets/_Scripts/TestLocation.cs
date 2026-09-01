@@ -5,35 +5,42 @@ public class TestLocation : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
 
+    private LocationService _locationService;
+
+    private void Awake()
+    {
+        _locationService = Input.location;
+    }
+
     public void IsEnabledByUser()
     {
         Debug.Log($"Supports Location: {SystemInfo.supportsLocationService}");
-        text.SetText(Input.location.isEnabledByUser.ToString());
+        text.SetText(_locationService.isEnabledByUser.ToString());
     }
 
     public void LocationStart()
     {
-        float desiredAccuracyInMeters = 10f;
-        float updateDistanceInMeters = 10f;
+        float desiredAccuracyInMeters = 1f;
+        float updateDistanceInMeters = 0.001f;
 
-        Input.location.Start(desiredAccuracyInMeters, updateDistanceInMeters);
+        _locationService.Start(desiredAccuracyInMeters, updateDistanceInMeters);
     }
 
     public void CheckLocationStart()
     {
-        text.SetText(Input.location.status.ToString());
+        text.SetText(_locationService.status.ToString());
     }
 
     public void CheckLocation()
     {
-        if (Input.location.status == LocationServiceStatus.Running)
+        if (_locationService.status == LocationServiceStatus.Running)
         {
-            text.SetText($"Location: {Input.location.lastData.latitude} {Input.location.lastData.longitude} {Input.location.lastData.altitude} {Input.location.lastData.horizontalAccuracy} {Input.location.lastData.verticalAccuracy}");
+            text.SetText($"Location: {_locationService.lastData.latitude} {_locationService.lastData.longitude} {_locationService.lastData.altitude} {_locationService.lastData.horizontalAccuracy} {_locationService.lastData.verticalAccuracy}");
         }
     }
 
     public void LocationStop()
     {
-        Input.location.Stop();
+        _locationService.Stop();
     }
 }

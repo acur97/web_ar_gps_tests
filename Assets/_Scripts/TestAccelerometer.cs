@@ -66,9 +66,9 @@ public class TestAccelerometer : MonoBehaviour
             _text += $"\nAttitudeSensor: {AttitudeSensor.current.attitude.ReadValue()}";
         }
 
-        if (Input.compass != null /*&& Input.compass.timestamp > 0*/) // solo funciona en moderno, vacio vector3, funciona float, funciona float
+        if (Input.compass != null) // solo funciona en moderno, vacio vector3, funciona float, funciona float
         {
-            _text += $"\ncompass: {Input.compass.magneticHeading} {Input.compass.trueHeading} {Input.compass.headingAccuracy} {Input.compass.timestamp} {Input.compass.enabled}";
+            _text += $"\ncompass: {Input.compass.magneticHeading} {Input.compass.trueHeading} {Input.compass.headingAccuracy}";
             //                     float                           float                       0  En iphone si muestra un valor de 20.03567
         }
 
