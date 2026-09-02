@@ -14,7 +14,7 @@ public class TestLocation : MonoBehaviour
     public void LocationStart()
     {
         float desiredAccuracyInMeters = 1f;
-        float updateDistanceInMeters = 0.001f;
+        float updateDistanceInMeters = 0f;
 
         PreciseLocation.Install();
         Input.location.Start(desiredAccuracyInMeters, updateDistanceInMeters);

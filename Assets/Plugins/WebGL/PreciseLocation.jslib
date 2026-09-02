@@ -13,6 +13,11 @@ var LibraryPreciseLocation = {
         if (preciseLocation.installed)
             return;
 
+        const options = {
+            enableHighAccuracy: true,
+            maximumAge: 0
+        };
+
         const originalWatchPosition =
             navigator.geolocation.watchPosition.bind(navigator.geolocation);
 
