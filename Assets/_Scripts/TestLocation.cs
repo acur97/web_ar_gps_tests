@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class TestLocation : MonoBehaviour
 {
+    public float latitude;
+    public float longitude;
+
     [SerializeField] private TextMeshProUGUI text;
 
     private LocationService _locationService;
@@ -24,6 +27,7 @@ public class TestLocation : MonoBehaviour
         float updateDistanceInMeters = 0.001f;
 
         _locationService.Start(desiredAccuracyInMeters, updateDistanceInMeters);
+        //Input.compass.enabled = true;
     }
 
     public void CheckLocationStart()
@@ -35,7 +39,10 @@ public class TestLocation : MonoBehaviour
     {
         if (_locationService.status == LocationServiceStatus.Running)
         {
-            text.SetText($"Location: {_locationService.lastData.latitude} {_locationService.lastData.longitude} {_locationService.lastData.altitude} {_locationService.lastData.horizontalAccuracy} {_locationService.lastData.verticalAccuracy}");
+            latitude = _locationService.lastData.latitude;
+            longitude = _locationService.lastData.longitude;
+
+            text.SetText($"Location: {latitude} {longitude} {_locationService.lastData.altitude} {_locationService.lastData.horizontalAccuracy} {_locationService.lastData.verticalAccuracy}");
         }
     }
 
