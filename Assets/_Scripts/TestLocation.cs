@@ -3,22 +3,12 @@ using UnityEngine;
 
 public class TestLocation : MonoBehaviour
 {
-    public float latitude;
-    public float longitude;
-
     [SerializeField] private TextMeshProUGUI text;
-
-    private LocationService _locationService;
-
-    private void Awake()
-    {
-        _locationService = Input.location;
-    }
 
     public void IsEnabledByUser()
     {
         Debug.Log($"Supports Location: {SystemInfo.supportsLocationService}");
-        text.SetText(_locationService.isEnabledByUser.ToString());
+        text.SetText(Input.location.isEnabledByUser.ToString());
     }
 
     public void LocationStart()
@@ -26,28 +16,27 @@ public class TestLocation : MonoBehaviour
         float desiredAccuracyInMeters = 1f;
         float updateDistanceInMeters = 0.001f;
 
-        _locationService.Start(desiredAccuracyInMeters, updateDistanceInMeters);
+        PreciseLocation.Install();
+        Input.location.Start(desiredAccuracyInMeters, updateDistanceInMeters);
         //Input.compass.enabled = true;
     }
 
     public void CheckLocationStart()
     {
-        text.SetText(_locationService.status.ToString());
+        text.SetText(Input.location.status.ToString());
     }
 
     public void CheckLocation()
     {
-        if (_locationService.status == LocationServiceStatus.Running)
+        if (Input.location.status == LocationServiceStatus.Running)
         {
-            latitude = _locationService.lastData.latitude;
-            longitude = _locationService.lastData.longitude;
-
-            text.SetText($"Location: {latitude} {longitude} {_locationService.lastData.altitude} {_locationService.lastData.horizontalAccuracy} {_locationService.lastData.verticalAccuracy}");
+            text.SetText($"Location: {Input.location.lastData.latitude} {Input.location.lastData.longitude} {Input.location.lastData.altitude} {Input.location.lastData.horizontalAccuracy} {Input.location.lastData.verticalAccuracy}");
+            text.text += $"\nPreciseLocation: {PreciseLocation.Latitude} {PreciseLocation.Longitude} {PreciseLocation.Altitude}";
         }
     }
 
     public void LocationStop()
     {
-        _locationService.Stop();
+        Input.location.Stop();
     }
 }

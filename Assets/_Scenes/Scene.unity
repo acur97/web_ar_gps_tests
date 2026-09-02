@@ -2689,8 +2689,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85e6335e519142f4fafa35acbc4abb8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestLocation
-  latitude: 0
-  longitude: 0
   text: {fileID: 1971716266}
 --- !u!224 &1312154006
 RectTransform:
@@ -2762,7 +2760,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d64320343aaadc44db340307079da96b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestMap
-  location: {fileID: 1312154005}
   rawImage: {fileID: 1888230446}
   text: {fileID: 1971716266}
 --- !u!1 &1392232976
