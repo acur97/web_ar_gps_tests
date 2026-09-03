@@ -14,6 +14,7 @@ public class TestAccelerometer : MonoBehaviour
     [Space]
     [SerializeField] private Transform compassRoot;
     [SerializeField] private RectTransform compassTest;
+    [SerializeField] private RectTransform mapTest;
 
     private bool enabledSensors = false;
     private Vector3 acceleration;
@@ -72,11 +73,12 @@ public class TestAccelerometer : MonoBehaviour
 
         if (Input.compass != null) // solo funciona en moderno, vacio vector3, funciona float, funciona float
         {
-            _text += $"\ncompass: {Input.compass.magneticHeading} {Input.compass.trueHeading}" /*{Input.compass.headingAccuracy}"*/;
+            _text += $"\ncompass: {Input.compass.trueHeading}" /*{Input.compass.magneticHeading}"*/ /*{Input.compass.headingAccuracy}"*/;
             //                               float (WebGL usa estos dos igual)                    Solo en iOS muestra 20.03567
 
             compassRoot.localEulerAngles = new Vector3(0, Input.compass.trueHeading, 0);
             compassTest.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
+            mapTest.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
         }
 
         text.SetText(_text);
