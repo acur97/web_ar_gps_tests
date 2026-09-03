@@ -12,7 +12,9 @@ public class TestMap : MonoBehaviour
 
     [SerializeField] private RawImage rawImage;
     [SerializeField] private RectTransform circleAccuracy;
-    [SerializeField] private float accuracyScale;
+    [SerializeField] private float mapZoom;
+    [SerializeField] private float circleZoom;
+    private float circleScale;
     [SerializeField] private TextMeshProUGUI text;
 
     public void DownloadMap()
@@ -24,7 +26,7 @@ public class TestMap : MonoBehaviour
 
     private async UniTaskVoid DownloadImage()
     {
-        using UnityWebRequest request = UnityWebRequestTexture.GetTexture(string.Format(url, PreciseLocation.Latitude, PreciseLocation.Longitude, 20, MapsStaticAPIKey));
+        using UnityWebRequest request = UnityWebRequestTexture.GetTexture(string.Format(url, PreciseLocation.Latitude, PreciseLocation.Longitude, mapZoom, MapsStaticAPIKey));
 
         text.SetText("Descargando...");
         await request.SendWebRequest();
@@ -45,7 +47,8 @@ public class TestMap : MonoBehaviour
     {
         if (Input.location.status == LocationServiceStatus.Running)
         {
-            circleAccuracy.sizeDelta = new Vector2(Input.location.lastData.horizontalAccuracy * accuracyScale, Input.location.lastData.verticalAccuracy * accuracyScale);
+            circleScale = (mapZoom * Input.location.lastData.horizontalAccuracy) * circleZoom;
+            circleAccuracy.sizeDelta = new Vector2(circleScale, circleScale);
         }
     }
 }
