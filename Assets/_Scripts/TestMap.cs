@@ -11,6 +11,8 @@ public class TestMap : MonoBehaviour
     private const string url = "https://maps.googleapis.com/maps/api/staticmap?center={0},{1}&zoom={2}&size=640x640&key={3}";
 
     [SerializeField] private RawImage rawImage;
+    [SerializeField] private RectTransform circleAccuracy;
+    [SerializeField] private float accuracyScale;
     [SerializeField] private TextMeshProUGUI text;
 
     public void DownloadMap()
@@ -36,6 +38,14 @@ public class TestMap : MonoBehaviour
         {
             text.SetText("Listo.");
             rawImage.texture = DownloadHandlerTexture.GetContent(request);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.location.status == LocationServiceStatus.Running)
+        {
+            circleAccuracy.sizeDelta = new Vector2(Input.location.lastData.horizontalAccuracy * accuracyScale, Input.location.lastData.verticalAccuracy * accuracyScale);
         }
     }
 }
