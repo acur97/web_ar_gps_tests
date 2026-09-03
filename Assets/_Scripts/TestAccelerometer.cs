@@ -13,6 +13,7 @@ public class TestAccelerometer : MonoBehaviour
 
     [Space]
     [SerializeField] private Transform compassRoot;
+    [SerializeField] private RectTransform compassTest;
 
     private bool enabledSensors = false;
     private Vector3 acceleration;
@@ -71,10 +72,11 @@ public class TestAccelerometer : MonoBehaviour
 
         if (Input.compass != null) // solo funciona en moderno, vacio vector3, funciona float, funciona float
         {
-            _text += $"\ncompass: {Input.compass.magneticHeading} {Input.compass.trueHeading} {Input.compass.headingAccuracy}";
-            //                               float (WebGL usa estos dos igual)                 Solo en iOS muestra 20.03567
+            _text += $"\ncompass: {Input.compass.magneticHeading} {Input.compass.trueHeading}" /*{Input.compass.headingAccuracy}"*/;
+            //                               float (WebGL usa estos dos igual)                    Solo en iOS muestra 20.03567
 
             compassRoot.localEulerAngles = new Vector3(0, Input.compass.trueHeading, 0);
+            compassTest.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
         }
 
         text.SetText(_text);
@@ -116,7 +118,7 @@ public class TestAccelerometer : MonoBehaviour
             #endregion
 
             #region v6 -- bastante bueno, no se desfasa, pero teniendo el celular acostado hace rotaciones raras, pero casi nunca se haran
-            cube.rotation = Quaternion.FromToRotation(Vector3.down, filteredGravity);
+            cube.localRotation = Quaternion.FromToRotation(Vector3.down, filteredGravity);
             #endregion
 
             #region v7 -- se bugea arriba y abajo
