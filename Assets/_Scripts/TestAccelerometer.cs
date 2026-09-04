@@ -22,14 +22,9 @@ public class TestAccelerometer : MonoBehaviour
 
     private float alphaHeading;
     private bool inProblemZone = false;
-    private bool recoveringFromDeadZone = false;
     private float lastGoodHeading;
-    private float deadZoneHeading;
     private float smoothedHeading;
-    private float smoothSpeed;
-    [SerializeField] private float fastSmoothSpeed = 40f;
-    [SerializeField] private float slowSmoothSpeed = 3f;
-    [SerializeField] private float maxSmoothDifference = 60f;
+    private bool initialized;
 
 
 
@@ -82,87 +77,32 @@ public class TestAccelerometer : MonoBehaviour
 
     private float GetHeading(float _alphaHeading)
     {
-        float rawHeading = _alphaHeading;
-        inProblemZone = Mathf.Abs(GetGravityZ()) < 0.1;
-
-        if (inProblemZone && !inProblemZone)
+        if (!initialized)
         {
-            inProblemZone = true;
-            recoveringFromDeadZone = false;
-            deadZoneHeading = lastGoodHeading;
-
-            return smoothedHeading;
+            lastGoodHeading = _alphaHeading;
+            initialized = true;
+            return _alphaHeading;
         }
 
-        if (inProblemZone)
+        inProblemZone =
+            Mathf.Abs(GetGravityZ()) < 0.1;
+
+        if (!inProblemZone)
         {
-            return smoothedHeading;
+            lastGoodHeading = _alphaHeading;
         }
+        //else
+        //{
+        //    return lastGoodHeading;
+        //}
 
-        if (inProblemZone)
-        {
-            inProblemZone = false;
-            recoveringFromDeadZone = true;
-
-            float difference = Mathf.Abs(
-                Mathf.DeltaAngle(
-                    deadZoneHeading,
-                    rawHeading
-                )
-            );
-
-            float t = Mathf.InverseLerp(
-                0f,
-                maxSmoothDifference,
-                difference
-            );
-
-            smoothSpeed = Mathf.Lerp(
-                fastSmoothSpeed,
-                slowSmoothSpeed,
-                t
-            );
-        }
-
-        float currentDifference = Mathf.Abs(
-            Mathf.DeltaAngle(
-                smoothedHeading,
-                rawHeading
-            )
-        );
-
-        if (currentDifference > 150f)
-        {
-            return smoothedHeading;
-        }
-
-        float smoothT = 1f - Mathf.Exp(
-            -smoothSpeed * Time.deltaTime
-        );
+        float t = 1f - Mathf.Exp(-21 * Time.deltaTime);
 
         smoothedHeading = Mathf.LerpAngle(
             smoothedHeading,
-            rawHeading,
-            smoothT
+            lastGoodHeading,
+            t
         );
-
-        lastGoodHeading = smoothedHeading;
-
-        if (recoveringFromDeadZone)
-        {
-            float remainingDifference = Mathf.Abs(
-                Mathf.DeltaAngle(
-                    smoothedHeading,
-                    rawHeading
-                )
-            );
-
-            if (remainingDifference < 1f)
-            {
-                recoveringFromDeadZone = false;
-                smoothSpeed = fastSmoothSpeed;
-            }
-        }
 
         return smoothedHeading;
     }

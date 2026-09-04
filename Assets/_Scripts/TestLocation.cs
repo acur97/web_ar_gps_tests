@@ -55,6 +55,6 @@ public class TestLocation : MonoBehaviour
     public void LocationStop()
     {
         Input.location.Stop();
-        text.text += "Stopped.";
+        text.text += "\nStopped.";
     }
 }
