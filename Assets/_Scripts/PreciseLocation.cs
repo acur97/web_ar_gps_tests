@@ -18,13 +18,13 @@ public static class PreciseLocation
     private static extern double PreciseLocation_GetLongitude();
 
     [DllImport("__Internal")]
-    private static extern double PreciseCompass_GetAlpha();
+    private static extern float PreciseCompass_GetAlpha();
 
     [DllImport("__Internal")]
-    private static extern double PreciseCompass_GetBeta();
+    private static extern float PreciseCompass_GetBeta();
 
     [DllImport("__Internal")]
-    private static extern double PreciseCompass_GetGamma();
+    private static extern float PreciseCompass_GetGamma();
 
 #endif
 
@@ -59,38 +59,38 @@ public static class PreciseLocation
         }
     }
 
-    public static double Alpha
+    public static float Alpha
     {
         get
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
             return PreciseCompass_GetAlpha();
 #else
-            return 0.0;
+            return 0f;
 #endif
         }
     }
 
-    public static double Beta
+    public static float Beta
     {
         get
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
             return PreciseCompass_GetBeta();
 #else
-            return 0.0;
+            return 0f;
 #endif
         }
     }
 
-    public static double Gamma
+    public static float Gamma
     {
         get
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
             return PreciseCompass_GetGamma();
 #else
-            return 0.0;
+            return 0f;
 #endif
         }
     }

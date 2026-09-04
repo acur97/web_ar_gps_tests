@@ -102,23 +102,12 @@ public class TestAccelerometer : MonoBehaviour
             _text += $"\ncompass: {Input.compass.trueHeading}" /*{Input.compass.magneticHeading}"*/ /*{Input.compass.headingAccuracy}"*/;
             //                               float (WebGL usa estos dos igual)                         Solo en iOS muestra 20.03567
 
-            //compassCorrected = GetCorrectedHeading();
+            float heading = Mathf.Repeat(360f - PreciseLocation.Alpha, 360f);
+            _text += $" | Corrected Alpha:{heading}";
 
-            //if (GravitySensor.current.gravity.ReadValue().y > -0.98) // entre -0.90 y -1.00
-            //{
-            //    compassCorrected = Input.compass.trueHeading;
-            //    if (GravitySensor.current.gravity.ReadValue().z > -0.05)
-            //    {
-            //        compassCorrected += 180;
-            //    }
-            //    compassCorrected %= 360f;
-            //}
-
-            //_text += $"\ncompass Corrected: {compassCorrected}";
-
-            compassRoot.localEulerAngles = new Vector3(0, Input.compass.trueHeading, 0);
-            compassTest.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
-            mapTest.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
+            compassRoot.localEulerAngles = new Vector3(0, heading, 0);
+            compassTest.localEulerAngles = new Vector3(0, 0, heading);
+            mapTest.localEulerAngles = new Vector3(0, 0, heading);
 
             _text += $"\nAlpha:{PreciseLocation.Alpha} Beta:{PreciseLocation.Beta} Gamma:{PreciseLocation.Gamma}";
         }
