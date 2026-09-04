@@ -63,7 +63,7 @@ public class TestAccelerometer : MonoBehaviour
         Vector3 gravity = GravitySensor.current.gravity.ReadValue();
 
         float correction01 = Mathf.InverseLerp(
-            0.1f,
+            0.05f,
             -0.1f,
             gravity.z
         );
