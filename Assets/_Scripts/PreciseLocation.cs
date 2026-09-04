@@ -16,7 +16,7 @@ public static class PreciseLocation
     private static extern double PreciseLocation_GetLongitude();
 
     [DllImport("__Internal")]
-    private static extern double PreciseLocation_GetAccuracy();
+    private static extern double PreciseLocation_GetAltitude();
 
 #endif
 
@@ -51,12 +51,12 @@ public static class PreciseLocation
         }
     }
 
-    public static double Accuracy
+    public static double Altitude
     {
         get
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
-            return PreciseLocation_GetAccuracy();
+            return PreciseLocation_GetAltitude();
 #else
             return 0.0;
 #endif

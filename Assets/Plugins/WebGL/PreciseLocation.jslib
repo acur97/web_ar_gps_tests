@@ -4,7 +4,7 @@ var LibraryPreciseLocation = {
         installed: false,
         latitude: 0.0,
         longitude: 0.0,
-        accuracy: 0.0
+        altitude: 0.0
     },
 
     PreciseLocation_Install__deps: ['$preciseLocation'],
@@ -28,7 +28,7 @@ var LibraryPreciseLocation = {
 
                     preciseLocation.latitude = position.coords.latitude;
                     preciseLocation.longitude = position.coords.longitude;
-                    preciseLocation.accuracy = position.coords.accuracy;
+                    preciseLocation.altitude = position.coords.altitude;
 
                     success(position);
                 },
@@ -50,9 +50,9 @@ var LibraryPreciseLocation = {
         return preciseLocation.longitude;
     },
 
-    PreciseLocation_GetAccuracy__deps: ['$preciseLocation'],
-    PreciseLocation_GetAccuracy: function () {
-        return preciseLocation.accuracy;
+    PreciseLocation_GetAltitude__deps: ['$preciseLocation'],
+    PreciseLocation_GetAltitude: function () {
+        return preciseLocation.altitude;
     }
 };
 
