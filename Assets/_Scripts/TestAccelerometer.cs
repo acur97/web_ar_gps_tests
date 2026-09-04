@@ -87,9 +87,9 @@ public class TestAccelerometer : MonoBehaviour
         inProblemZone =
             Mathf.Abs(GetGravityZ()) < 0.1;
 
-        if (inProblemZone)
+        if (!inProblemZone)
         {
-            return lastGoodHeading;
+            lastGoodHeading = _alphaHeading;
         }
 
         float t = 1f - Mathf.Exp(-8 * Time.deltaTime);
@@ -101,10 +101,6 @@ public class TestAccelerometer : MonoBehaviour
         );
 
         return smoothedHeading;
-
-        //lastGoodHeading = _alphaHeading;
-
-        //return _alphaHeading;
     }
 
     private void Update()
