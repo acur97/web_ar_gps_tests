@@ -23,6 +23,7 @@ public class TestAccelerometer : MonoBehaviour
     private float alphaHeading;
     private bool inProblemZone = false;
     private float lastGoodHeading;
+    private float smoothedHeading;
     private bool initialized;
 
 
@@ -91,9 +92,19 @@ public class TestAccelerometer : MonoBehaviour
             return lastGoodHeading;
         }
 
-        lastGoodHeading = _alphaHeading;
+        float t = 1f - Mathf.Exp(-8 * Time.deltaTime);
 
-        return _alphaHeading;
+        smoothedHeading = Mathf.LerpAngle(
+            smoothedHeading,
+            lastGoodHeading,
+            t
+        );
+
+        return smoothedHeading;
+
+        //lastGoodHeading = _alphaHeading;
+
+        //return _alphaHeading;
     }
 
     private void Update()
