@@ -78,10 +78,10 @@ public class TestAccelerometer : MonoBehaviour
             _text += $"\ncompass: {Input.compass.trueHeading}" /*{Input.compass.magneticHeading}"*/ /*{Input.compass.headingAccuracy}"*/;
             //                               float (WebGL usa estos dos igual)                         Solo en iOS muestra 20.03567
 
-            //if (GravitySensor.current.gravity.ReadValue().y > ) // entre -0.90 y -1.00
+            //if (GravitySensor.current.gravity.ReadValue().y > -0.98) // entre -0.90 y -1.00
             {
                 compassCorrected = Input.compass.trueHeading;
-                if (GravitySensor.current.gravity.ReadValue().z > -0.1f)
+                if (GravitySensor.current.gravity.ReadValue().z > -0.05)
                 {
                     compassCorrected += 180;
                 }
@@ -91,7 +91,7 @@ public class TestAccelerometer : MonoBehaviour
             _text += $"\ncompass Corrected: {compassCorrected}";
 
             compassRoot.localEulerAngles = new Vector3(0, compassCorrected, 0);
-            compassTest.localEulerAngles = new Vector3(0, 0, compassCorrected);
+            compassTest.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
             mapTest.localEulerAngles = new Vector3(0, 0, compassCorrected);
         }
 
