@@ -7,8 +7,7 @@ public class TestLocation : MonoBehaviour
 
     public void IsEnabledByUser()
     {
-        Debug.Log($"Supports Location: {SystemInfo.supportsLocationService}");
-        text.SetText(Input.location.isEnabledByUser.ToString());
+        text.SetText($"Supports Location:{SystemInfo.supportsLocationService} isEnabledByUser:{Input.location.isEnabledByUser}");
     }
 
     public void LocationStart()
@@ -21,19 +20,29 @@ public class TestLocation : MonoBehaviour
         //Input.compass.enabled = true;
     }
 
-    public void CheckLocationStart()
+    private void Update()
     {
-        text.SetText(Input.location.status.ToString());
-    }
-
-    public void CheckLocation()
-    {
-        if (Input.location.status == LocationServiceStatus.Running)
+        switch (Input.location.status)
         {
-            text.text = $"Location: {Input.location.lastData.latitude} {Input.location.lastData.longitude} {Input.location.lastData.altitude} {Input.location.lastData.horizontalAccuracy} {Input.location.lastData.verticalAccuracy}";
-            //                                                                                                                                                      WebGL usa estos dos valores por igual
-            text.text += $"\nPreciseLocation: {PreciseLocation.Latitude} {PreciseLocation.Longitude} {PreciseLocation.Accuracy}";
-            // Android tiene como 7 numeros de precision, iphone tiene como 15 de precision, una locura
+            case LocationServiceStatus.Initializing:
+                text.SetText("Initializing.");
+                break;
+            case LocationServiceStatus.Running:
+                text.SetText("Running.");
+
+                text.text += $"\nLocation: {Input.location.lastData.latitude} {Input.location.lastData.longitude} {Input.location.lastData.altitude} {Input.location.lastData.horizontalAccuracy}" /*{Input.location.lastData.verticalAccuracy}"*/;
+                //                                                                                                                                                      WebGL usa estos dos valores por igual
+                text.text += $"\nPreciseLocation: {PreciseLocation.Latitude} {PreciseLocation.Longitude} {PreciseLocation.Accuracy}";
+                // Android tiene 8-9 numeros de precision, iphone tiene 15 de precision, una locura
+                break;
+            case LocationServiceStatus.Stopped:
+                text.SetText("Stopped.");
+                break;
+            case LocationServiceStatus.Failed:
+                text.SetText("Failed.");
+                break;
+            default:
+                break;
         }
     }
 

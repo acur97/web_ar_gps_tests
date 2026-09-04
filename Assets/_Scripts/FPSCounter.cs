@@ -9,6 +9,7 @@ public class FPSCounter : MonoBehaviour
 
     private float accum = 0;
     private int frames = 0;
+    private float deltaTime;
     private float timeleft;
     private int fps;
 
@@ -21,8 +22,9 @@ public class FPSCounter : MonoBehaviour
 
     private void Update()
     {
-        timeleft -= Time.deltaTime;
-        accum += Time.timeScale / Time.deltaTime;
+        deltaTime = Time.deltaTime;
+        timeleft -= deltaTime;
+        accum += Time.timeScale / deltaTime;
         ++frames;
 
         if (timeleft <= 0.0)

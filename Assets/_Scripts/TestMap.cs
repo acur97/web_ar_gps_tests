@@ -23,7 +23,7 @@ public class TestMap : MonoBehaviour
 
     public void DownloadMap()
     {
-        text.SetText("Iniciando descarga...");
+        text.SetText("Iniciando descarga de mapa...");
 
         DownloadImage().Forget();
     }
@@ -32,7 +32,7 @@ public class TestMap : MonoBehaviour
     {
         using UnityWebRequest request = UnityWebRequestTexture.GetTexture(string.Format(url, PreciseLocation.Latitude, PreciseLocation.Longitude, mapZoom, MapsStaticAPIKey));
 
-        text.SetText("Descargando...");
+        text.SetText("Descargando mapa...");
         await request.SendWebRequest();
 
         if (request.result != UnityWebRequest.Result.Success)
@@ -42,7 +42,7 @@ public class TestMap : MonoBehaviour
         }
         else
         {
-            text.SetText("Listo.");
+            text.SetText("Mapa listo.");
             rawImage.texture = DownloadHandlerTexture.GetContent(request);
         }
     }
