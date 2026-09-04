@@ -56,6 +56,23 @@ public class TestAccelerometer : MonoBehaviour
         enabledSensors = true;
     }
 
+    private float GetCorrectedHeading()
+    {
+        float heading = Input.compass.trueHeading;
+
+        Vector3 g = GravitySensor.current.gravity.ReadValue().normalized;
+
+        // Qué tan vertical está el teléfono.
+        float verticality = Mathf.Abs(g.z);
+
+        // Solo corregimos cuando realmente estamos
+        // en una orientación suficientemente vertical.
+        if (verticality > 0.7f && g.z < 0f)
+            heading += 180f;
+
+        return Mathf.Repeat(heading, 360f);
+    }
+
     private void Update()
     {
         if (!enabledSensors)
@@ -78,15 +95,17 @@ public class TestAccelerometer : MonoBehaviour
             _text += $"\ncompass: {Input.compass.trueHeading}" /*{Input.compass.magneticHeading}"*/ /*{Input.compass.headingAccuracy}"*/;
             //                               float (WebGL usa estos dos igual)                         Solo en iOS muestra 20.03567
 
+            compassCorrected = GetCorrectedHeading();
+
             //if (GravitySensor.current.gravity.ReadValue().y > -0.98) // entre -0.90 y -1.00
-            {
-                compassCorrected = Input.compass.trueHeading;
-                if (GravitySensor.current.gravity.ReadValue().z > -0.05)
-                {
-                    compassCorrected += 180;
-                }
-                compassCorrected %= 360f;
-            }
+            //{
+            //    compassCorrected = Input.compass.trueHeading;
+            //    if (GravitySensor.current.gravity.ReadValue().z > -0.05)
+            //    {
+            //        compassCorrected += 180;
+            //    }
+            //    compassCorrected %= 360f;
+            //}
 
             _text += $"\ncompass Corrected: {compassCorrected}";
 
