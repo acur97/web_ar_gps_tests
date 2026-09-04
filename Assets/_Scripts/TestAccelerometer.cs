@@ -87,7 +87,11 @@ public class TestAccelerometer : MonoBehaviour
         inProblemZone =
             Mathf.Abs(GetGravityZ()) < 0.1;
 
-        if (!inProblemZone)
+        if (inProblemZone)
+        {
+            return lastGoodHeading;
+        }
+        else
         {
             lastGoodHeading = _alphaHeading;
         }
