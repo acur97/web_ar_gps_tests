@@ -3,7 +3,11 @@ var LibraryPreciseLocation = {
     $preciseLocation: {
         installed: false,
         latitude: 0.0,
-        longitude: 0.0
+        longitude: 0.0,
+
+        alpha: 0.0,
+        beta: 0.0,
+        gamma: 0.0
     },
 
     PreciseLocation_Install__deps: ['$preciseLocation'],
@@ -46,6 +50,21 @@ var LibraryPreciseLocation = {
     PreciseLocation_GetLongitude__deps: ['$preciseLocation'],
     PreciseLocation_GetLongitude: function () {
         return preciseLocation.longitude;
+    },
+
+    PreciseCompass_GetAlpha__deps: ['$preciseLocation'],
+    PreciseCompass_GetAlpha: function () {
+        return preciseLocation.alpha;
+    },
+
+    PreciseCompass_GetBeta__deps: ['$preciseLocation'],
+    PreciseCompass_GetBeta: function () {
+        return preciseLocation.beta;
+    },
+
+    PreciseCompass_GetGamma__deps: ['$preciseLocation'],
+    PreciseCompass_GetGamma: function () {
+        return preciseLocation.gamma;
     }
 };
 
