@@ -7,7 +7,12 @@ using UnityEngine.UI;
 public class TestMap : MonoBehaviour
 {
     private const string MapsStaticAPIKey = "AIzaSyDrLcl9TazRnbQe3QHLaDewmUUkd9B7K8w";
-    private const string url = "https://maps.googleapis.com/maps/api/staticmap?center={0},{1}&zoom={2}&size=640x640&key={3}";
+    private const string url = "https://maps.googleapis.com/maps/api/staticmap?center={0},{1}&zoom={2}" +
+        "&size=640x640" +
+        "&style=feature:administrative|visibility:off" +
+        "&style=feature:poi|visibility:off" +
+        "&style=feature:transit|visibility:off" +
+        "&key={3}";
 
     [SerializeField] private RawImage rawImage;
     [SerializeField] private RectTransform circleAccuracy;

@@ -10,6 +10,7 @@ public class TestAccelerometer : MonoBehaviour
 
     [Space]
     [SerializeField] private Transform cube;
+    [SerializeField] private Transform cubeParent;
 
     [Space]
     [SerializeField] private Transform compassRoot;
@@ -120,7 +121,7 @@ public class TestAccelerometer : MonoBehaviour
             #endregion
 
             #region v6 -- bastante bueno, no se desfasa, pero teniendo el celular acostado hace rotaciones raras, pero casi nunca se haran
-            cube.localRotation = Quaternion.FromToRotation(Vector3.down, filteredGravity);
+            cube.localRotation = Quaternion.FromToRotation(-cubeParent.up /*Vector3.down*/, filteredGravity);
             #endregion
 
             #region v7 -- se bugea arriba y abajo
