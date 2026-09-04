@@ -60,17 +60,24 @@ public class TestAccelerometer : MonoBehaviour
     {
         float heading = Input.compass.trueHeading;
 
-        Vector3 g = GravitySensor.current.gravity.ReadValue().normalized;
+        Vector3 gravity = GravitySensor.current.gravity.ReadValue();
 
-        // Qué tan vertical está el teléfono.
-        float verticality = Mathf.Abs(g.z);
+        float correction01 = Mathf.InverseLerp(
+            0.05f,
+            -0.05f,
+            gravity.z
+        );
 
-        // Solo corregimos cuando realmente estamos
-        // en una orientación suficientemente vertical.
-        if (verticality > 0.7f && g.z < 0f)
-            heading += 180f;
+        float correction = Mathf.Lerp(
+            0f,
+            180f,
+            correction01
+        );
 
-        return Mathf.Repeat(heading, 360f);
+        return Mathf.Repeat(
+            heading + correction,
+            360f
+        );
     }
 
     private void Update()
