@@ -17,6 +17,20 @@ public class TestAccelerometer : MonoBehaviour
     [SerializeField] private RectTransform compassTest;
     [SerializeField] private RectTransform mapTest;
 
+    [Header("Dead Zone")]
+    [SerializeField] private float deadZoneGravityZ = 0.05f;
+    [SerializeField] private double deadZoneBetaMin = 85.0;
+    [SerializeField] private double deadZoneBetaMax = 91.0;
+
+    [Header("180° Jump Detection")]
+    [SerializeField] private float jumpMin = 150f;
+    [SerializeField] private float jumpMax = 210f;
+
+    private float lastGoodHeading;
+    private bool initialized;
+
+
+
     private bool enabledSensors = false;
     //private float compassCorrected;
     private Vector3 acceleration;
@@ -56,28 +70,48 @@ public class TestAccelerometer : MonoBehaviour
         enabledSensors = true;
     }
 
-    private float GetCorrectedHeading()
+    private float GetHeading()
     {
-        float heading = Input.compass.trueHeading;
+        float rawHeading = Input.compass.trueHeading;
 
-        Vector3 gravity = GravitySensor.current.gravity.ReadValue();
+        if (!initialized)
+        {
+            lastGoodHeading = rawHeading;
+            initialized = true;
+            return rawHeading;
+        }
 
-        float correction01 = Mathf.InverseLerp(
-            0.05f,
-            -0.1f,
-            gravity.z
+        float gravityZ = GetGravityZ();
+        float beta = PreciseLocation.Beta;
+
+        bool inProblemZone =
+            Mathf.Abs(gravityZ) < deadZoneGravityZ &&
+            beta > deadZoneBetaMin &&
+            beta < deadZoneBetaMax;
+
+        float difference = Mathf.Abs(
+            Mathf.DeltaAngle(lastGoodHeading, rawHeading)
         );
 
-        float correction = Mathf.Lerp(
-            180f,
-            0f,
-            correction01
-        );
+        bool looksLike180Jump =
+            difference > jumpMin &&
+            difference < jumpMax;
 
-        return Mathf.Repeat(
-            heading + correction,
-            360f
-        );
+        if (inProblemZone && looksLike180Jump)
+        {
+            return lastGoodHeading;
+        }
+        lastGoodHeading = rawHeading;
+
+        return rawHeading;
+    }
+
+    private float GetGravityZ()
+    {
+        if (GravitySensor.current == null)
+            return 0f;
+
+        return GravitySensor.current.gravity.ReadValue().z;
     }
 
     private void Update()
@@ -105,8 +139,12 @@ public class TestAccelerometer : MonoBehaviour
             float heading = Mathf.Repeat(360f - PreciseLocation.Alpha, 360f);
             _text += $" | Corrected Alpha:{heading}";
 
+            float heading2 = GetHeading();
+
+            _text += $" | Corrected heading:{heading2}";
+
             compassRoot.localEulerAngles = new Vector3(0, heading, 0);
-            compassTest.localEulerAngles = new Vector3(0, 0, heading);
+            compassTest.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
             mapTest.localEulerAngles = new Vector3(0, 0, heading);
 
             _text += $"\nAlpha:{PreciseLocation.Alpha} Beta:{PreciseLocation.Beta} Gamma:{PreciseLocation.Gamma}";
