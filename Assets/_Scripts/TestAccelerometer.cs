@@ -14,11 +14,12 @@ public class TestAccelerometer : MonoBehaviour
 
     [Space]
     [SerializeField] private Transform compassRoot;
-    [SerializeField] private RectTransform compassTest;
+    [SerializeField] private RectTransform compasstrueHeading;
+    [SerializeField] private RectTransform compassalphaHeading;
     [SerializeField] private RectTransform mapTest;
 
     [Header("Dead Zone")]
-    [SerializeField] private float deadZoneGravityZ = 0.05f;
+    [SerializeField] private float deadZoneGravityZ = 0.1f;
     private float alphaHeading;
     private bool inProblemZone = false;
     private float lastGoodHeading;
@@ -132,8 +133,9 @@ public class TestAccelerometer : MonoBehaviour
             _text += $"\ninProblemZone:{inProblemZone} | correctedAlphaHeading:{alphaHeading2}";
 
             compassRoot.localEulerAngles = new Vector3(0, alphaHeading2, 0);
-            compassTest.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
             mapTest.localEulerAngles = new Vector3(0, 0, alphaHeading2);
+            compasstrueHeading.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
+            compassalphaHeading.localEulerAngles = new Vector3(0, 0, alphaHeading);
 
             _text += $"\nAlpha:{PreciseLocation.Alpha} Beta:{PreciseLocation.Beta} Gamma:{PreciseLocation.Gamma}";
         }
