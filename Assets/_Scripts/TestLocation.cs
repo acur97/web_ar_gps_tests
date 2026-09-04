@@ -5,6 +5,11 @@ public class TestLocation : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
 
+    private void Awake()
+    {
+        text.SetText("Uninitialized.");
+    }
+
     public void IsEnabledByUser()
     {
         text.SetText($"Supports Location:{SystemInfo.supportsLocationService} isEnabledByUser:{Input.location.isEnabledByUser}");
@@ -17,6 +22,7 @@ public class TestLocation : MonoBehaviour
 
         PreciseLocation.Install();
         Input.location.Start(desiredAccuracyInMeters, updateDistanceInMeters);
+        text.SetText("Initializing.");
         //Input.compass.enabled = true;
     }
 
@@ -24,9 +30,9 @@ public class TestLocation : MonoBehaviour
     {
         switch (Input.location.status)
         {
-            case LocationServiceStatus.Initializing:
-                text.SetText("Initializing.");
-                break;
+            //case LocationServiceStatus.Initializing:
+            //    text.SetText("Initializing.");
+            //    break;
             case LocationServiceStatus.Running:
                 text.SetText("Running.");
 
@@ -35,9 +41,9 @@ public class TestLocation : MonoBehaviour
                 text.text += $"\nPrecise: {PreciseLocation.Latitude} | {PreciseLocation.Longitude}";
                 // Android tiene 8-9 numeros de precision, iOS y Pc tiene 15 de precision, una locura de diferencia
                 break;
-            case LocationServiceStatus.Stopped:
-                text.SetText("Stopped.");
-                break;
+            //case LocationServiceStatus.Stopped:
+            //    text.SetText("Stopped.");
+            //    break;
             case LocationServiceStatus.Failed:
                 text.SetText("Failed.");
                 break;
@@ -49,5 +55,6 @@ public class TestLocation : MonoBehaviour
     public void LocationStop()
     {
         Input.location.Stop();
+        text.text += "Stopped.";
     }
 }

@@ -18,8 +18,8 @@ public class TestAccelerometer : MonoBehaviour
     [SerializeField] private RectTransform compassalphaHeading;
     [SerializeField] private RectTransform mapTest;
 
-    [Header("Dead Zone")]
-    [SerializeField] private float deadZoneGravityZ = 0.1f;
+
+
     private float alphaHeading;
     private bool inProblemZone = false;
     private float lastGoodHeading;
@@ -74,28 +74,26 @@ public class TestAccelerometer : MonoBehaviour
         return GravitySensor.current.gravity.ReadValue().z;
     }
 
-    private float GetHeading()
+    private float GetHeading(float _alphaHeading)
     {
-        float rawHeading = alphaHeading;
-
         if (!initialized)
         {
-            lastGoodHeading = rawHeading;
+            lastGoodHeading = _alphaHeading;
             initialized = true;
-            return rawHeading;
+            return _alphaHeading;
         }
 
         inProblemZone =
-            Mathf.Abs(GetGravityZ()) < deadZoneGravityZ;
+            Mathf.Abs(GetGravityZ()) < 0.1;
 
         if (inProblemZone)
         {
             return lastGoodHeading;
         }
 
-        lastGoodHeading = rawHeading;
+        lastGoodHeading = _alphaHeading;
 
-        return rawHeading;
+        return _alphaHeading;
     }
 
     private void Update()
@@ -128,7 +126,7 @@ public class TestAccelerometer : MonoBehaviour
             alphaHeading = Mathf.Repeat(360f - PreciseLocation.Alpha, 360f);
             _text += $" | alphaHeading:{alphaHeading}";
 
-            float alphaHeading2 = GetHeading();
+            float alphaHeading2 = GetHeading(alphaHeading);
 
             _text += $"\ninProblemZone:{inProblemZone} | correctedAlphaHeading:{alphaHeading2}";
 
