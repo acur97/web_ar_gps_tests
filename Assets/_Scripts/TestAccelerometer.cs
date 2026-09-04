@@ -19,21 +19,15 @@ public class TestAccelerometer : MonoBehaviour
 
     [Header("Dead Zone")]
     [SerializeField] private float deadZoneGravityZ = 0.05f;
-    //[SerializeField] private double deadZoneBetaMin = 85.0;
-    //[SerializeField] private double deadZoneBetaMax = 91.0;
-
-    [Header("180° Jump Detection")]
-    //[SerializeField] private float jumpMin = 150f;
-    //[SerializeField] private float jumpMax = 210f;
+    private float alphaHeading;
     private bool inProblemZone = false;
-
     private float lastGoodHeading;
     private bool initialized;
 
 
 
     private bool enabledSensors = false;
-    //private float compassCorrected;
+    private bool hasCompass = false;
     private Vector3 acceleration;
     private Vector3 gravity;
     private Vector3 filteredGravity;
@@ -71,9 +65,17 @@ public class TestAccelerometer : MonoBehaviour
         enabledSensors = true;
     }
 
+    private float GetGravityZ()
+    {
+        if (GravitySensor.current == null)
+            return 0f;
+
+        return GravitySensor.current.gravity.ReadValue().z;
+    }
+
     private float GetHeading()
     {
-        float rawHeading = Input.compass.trueHeading;
+        float rawHeading = alphaHeading;
 
         if (!initialized)
         {
@@ -82,37 +84,17 @@ public class TestAccelerometer : MonoBehaviour
             return rawHeading;
         }
 
-        float gravityZ = GetGravityZ();
-        //float beta = PreciseLocation.Beta;
-
         inProblemZone =
-            Mathf.Abs(gravityZ) < deadZoneGravityZ; /*&&*/
-            //beta > deadZoneBetaMin &&
-            //beta < deadZoneBetaMax;
+            Mathf.Abs(GetGravityZ()) < deadZoneGravityZ;
 
-        //float difference = Mathf.Abs(
-        //    Mathf.DeltaAngle(lastGoodHeading, rawHeading)
-        //);
-
-        //bool looksLike180Jump =
-        //    difference > jumpMin &&
-        //    difference < jumpMax;
-
-        if (inProblemZone /*&& looksLike180Jump*/)
+        if (inProblemZone)
         {
             return lastGoodHeading;
         }
+
         lastGoodHeading = rawHeading;
 
         return rawHeading;
-    }
-
-    private float GetGravityZ()
-    {
-        if (GravitySensor.current == null)
-            return 0f;
-
-        return GravitySensor.current.gravity.ReadValue().z;
     }
 
     private void Update()
@@ -132,21 +114,26 @@ public class TestAccelerometer : MonoBehaviour
             _text += $"\nAttitudeSensor: {AttitudeSensor.current.attitude.ReadValue()}";
         }
 
-        if (Input.compass != null) // solo funciona en moderno, float
+        if (!hasCompass && Input.compass.trueHeading != 0)
+        {
+            hasCompass = true;
+        }
+
+        if (hasCompass) // solo funciona en moderno, float
         {
             _text += $"\ncompass:{Input.compass.trueHeading}" /*{Input.compass.magneticHeading}"*/ /*{Input.compass.headingAccuracy}"*/;
             //                               float (WebGL usa estos dos igual)                         Solo en iOS muestra 20.03567
 
-            float heading = Mathf.Repeat(360f - PreciseLocation.Alpha, 360f);
-            _text += $" | correctedAlpha:{heading}";
+            alphaHeading = Mathf.Repeat(360f - PreciseLocation.Alpha, 360f);
+            _text += $" | alphaHeading:{alphaHeading}";
 
-            float heading2 = GetHeading();
+            float alphaHeading2 = GetHeading();
 
-            _text += $"\ninProblemZone:{inProblemZone} | correctedHeading:{heading2}";
+            _text += $"\ninProblemZone:{inProblemZone} | correctedAlphaHeading:{alphaHeading2}";
 
-            compassRoot.localEulerAngles = new Vector3(0, heading, 0);
+            compassRoot.localEulerAngles = new Vector3(0, alphaHeading2, 0);
             compassTest.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
-            mapTest.localEulerAngles = new Vector3(0, 0, heading);
+            mapTest.localEulerAngles = new Vector3(0, 0, alphaHeading2);
 
             _text += $"\nAlpha:{PreciseLocation.Alpha} Beta:{PreciseLocation.Beta} Gamma:{PreciseLocation.Gamma}";
         }

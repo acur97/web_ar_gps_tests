@@ -2,8 +2,6 @@
 using System.Runtime.InteropServices;
 #endif
 
-using System.Runtime.InteropServices;
-
 public static class PreciseLocation
 {
 #if UNITY_WEBGL && !UNITY_EDITOR

@@ -33,7 +33,7 @@ public class TestLocation : MonoBehaviour
                 text.text += $"\nLocation: {Input.location.lastData.latitude} | {Input.location.lastData.longitude} | {Input.location.lastData.altitude} | {Input.location.lastData.horizontalAccuracy}" /*{Input.location.lastData.verticalAccuracy}"*/;
                 //                                                                                                                                                      WebGL usa estos dos valores por igual
                 text.text += $"\nPrecise: {PreciseLocation.Latitude} | {PreciseLocation.Longitude}";
-                // Android tiene 8-9 numeros de precision, iphone tiene 15 de precision, una locura
+                // Android tiene 8-9 numeros de precision, iOS y Pc tiene 15 de precision, una locura de diferencia
                 break;
             case LocationServiceStatus.Stopped:
                 text.SetText("Stopped.");
