@@ -19,12 +19,13 @@ public class TestAccelerometer : MonoBehaviour
 
     [Header("Dead Zone")]
     [SerializeField] private float deadZoneGravityZ = 0.05f;
-    [SerializeField] private double deadZoneBetaMin = 85.0;
-    [SerializeField] private double deadZoneBetaMax = 91.0;
+    //[SerializeField] private double deadZoneBetaMin = 85.0;
+    //[SerializeField] private double deadZoneBetaMax = 91.0;
 
     [Header("180° Jump Detection")]
-    [SerializeField] private float jumpMin = 150f;
-    [SerializeField] private float jumpMax = 210f;
+    //[SerializeField] private float jumpMin = 150f;
+    //[SerializeField] private float jumpMax = 210f;
+    private bool inProblemZone = false;
 
     private float lastGoodHeading;
     private bool initialized;
@@ -82,22 +83,22 @@ public class TestAccelerometer : MonoBehaviour
         }
 
         float gravityZ = GetGravityZ();
-        float beta = PreciseLocation.Beta;
+        //float beta = PreciseLocation.Beta;
 
-        bool inProblemZone =
-            Mathf.Abs(gravityZ) < deadZoneGravityZ &&
-            beta > deadZoneBetaMin &&
-            beta < deadZoneBetaMax;
+        inProblemZone =
+            Mathf.Abs(gravityZ) < deadZoneGravityZ; /*&&*/
+            //beta > deadZoneBetaMin &&
+            //beta < deadZoneBetaMax;
 
-        float difference = Mathf.Abs(
-            Mathf.DeltaAngle(lastGoodHeading, rawHeading)
-        );
+        //float difference = Mathf.Abs(
+        //    Mathf.DeltaAngle(lastGoodHeading, rawHeading)
+        //);
 
-        bool looksLike180Jump =
-            difference > jumpMin &&
-            difference < jumpMax;
+        //bool looksLike180Jump =
+        //    difference > jumpMin &&
+        //    difference < jumpMax;
 
-        if (inProblemZone && looksLike180Jump)
+        if (inProblemZone /*&& looksLike180Jump*/)
         {
             return lastGoodHeading;
         }
@@ -133,15 +134,15 @@ public class TestAccelerometer : MonoBehaviour
 
         if (Input.compass != null) // solo funciona en moderno, float
         {
-            _text += $"\ncompass: {Input.compass.trueHeading}" /*{Input.compass.magneticHeading}"*/ /*{Input.compass.headingAccuracy}"*/;
+            _text += $"\ncompass:{Input.compass.trueHeading}" /*{Input.compass.magneticHeading}"*/ /*{Input.compass.headingAccuracy}"*/;
             //                               float (WebGL usa estos dos igual)                         Solo en iOS muestra 20.03567
 
             float heading = Mathf.Repeat(360f - PreciseLocation.Alpha, 360f);
-            _text += $" | Corrected Alpha:{heading}";
+            _text += $" | correctedAlpha:{heading}";
 
             float heading2 = GetHeading();
 
-            _text += $" | Corrected heading:{heading2}";
+            _text += $"\ninProblemZone:{inProblemZone} | correctedHeading:{heading2}";
 
             compassRoot.localEulerAngles = new Vector3(0, heading, 0);
             compassTest.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
