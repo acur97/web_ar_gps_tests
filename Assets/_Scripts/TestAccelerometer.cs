@@ -21,6 +21,7 @@ public class TestAccelerometer : MonoBehaviour
 
 
     private float alphaHeading;
+    private float alphaHeading2;
     private bool inProblemZone = false;
     private float lastGoodHeading;
     private float smoothedHeading;
@@ -30,6 +31,7 @@ public class TestAccelerometer : MonoBehaviour
 
     private bool enabledSensors = false;
     private bool hasCompass = false;
+    private bool preciseCompass = false;
     private Vector3 acceleration;
     private Vector3 gravity;
     private Vector3 filteredGravity;
@@ -96,7 +98,7 @@ public class TestAccelerometer : MonoBehaviour
         //    return lastGoodHeading;
         //}
 
-        float t = 1f - Mathf.Exp(-21 * Time.deltaTime);
+        float t = 1f - Mathf.Exp(-10.5f * Time.deltaTime);
 
         smoothedHeading = Mathf.LerpAngle(
             smoothedHeading,
@@ -129,24 +131,40 @@ public class TestAccelerometer : MonoBehaviour
             hasCompass = true;
         }
 
+        if (hasCompass && !preciseCompass && Input.compass.headingAccuracy != 0)
+        {
+            preciseCompass = true;
+        }
+
         if (hasCompass) // solo funciona en moderno, float
         {
-            _text += $"\ncompass:{Input.compass.trueHeading}" /*{Input.compass.magneticHeading}"*/ /*{Input.compass.headingAccuracy}"*/;
-            //                               float (WebGL usa estos dos igual)                         Solo en iOS muestra 20.03567
+            _text += $"\ncompass:{Input.compass.trueHeading}" /*{Input.compass.magneticHeading}"*/;
+            //                               float (WebGL usa estos dos igual)
+            _text += $" | Accuracy:{Input.compass.headingAccuracy}";
+            //                   Solo en iOS muestra 20.03567
 
-            alphaHeading = Mathf.Repeat(360f - PreciseLocation.Alpha, 360f);
-            _text += $" | alphaHeading:{alphaHeading}";
+            if (preciseCompass) // iOS
+            {
+                compassRoot.localEulerAngles = new Vector3(0, Input.compass.trueHeading, 0);
+                mapTest.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
+                compasstrueHeading.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
+            }
+            else // Android (o hata pc)
+            {
+                alphaHeading = Mathf.Repeat(360f - PreciseLocation.Alpha, 360f);
+                _text += $" | alphaHeading:{alphaHeading}";
 
-            float alphaHeading2 = GetHeading(alphaHeading);
+                alphaHeading2 = GetHeading(alphaHeading);
 
-            _text += $"\ninProblemZone:{inProblemZone} | correctedAlphaHeading:{alphaHeading2}";
+                _text += $"\ninProblemZone:{inProblemZone} | correctedAlphaHeading:{alphaHeading2}";
 
-            compassRoot.localEulerAngles = new Vector3(0, alphaHeading2, 0);
-            mapTest.localEulerAngles = new Vector3(0, 0, alphaHeading2);
-            compasstrueHeading.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
-            compassalphaHeading.localEulerAngles = new Vector3(0, 0, alphaHeading);
+                compassRoot.localEulerAngles = new Vector3(0, alphaHeading2, 0);
+                mapTest.localEulerAngles = new Vector3(0, 0, alphaHeading2);
+                compasstrueHeading.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
+                compassalphaHeading.localEulerAngles = new Vector3(0, 0, alphaHeading);
 
-            _text += $"\nAlpha:{PreciseLocation.Alpha} Beta:{PreciseLocation.Beta} Gamma:{PreciseLocation.Gamma}";
+                _text += $"\nAlpha:{PreciseLocation.Alpha} | Beta:{PreciseLocation.Beta} | Gamma:{PreciseLocation.Gamma}";
+            }
         }
 
         text.SetText(_text);

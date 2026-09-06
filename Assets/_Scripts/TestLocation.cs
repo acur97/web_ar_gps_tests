@@ -23,7 +23,6 @@ public class TestLocation : MonoBehaviour
         PreciseLocation.Install();
         Input.location.Start(desiredAccuracyInMeters, updateDistanceInMeters);
         text.SetText("Initializing.");
-        //Input.compass.enabled = true;
     }
 
     private void Update()
@@ -37,7 +36,7 @@ public class TestLocation : MonoBehaviour
                 text.SetText("Running.");
 
                 text.text += $"\nLocation: {Input.location.lastData.latitude} | {Input.location.lastData.longitude} | {Input.location.lastData.altitude} | {Input.location.lastData.horizontalAccuracy}" /*{Input.location.lastData.verticalAccuracy}"*/;
-                //                                                                                                                                                      WebGL usa estos dos valores por igual
+                //                                                                                                                                                            WebGL usa estos dos valores por igual
                 text.text += $"\nPrecise: {PreciseLocation.Latitude} | {PreciseLocation.Longitude}";
                 // Android tiene 8-9 numeros de precision, iOS y Pc tiene 15 de precision, una locura de diferencia
                 break;
@@ -54,7 +53,10 @@ public class TestLocation : MonoBehaviour
 
     public void LocationStop()
     {
+        if (Input.location.status == LocationServiceStatus.Running)
+        {
+            text.text += "\nStopped.";
+        }
         Input.location.Stop();
-        text.text += "\nStopped.";
     }
 }
