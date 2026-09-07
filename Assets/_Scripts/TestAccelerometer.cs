@@ -48,6 +48,13 @@ public class TestAccelerometer : MonoBehaviour
             Debug.Log($"Enabled {GravitySensor.current.description} {GravitySensor.current.samplingFrequency}Hz");
         }
 
+        Debug.Log($"LinearAccelerationSensor - {LinearAccelerationSensor.current}");
+        if (LinearAccelerationSensor.current != null)
+        {
+            InputSystem.EnableDevice(LinearAccelerationSensor.current);
+            Debug.Log($"Enabled {LinearAccelerationSensor.current.description} {LinearAccelerationSensor.current.samplingFrequency}Hz");
+        }
+
         Debug.Log($"Supports Gyroscope: {SystemInfo.supportsGyroscope}");
         Debug.Log($"AttitudeSensor - {AttitudeSensor.current}");
         if (AttitudeSensor.current != null)
@@ -98,7 +105,7 @@ public class TestAccelerometer : MonoBehaviour
         //    return lastGoodHeading;
         //}
 
-        float t = 1f - Mathf.Exp(-10.5f * Time.deltaTime);
+        float t = 1f - Mathf.Exp(-7f * Time.deltaTime);
 
         smoothedHeading = Mathf.LerpAngle(
             smoothedHeading,
@@ -119,6 +126,11 @@ public class TestAccelerometer : MonoBehaviour
         if (GravitySensor.current != null && GravitySensor.current.lastUpdateTime > 0) // funciona en los dos, gravedad, vector3
         {
             _text += $"\nGravitySensor: {GravitySensor.current.gravity.ReadValue()}";
+        }
+
+        if (LinearAccelerationSensor.current != null && LinearAccelerationSensor.current.lastUpdateTime > 0)
+        {
+            _text += $"\nLinearAccelerationSensor: {LinearAccelerationSensor.current.acceleration.ReadValue()}";
         }
 
         if (AttitudeSensor.current != null && AttitudeSensor.current.lastUpdateTime > 0) // solo funciona en moderno, gyro, quaternio, 
