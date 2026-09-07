@@ -19,6 +19,15 @@ public class TestAccelerometer : MonoBehaviour
     [SerializeField] private RectTransform mapTest;
 
 
+    [Space]
+    [SerializeField] private Transform accelerationCube;
+    [SerializeField] private float sensitivity = 2f;
+    [SerializeField] private float maxVelocity = 2f;
+    [SerializeField] private float maxHeight = 2f;
+    private float velocity2;
+
+
+
 
     private float alphaHeading;
     private float alphaHeading2;
@@ -226,6 +235,41 @@ public class TestAccelerometer : MonoBehaviour
             //Vector3 forward = Vector3.ProjectOnPlane(Vector3.forward, gravity).normalized;
             //cube.rotation = Quaternion.LookRotation(forward, gravity);
             #endregion
+
+
+            // -----------------------
+
+
+            Vector3 gravity2 = GravitySensor.current.gravity.ReadValue();
+
+            // Dirección "arriba" del mundo respecto al teléfono.
+            Vector3 worldUp = -gravity2.normalized;
+
+            // ¿Cuánta aceleración hay en la dirección vertical?
+            float verticalAcceleration =
+                Vector3.Dot(acceleration, worldUp);
+
+            // Aceleración -> velocidad
+            velocity2 += verticalAcceleration * sensitivity * Time.deltaTime;
+
+            velocity2 = Mathf.Clamp(
+                velocity2,
+                -maxVelocity,
+                maxVelocity
+            );
+
+            // Velocidad -> posición
+            Vector3 position = accelerationCube.position;
+
+            position.y += velocity2 * Time.deltaTime;
+
+            position.y = Mathf.Clamp(
+                position.y,
+                -maxHeight,
+                maxHeight
+            );
+
+            accelerationCube.position = position;
         }
     }
 }

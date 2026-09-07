@@ -26,7 +26,6 @@ MonoBehaviour:
     probeVolumeBlendStatesCS: {fileID: 0}
   m_RendererFeatures: []
   m_RendererFeatureMap: 
-  xrSystemData: {fileID: 0}
   postProcessData: {fileID: 0}
   m_AssetVersion: 3
   m_PrepassLayerMask:
