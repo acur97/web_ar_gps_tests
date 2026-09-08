@@ -180,7 +180,7 @@ public class TestAccelerometer : MonoBehaviour
         if (AttitudeSensor.current != null && AttitudeSensor.current.lastUpdateTime > 0)
         {
             gyroscope = AttitudeSensor.current.attitude.ReadValue();
-            cube.localRotation = new Quaternion(gyroscope.y, -gyroscope.z, -gyroscope.x, gyroscope.w);
+            cube.localRotation = new Quaternion(gyroscope.x, gyroscope.y, -gyroscope.z, -gyroscope.w);
         }
         else if (GravitySensor.current != null && GravitySensor.current.lastUpdateTime > 0)
         {

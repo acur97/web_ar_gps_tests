@@ -11,7 +11,7 @@ public class TestCamera : MonoBehaviour
 
     private WebCamDevice frontCameraDevice;
     private WebCamDevice backCameraDevice;
-    private WebCamDevice activeCameraDevice;
+    //private WebCamDevice activeCameraDevice;
 
     [Space]
     [SerializeField] private WebCamTexture frontCameraTexture;
@@ -19,6 +19,7 @@ public class TestCamera : MonoBehaviour
     [SerializeField] private WebCamTexture activeCameraTexture;
 
     private CancellationTokenSource token;
+    private bool cameraSet = false;
 
     public void StartCamera()
     {
@@ -69,11 +70,12 @@ public class TestCamera : MonoBehaviour
             activeCameraTexture.Stop();
 
         activeCameraTexture = cameraToUse;
-        activeCameraDevice = cameraToUse.Equals(frontCameraTexture) ? frontCameraDevice : backCameraDevice;
+        //activeCameraDevice = cameraToUse.Equals(frontCameraTexture) ? frontCameraDevice : backCameraDevice;
 
         rImage.texture = activeCameraTexture;
 
         activeCameraTexture.Play();
+        cameraSet = false;
     }
 
     public void SwitchCamera()
@@ -86,12 +88,13 @@ public class TestCamera : MonoBehaviour
         token?.Cancel();
         rImage.enabled = false;
         rImage.texture = null;
+        cameraSet = false;
 
         if (activeCameraTexture != null)
         {
             activeCameraTexture.Stop();
             Destroy(activeCameraTexture);
-            activeCameraDevice = default;
+            //activeCameraDevice = default;
         }
         if (frontCameraTexture != null)
         {
@@ -109,7 +112,7 @@ public class TestCamera : MonoBehaviour
 
     private void Update()
     {
-        if (activeCameraTexture == null)
+        if (cameraSet || activeCameraTexture == null)
             return;
 
         // Skip making adjustment for incorrect camera data
@@ -119,21 +122,22 @@ public class TestCamera : MonoBehaviour
             return;
         }
 
-        // Rotate image to show correct orientation 
-        //rotationVector.z = -activeCameraTexture.videoRotationAngle;
-        //image.rectTransform.localEulerAngles = rotationVector;
-
-        Debug.LogWarning(
-            $"currentResolution:{activeCameraTexture.width}x{activeCameraTexture.height} | UpdateThisFrame:{activeCameraTexture.didUpdateThisFrame} | isPlaying:{activeCameraTexture.isPlaying}");
+        Debug.LogWarning($"currentResolution:{activeCameraTexture.width}x{activeCameraTexture.height} | UpdateThisFrame:{activeCameraTexture.didUpdateThisFrame} | isPlaying:{activeCameraTexture.isPlaying}");
         // currentResolution:480x640 | UpdateThisFrame:True | isPlaying:True
         // currentResolution:480x640 | UpdateThisFrame:True | isPlaying:false
 
         // Set AspectRatioFitter's ratio
         aspectFitter.aspectRatio = activeCameraTexture.width / (float)activeCameraTexture.height;
 
+        cameraSet = true;
+
         //bool vflip = webCamTexture.videoVerticallyMirrored;
         //Vector2 scale = new(1, vflip ? -1 : 1);
         //Vector2 offset = new(0, vflip ? 1 : 0);
+
+        // Rotate image to show correct orientation 
+        //rotationVector.z = -activeCameraTexture.videoRotationAngle;
+        //image.rectTransform.localEulerAngles = rotationVector;
 
         // Unflip if vertically flipped
         //image.uvRect =
