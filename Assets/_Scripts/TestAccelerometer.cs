@@ -110,7 +110,7 @@ public class TestAccelerometer : MonoBehaviour
         //    return lastGoodHeading;
         //}
 
-        float t = 1f - Mathf.Exp(-5.25f * Time.deltaTime);
+        float t = 1f - Mathf.Exp(-7f * Time.deltaTime);
 
         smoothedHeading = Mathf.LerpAngle(
             smoothedHeading,
@@ -133,7 +133,7 @@ public class TestAccelerometer : MonoBehaviour
 
         compassOffset = Mathf.DeltaAngle(attitudeHeading, alphaHeading2);
 
-        compassOffsetLerp = Mathf.LerpAngle(compassOffsetLerp, compassOffset, 1f - Mathf.Exp(-2.1f * Time.deltaTime));
+        compassOffsetLerp = Mathf.Repeat(Mathf.LerpAngle(compassOffsetLerp, compassOffset, 1f - Mathf.Exp(-2.1f * Time.deltaTime)), 360f);
     }
 
     private float GetAttitudeYaw()
