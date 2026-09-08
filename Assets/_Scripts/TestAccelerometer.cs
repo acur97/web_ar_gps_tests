@@ -43,7 +43,6 @@ public class TestAccelerometer : MonoBehaviour
     private Quaternion gyroscopeOffset;
     private Quaternion gyroscope;
     private float compassOffset;
-    private float gyroYaw;
     private float gyroCalibratedYaw;
 
 
@@ -127,14 +126,22 @@ public class TestAccelerometer : MonoBehaviour
 
         Vector3 horizontalForward = Vector3.ProjectOnPlane(forward, Vector3.up).normalized;
 
-        gyroYaw = Mathf.Atan2(horizontalForward.x, horizontalForward.z) * Mathf.Rad2Deg;
-        gyroYaw = Mathf.Repeat(gyroYaw, 360f);
-
         float attitudeHeading = Mathf.Atan2(horizontalForward.x, horizontalForward.z) * Mathf.Rad2Deg;
 
         attitudeHeading = (attitudeHeading + 360f) % 360f;
 
         compassOffset = Mathf.DeltaAngle(attitudeHeading, alphaHeading);
+    }
+
+    private float GetAttitudeYaw()
+    {
+        Vector3 forward = cube.localRotation * Vector3.forward;
+
+        Vector3 horizontalForward = Vector3.ProjectOnPlane(forward, Vector3.up).normalized;
+
+        float gyroYaw = Mathf.Atan2(horizontalForward.x, horizontalForward.z) * Mathf.Rad2Deg;
+
+        return Mathf.Repeat(gyroYaw, 360f);
     }
 
     private void Update()
@@ -191,8 +198,7 @@ public class TestAccelerometer : MonoBehaviour
                 compasstrueHeading.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
                 compassalphaHeading.localEulerAngles = new Vector3(0, 0, alphaHeading);
 
-                float yawOffset = Mathf.DeltaAngle(gyroYaw, alphaHeading);
-                gyroCalibratedYaw = Mathf.Repeat(gyroYaw + yawOffset, 360f);
+                gyroCalibratedYaw = GetAttitudeYaw();
                 compassGyro.localEulerAngles = new Vector3(0, 0, gyroCalibratedYaw);
                 _text += $"\ngyroCalibratedYaw:{gyroCalibratedYaw}";
 
