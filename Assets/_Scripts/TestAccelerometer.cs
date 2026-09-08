@@ -40,6 +40,8 @@ public class TestAccelerometer : MonoBehaviour
 
 
     private Quaternion gyroscope;
+    private float compassOffset;
+    [SerializeField] private float compassCorrectionSpeed = 1f;
 
 
 
@@ -175,12 +177,28 @@ public class TestAccelerometer : MonoBehaviour
             }
         }
 
-        text.SetText(_text);
-
         if (AttitudeSensor.current != null && AttitudeSensor.current.lastUpdateTime > 0)
         {
             gyroscope = Quaternion.Euler(-90f, 0f, 0f) * AttitudeSensor.current.attitude.ReadValue();
             cube.localRotation = new Quaternion(gyroscope.x, gyroscope.y, -gyroscope.z, -gyroscope.w);
+
+
+
+
+
+            Vector3 forward = cube.localRotation * Vector3.forward;
+
+            Vector3 horizontalForward = Vector3.ProjectOnPlane(forward, Vector3.up).normalized;
+
+            float attitudeHeading = Mathf.Atan2(horizontalForward.x, horizontalForward.z) * Mathf.Rad2Deg;
+
+            attitudeHeading = (attitudeHeading + 360f) % 360f;
+
+            float error = Mathf.DeltaAngle(attitudeHeading, Input.compass.trueHeading);
+
+            compassOffset = Mathf.LerpAngle(compassOffset, error, 1f - Mathf.Exp(-compassCorrectionSpeed * Time.deltaTime));
+
+            _text += $"\nGyro Compass Error:{error} | compassOffset{compassOffset}";
         }
         else if (GravitySensor.current != null && GravitySensor.current.lastUpdateTime > 0)
         {
@@ -195,5 +213,7 @@ public class TestAccelerometer : MonoBehaviour
             gravityFiltered.Normalize();
             cube.localRotation = Quaternion.FromToRotation(-cubeParent.up, gravityFiltered);
         }
+
+        text.SetText(_text);
     }
 }
