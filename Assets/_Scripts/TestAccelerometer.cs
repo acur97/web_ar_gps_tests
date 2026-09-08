@@ -16,6 +16,7 @@ public class TestAccelerometer : MonoBehaviour
     [SerializeField] private Transform compassRoot;
     [SerializeField] private RectTransform compasstrueHeading;
     [SerializeField] private RectTransform compassalphaHeading;
+    [SerializeField] private RectTransform compassGyro;
     [SerializeField] private RectTransform mapTest;
 
 
@@ -41,10 +42,9 @@ public class TestAccelerometer : MonoBehaviour
 
     private Quaternion gyroscopeOffset;
     private Quaternion gyroscope;
-    private float error;
     private float compassOffset;
-    [SerializeField] private float compassCorrectionSpeed = 1f;
-
+    private float gyroYaw;
+    private float gyroCalibratedYaw;
 
 
 
@@ -127,13 +127,14 @@ public class TestAccelerometer : MonoBehaviour
 
         Vector3 horizontalForward = Vector3.ProjectOnPlane(forward, Vector3.up).normalized;
 
+        gyroYaw = Mathf.Atan2(horizontalForward.x, horizontalForward.z) * Mathf.Rad2Deg;
+        gyroYaw = Mathf.Repeat(gyroYaw, 360f);
+
         float attitudeHeading = Mathf.Atan2(horizontalForward.x, horizontalForward.z) * Mathf.Rad2Deg;
 
         attitudeHeading = (attitudeHeading + 360f) % 360f;
 
-        error = Mathf.DeltaAngle(attitudeHeading, alphaHeading - 90); // hay que quitar este 90, solo es pa pruebas
-
-        compassOffset = Mathf.LerpAngle(compassOffset, error, 2.1f - Mathf.Exp(-compassCorrectionSpeed * Time.deltaTime));
+        compassOffset = Mathf.DeltaAngle(attitudeHeading, alphaHeading);
     }
 
     private void Update()
@@ -190,6 +191,11 @@ public class TestAccelerometer : MonoBehaviour
                 compasstrueHeading.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
                 compassalphaHeading.localEulerAngles = new Vector3(0, 0, alphaHeading);
 
+                float yawOffset = Mathf.DeltaAngle(gyroYaw, alphaHeading);
+                gyroCalibratedYaw = Mathf.Repeat(gyroYaw + yawOffset, 360f);
+                compassGyro.localEulerAngles = new Vector3(0, 0, gyroCalibratedYaw);
+                _text += $"\ngyroCalibratedYaw:{gyroCalibratedYaw}";
+
                 _text += $"\nAlpha:{PreciseLocation.Alpha} | Beta:{PreciseLocation.Beta} | Gamma:{PreciseLocation.Gamma}";
             }
         }
@@ -202,7 +208,7 @@ public class TestAccelerometer : MonoBehaviour
 
             cube.localRotation = Quaternion.Euler(0f, compassOffset, 0f) * gyroscope;
 
-            _text += $"\nGyro Compass Error:{error} | compassOffset{compassOffset}";
+            _text += $"\nGyroCompassOffset{compassOffset}";
         }
         else if (GravitySensor.current != null && GravitySensor.current.lastUpdateTime > 0)
         {
