@@ -194,7 +194,7 @@ public class TestAccelerometer : MonoBehaviour
 
             attitudeHeading = (attitudeHeading + 360f) % 360f;
 
-            float error = Mathf.DeltaAngle(attitudeHeading, Input.compass.trueHeading - 90); // hay que quitar este 90, solo es pa pruebas
+            float error = Mathf.DeltaAngle(attitudeHeading, alphaHeading - 90); // hay que quitar este 90, solo es pa pruebas
 
             compassOffset = Mathf.LerpAngle(compassOffset, error, 2.1f - Mathf.Exp(-compassCorrectionSpeed * Time.deltaTime));
 
