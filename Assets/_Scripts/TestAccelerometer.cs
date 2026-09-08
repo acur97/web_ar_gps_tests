@@ -194,9 +194,11 @@ public class TestAccelerometer : MonoBehaviour
 
             attitudeHeading = (attitudeHeading + 360f) % 360f;
 
-            float error = Mathf.DeltaAngle(attitudeHeading, Input.compass.trueHeading);
+            float error = Mathf.DeltaAngle(attitudeHeading, Input.compass.trueHeading - 90); // hay que quitar este 90, solo es pa pruebas
 
-            compassOffset = Mathf.LerpAngle(compassOffset, error, 1f - Mathf.Exp(-compassCorrectionSpeed * Time.deltaTime));
+            compassOffset = Mathf.LerpAngle(compassOffset, error, 2.1f - Mathf.Exp(-compassCorrectionSpeed * Time.deltaTime));
+
+            //cube.localRotation = Quaternion.Euler(0f, compassOffset, 0f) * cube.localRotation;
 
             _text += $"\nGyro Compass Error:{error} | compassOffset{compassOffset}";
         }
