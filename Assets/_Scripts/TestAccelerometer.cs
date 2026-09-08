@@ -133,7 +133,7 @@ public class TestAccelerometer : MonoBehaviour
 
         compassOffset = Mathf.DeltaAngle(attitudeHeading, alphaHeading2);
 
-        compassOffsetLerp = Mathf.Repeat(Mathf.LerpAngle(compassOffsetLerp, compassOffset, 1f - Mathf.Exp(-2.1f * Time.deltaTime)), 360f);
+        compassOffsetLerp = Mathf.Repeat(Mathf.LerpAngle(compassOffsetLerp, compassOffset, 1f - Mathf.Exp(-3.5f * Time.deltaTime)), 360f);
     }
 
     private float GetAttitudeYaw()
