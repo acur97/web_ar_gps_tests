@@ -180,13 +180,14 @@ public class TestAccelerometer : MonoBehaviour
         if (AttitudeSensor.current != null && AttitudeSensor.current.lastUpdateTime > 0)
         {
             gyroscope = Quaternion.Euler(-90f, 0f, 0f) * AttitudeSensor.current.attitude.ReadValue();
-            cube.localRotation = new Quaternion(gyroscope.x, gyroscope.y, -gyroscope.z, -gyroscope.w);
+            Quaternion gyro = new(gyroscope.x, gyroscope.y, -gyroscope.z, -gyroscope.w);
+            //cube.localRotation = gyro;
 
 
 
 
 
-            Vector3 forward = cube.localRotation * Vector3.forward;
+            Vector3 forward = gyro * Vector3.forward;
 
             Vector3 horizontalForward = Vector3.ProjectOnPlane(forward, Vector3.up).normalized;
 
@@ -198,7 +199,7 @@ public class TestAccelerometer : MonoBehaviour
 
             compassOffset = Mathf.LerpAngle(compassOffset, error, 2.1f - Mathf.Exp(-compassCorrectionSpeed * Time.deltaTime));
 
-            cube.localRotation = Quaternion.Euler(0f, compassOffset, 0f) * cube.localRotation;
+            cube.localRotation = Quaternion.Euler(0f, compassOffset, 0f) * gyro;
 
             _text += $"\nGyro Compass Error:{error} | compassOffset{compassOffset}";
         }
