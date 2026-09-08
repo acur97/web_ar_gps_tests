@@ -43,6 +43,7 @@ public class TestAccelerometer : MonoBehaviour
     private Quaternion gyroscopeOffset;
     private Quaternion gyroscope;
     private float compassOffset;
+    private float compassOffsetLerp;
     private float gyroCalibratedYaw;
 
 
@@ -120,7 +121,7 @@ public class TestAccelerometer : MonoBehaviour
         return smoothedHeading;
     }
 
-    public void CalibrateWithCompass()
+    private void CalibrateWithCompass()
     {
         Vector3 forward = gyroscope * Vector3.forward;
 
@@ -131,6 +132,8 @@ public class TestAccelerometer : MonoBehaviour
         attitudeHeading = (attitudeHeading + 360f) % 360f;
 
         compassOffset = Mathf.DeltaAngle(attitudeHeading, alphaHeading);
+
+        compassOffsetLerp = Mathf.LerpAngle(compassOffsetLerp, compassOffset, 1f - Mathf.Exp(-2.1f * Time.deltaTime));
     }
 
     private float GetAttitudeYaw()
@@ -214,7 +217,8 @@ public class TestAccelerometer : MonoBehaviour
 
             cube.localRotation = Quaternion.Euler(0f, compassOffset, 0f) * gyroscope;
 
-            _text += $"\nGyroCompassOffset{compassOffset}";
+            CalibrateWithCompass();
+            _text += $"\nGyroCompassOffset{compassOffset} | compassOffsetLerp:{compassOffsetLerp}";
         }
         else if (GravitySensor.current != null && GravitySensor.current.lastUpdateTime > 0)
         {
