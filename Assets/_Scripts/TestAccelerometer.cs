@@ -110,7 +110,7 @@ public class TestAccelerometer : MonoBehaviour
         //    return lastGoodHeading;
         //}
 
-        float t = 1f - Mathf.Exp(-7f * Time.deltaTime);
+        float t = 1f - Mathf.Exp(-5.25f * Time.deltaTime);
 
         smoothedHeading = Mathf.LerpAngle(
             smoothedHeading,
@@ -131,7 +131,7 @@ public class TestAccelerometer : MonoBehaviour
 
         attitudeHeading = (attitudeHeading + 360f) % 360f;
 
-        compassOffset = Mathf.DeltaAngle(attitudeHeading, alphaHeading);
+        compassOffset = Mathf.DeltaAngle(attitudeHeading, alphaHeading2);
 
         compassOffsetLerp = Mathf.LerpAngle(compassOffsetLerp, compassOffset, 1f - Mathf.Exp(-2.1f * Time.deltaTime));
     }
@@ -180,32 +180,32 @@ public class TestAccelerometer : MonoBehaviour
             //                               float (WebGL usa estos dos igual)
             _text += $" | Accuracy:{Input.compass.headingAccuracy}";
             //                   Solo en iOS muestra 20.03567
+            compasstrueHeading.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
 
             if (preciseCompass) // iOS
             {
                 //compassRoot.localEulerAngles = new Vector3(0, Input.compass.trueHeading, 0);
                 mapTest.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
-                compasstrueHeading.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
             }
             else // Android (o hata pc)
             {
                 alphaHeading = Mathf.Repeat(360f - PreciseLocation.Alpha, 360f);
                 _text += $" | alphaHeading:{alphaHeading}";
+                compassalphaHeading.localEulerAngles = new Vector3(0, 0, alphaHeading);
 
                 alphaHeading2 = GetHeading(alphaHeading);
 
                 _text += $"\ninProblemZone:{inProblemZone} | correctedAlphaHeading:{alphaHeading2}";
 
                 //compassRoot.localEulerAngles = new Vector3(0, alphaHeading2, 0);
-                mapTest.localEulerAngles = new Vector3(0, 0, alphaHeading2);
-                compasstrueHeading.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
-                compassalphaHeading.localEulerAngles = new Vector3(0, 0, alphaHeading);
 
                 gyroCalibratedYaw = GetAttitudeYaw();
                 compassGyro.localEulerAngles = new Vector3(0, 0, gyroCalibratedYaw);
                 _text += $"\ngyroCalibratedYaw:{gyroCalibratedYaw}";
 
                 _text += $"\nAlpha:{PreciseLocation.Alpha} | Beta:{PreciseLocation.Beta} | Gamma:{PreciseLocation.Gamma}";
+
+                mapTest.localEulerAngles = new Vector3(0, 0, gyroCalibratedYaw);
             }
         }
 
