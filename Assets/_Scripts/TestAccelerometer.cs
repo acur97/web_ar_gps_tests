@@ -19,14 +19,6 @@ public class TestAccelerometer : MonoBehaviour
     [SerializeField] private RectTransform mapTest;
 
 
-    [Space]
-    [SerializeField] private Transform accelerationCube;
-    [SerializeField] private float sensitivity = 2f;
-    [SerializeField] private float maxVelocity = 2f;
-    [SerializeField] private float maxHeight = 2f;
-    private float velocity2;
-
-
 
 
     private float alphaHeading;
@@ -55,13 +47,6 @@ public class TestAccelerometer : MonoBehaviour
         {
             InputSystem.EnableDevice(GravitySensor.current);
             Debug.Log($"Enabled {GravitySensor.current.description} {GravitySensor.current.samplingFrequency}Hz");
-        }
-
-        Debug.Log($"LinearAccelerationSensor - {LinearAccelerationSensor.current}");
-        if (LinearAccelerationSensor.current != null)
-        {
-            InputSystem.EnableDevice(LinearAccelerationSensor.current);
-            Debug.Log($"Enabled {LinearAccelerationSensor.current.description} {LinearAccelerationSensor.current.samplingFrequency}Hz");
         }
 
         Debug.Log($"Supports Gyroscope: {SystemInfo.supportsGyroscope}");
@@ -137,11 +122,6 @@ public class TestAccelerometer : MonoBehaviour
             _text += $"\nGravitySensor: {GravitySensor.current.gravity.ReadValue()}";
         }
 
-        if (LinearAccelerationSensor.current != null && LinearAccelerationSensor.current.lastUpdateTime > 0)
-        {
-            _text += $"\nLinearAccelerationSensor: {LinearAccelerationSensor.current.acceleration.ReadValue()}";
-        }
-
         if (AttitudeSensor.current != null && AttitudeSensor.current.lastUpdateTime > 0) // solo funciona en moderno, gyro, quaternio, 
         {
             _text += $"\nAttitudeSensor: {AttitudeSensor.current.attitude.ReadValue()}";
@@ -166,7 +146,7 @@ public class TestAccelerometer : MonoBehaviour
 
             if (preciseCompass) // iOS
             {
-                compassRoot.localEulerAngles = new Vector3(0, Input.compass.trueHeading, 0);
+                //compassRoot.localEulerAngles = new Vector3(0, Input.compass.trueHeading, 0);
                 mapTest.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
                 compasstrueHeading.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
             }
@@ -179,7 +159,7 @@ public class TestAccelerometer : MonoBehaviour
 
                 _text += $"\ninProblemZone:{inProblemZone} | correctedAlphaHeading:{alphaHeading2}";
 
-                compassRoot.localEulerAngles = new Vector3(0, alphaHeading2, 0);
+                //compassRoot.localEulerAngles = new Vector3(0, alphaHeading2, 0);
                 mapTest.localEulerAngles = new Vector3(0, 0, alphaHeading2);
                 compasstrueHeading.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
                 compassalphaHeading.localEulerAngles = new Vector3(0, 0, alphaHeading);
@@ -190,7 +170,11 @@ public class TestAccelerometer : MonoBehaviour
 
         text.SetText(_text);
 
-        if (GravitySensor.current != null && GravitySensor.current.lastUpdateTime > 0)
+        if (AttitudeSensor.current != null && AttitudeSensor.current.lastUpdateTime > 0)
+        {
+            cube.localRotation = AttitudeSensor.current.attitude.ReadValue();
+        }
+        else if (GravitySensor.current != null && GravitySensor.current.lastUpdateTime > 0)
         {
             acceleration = GravitySensor.current.gravity.ReadValue();
             gravity = new(-acceleration.x, acceleration.y, acceleration.z);
@@ -201,75 +185,7 @@ public class TestAccelerometer : MonoBehaviour
                 1f - MathF.Exp(-21 * Time.deltaTime));
 
             filteredGravity.Normalize();
-
-            #region v1, al tener vertical el telefono se descontrola el cubo
-            //cube.rotation = Quaternion.LookRotation(gravity);
-            #endregion
-
-            #region v2, se va desfazando, --- el mejor por ahora ---
-            //Quaternion tilt = Quaternion.FromToRotation(cube.up, gravity);
-            //cube.rotation = tilt * cube.rotation;
-            #endregion
-
-            #region v3 -- ultimo mejor con desfaces tambien --
-            //Quaternion tilt = Quaternion.FromToRotation(-cube.up, gravity);
-            //cube.rotation = tilt * cube.rotation;
-            #endregion
-
-            #region v4, no desfasa pero girar a los lados gira mal
-            //Quaternion tilt = Quaternion.FromToRotation(baseRotation * Vector3.up, gravity);
-            //cube.rotation = tilt * baseRotation;
-            #endregion
-
-            #region v5
-            //Quaternion tilt = Quaternion.FromToRotation(Vector3.up, gravity);
-            //cube.rotation = tilt * baseRotation;
-            #endregion
-
-            #region v6 -- bastante bueno, no se desfasa, pero teniendo el celular acostado hace rotaciones raras, pero casi nunca se haran
-            cube.localRotation = Quaternion.FromToRotation(-cubeParent.up /*Vector3.down*/, filteredGravity);
-            #endregion
-
-            #region v7 -- se bugea arriba y abajo
-            //gravity = -gravity.normalized;
-            //Vector3 forward = Vector3.ProjectOnPlane(Vector3.forward, gravity).normalized;
-            //cube.rotation = Quaternion.LookRotation(forward, gravity);
-            #endregion
-
-
-            // -----------------------
-
-
-            Vector3 gravity2 = GravitySensor.current.gravity.ReadValue();
-
-            // Dirección "arriba" del mundo respecto al teléfono.
-            Vector3 worldUp = -gravity2.normalized;
-
-            // ¿Cuánta aceleración hay en la dirección vertical?
-            float verticalAcceleration =
-                Vector3.Dot(acceleration, worldUp);
-
-            // Aceleración -> velocidad
-            velocity2 += verticalAcceleration * sensitivity * Time.deltaTime;
-
-            velocity2 = Mathf.Clamp(
-                velocity2,
-                -maxVelocity,
-                maxVelocity
-            );
-
-            // Velocidad -> posición
-            Vector3 position = accelerationCube.position;
-
-            position.y += velocity2 * Time.deltaTime;
-
-            position.y = Mathf.Clamp(
-                position.y,
-                -maxHeight,
-                maxHeight
-            );
-
-            accelerationCube.position = position;
+            cube.localRotation = Quaternion.FromToRotation(-cubeParent.up, filteredGravity);
         }
     }
 }

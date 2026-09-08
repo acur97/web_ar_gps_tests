@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputSettings
   m_SupportedDevices:
   - GravitySensor
-  - LinearAccelerationSensor
   - AttitudeSensor
   m_UpdateMode: 1
   m_ScrollDeltaBehavior: 0
