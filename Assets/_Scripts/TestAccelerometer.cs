@@ -215,7 +215,7 @@ public class TestAccelerometer : MonoBehaviour
             gyroscope = new(gyroscopeOffset.x, gyroscopeOffset.y, -gyroscopeOffset.z, -gyroscopeOffset.w);
             //cube.localRotation = gyroscope;            
 
-            cube.localRotation = Quaternion.Euler(0f, compassOffset, 0f) * gyroscope;
+            cube.localRotation = Quaternion.Euler(0f, compassOffsetLerp, 0f) * gyroscope;
 
             CalibrateWithCompass();
             _text += $"\nGyroCompassOffset{compassOffset} | compassOffsetLerp:{compassOffsetLerp}";
