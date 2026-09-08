@@ -39,7 +39,9 @@ public class TestAccelerometer : MonoBehaviour
 
 
 
+    private Quaternion gyroscopeOffset;
     private Quaternion gyroscope;
+    private float error;
     private float compassOffset;
     [SerializeField] private float compassCorrectionSpeed = 1f;
 
@@ -119,6 +121,21 @@ public class TestAccelerometer : MonoBehaviour
         return smoothedHeading;
     }
 
+    public void CalibrateWithCompass()
+    {
+        Vector3 forward = gyroscope * Vector3.forward;
+
+        Vector3 horizontalForward = Vector3.ProjectOnPlane(forward, Vector3.up).normalized;
+
+        float attitudeHeading = Mathf.Atan2(horizontalForward.x, horizontalForward.z) * Mathf.Rad2Deg;
+
+        attitudeHeading = (attitudeHeading + 360f) % 360f;
+
+        error = Mathf.DeltaAngle(attitudeHeading, alphaHeading - 90); // hay que quitar este 90, solo es pa pruebas
+
+        compassOffset = Mathf.LerpAngle(compassOffset, error, 2.1f - Mathf.Exp(-compassCorrectionSpeed * Time.deltaTime));
+    }
+
     private void Update()
     {
         if (!enabledSensors)
@@ -179,27 +196,11 @@ public class TestAccelerometer : MonoBehaviour
 
         if (AttitudeSensor.current != null && AttitudeSensor.current.lastUpdateTime > 0)
         {
-            gyroscope = Quaternion.Euler(-90f, 0f, 0f) * AttitudeSensor.current.attitude.ReadValue();
-            Quaternion gyro = new(gyroscope.x, gyroscope.y, -gyroscope.z, -gyroscope.w);
-            //cube.localRotation = gyro;
+            gyroscopeOffset = Quaternion.Euler(-90f, 0f, 0f) * AttitudeSensor.current.attitude.ReadValue();
+            gyroscope = new(gyroscopeOffset.x, gyroscopeOffset.y, -gyroscopeOffset.z, -gyroscopeOffset.w);
+            //cube.localRotation = gyroscope;            
 
-
-
-
-
-            Vector3 forward = gyro * Vector3.forward;
-
-            Vector3 horizontalForward = Vector3.ProjectOnPlane(forward, Vector3.up).normalized;
-
-            float attitudeHeading = Mathf.Atan2(horizontalForward.x, horizontalForward.z) * Mathf.Rad2Deg;
-
-            attitudeHeading = (attitudeHeading + 360f) % 360f;
-
-            float error = Mathf.DeltaAngle(attitudeHeading, alphaHeading - 90); // hay que quitar este 90, solo es pa pruebas
-
-            compassOffset = Mathf.LerpAngle(compassOffset, error, 2.1f - Mathf.Exp(-compassCorrectionSpeed * Time.deltaTime));
-
-            cube.localRotation = Quaternion.Euler(0f, compassOffset, 0f) * gyro;
+            cube.localRotation = Quaternion.Euler(0f, compassOffset, 0f) * gyroscope;
 
             _text += $"\nGyro Compass Error:{error} | compassOffset{compassOffset}";
         }
