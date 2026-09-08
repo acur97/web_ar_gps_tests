@@ -198,7 +198,7 @@ public class TestAccelerometer : MonoBehaviour
 
             compassOffset = Mathf.LerpAngle(compassOffset, error, 2.1f - Mathf.Exp(-compassCorrectionSpeed * Time.deltaTime));
 
-            //cube.localRotation = Quaternion.Euler(0f, compassOffset, 0f) * cube.localRotation;
+            cube.localRotation = Quaternion.Euler(0f, compassOffset, 0f) * cube.localRotation;
 
             _text += $"\nGyro Compass Error:{error} | compassOffset{compassOffset}";
         }
