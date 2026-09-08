@@ -70,7 +70,7 @@ public class TestAccelerometer : MonoBehaviour
             Input.compass.enabled = true;
             Debug.Log($"Enabled {Input.compass}");
         }
-        // con el gyro u otro sensor, tengo para subir y bajar la camara?, osea altura?
+        // con el gyro u otro sensor, tengo para subir y bajar la camara?, osea altura?, quiza con LinearAcceleration pero es muy inestable
 
         Debug.Log("Finish Sensors.");
 
@@ -179,7 +179,7 @@ public class TestAccelerometer : MonoBehaviour
 
         if (AttitudeSensor.current != null && AttitudeSensor.current.lastUpdateTime > 0)
         {
-            gyroscope = AttitudeSensor.current.attitude.ReadValue() * Quaternion.Euler(90f, 0f, 0f);
+            gyroscope = Quaternion.Euler(90f, 0f, 0f) * AttitudeSensor.current.attitude.ReadValue();
             cube.localRotation = new Quaternion(gyroscope.x, gyroscope.y, -gyroscope.z, -gyroscope.w);
         }
         else if (GravitySensor.current != null && GravitySensor.current.lastUpdateTime > 0)

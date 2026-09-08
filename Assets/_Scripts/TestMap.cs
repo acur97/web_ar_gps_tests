@@ -30,7 +30,8 @@ public class TestMap : MonoBehaviour
 
     private async UniTaskVoid DownloadImage()
     {
-        using UnityWebRequest request = UnityWebRequestTexture.GetTexture(string.Format(url, PreciseLocation.Latitude, PreciseLocation.Longitude, mapZoom, MapsStaticAPIKey));
+        using UnityWebRequest request = UnityWebRequestTexture.GetTexture(
+            string.Format(url, PreciseLocation.Latitude, PreciseLocation.Longitude, mapZoom, MapsStaticAPIKey));
 
         text.SetText("Descargando mapa...");
         await request.SendWebRequest();
