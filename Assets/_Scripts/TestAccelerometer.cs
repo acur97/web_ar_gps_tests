@@ -33,9 +33,16 @@ public class TestAccelerometer : MonoBehaviour
     private bool enabledSensors = false;
     private bool hasCompass = false;
     private bool preciseCompass = false;
-    private Vector3 acceleration;
     private Vector3 gravity;
-    private Vector3 filteredGravity;
+    private Vector3 gravityOriented;
+    private Vector3 gravityFiltered;
+
+
+
+    private Quaternion gyroscope;
+
+
+
 
     public void OnStart()
     {
@@ -172,20 +179,21 @@ public class TestAccelerometer : MonoBehaviour
 
         if (AttitudeSensor.current != null && AttitudeSensor.current.lastUpdateTime > 0)
         {
-            cube.localRotation = AttitudeSensor.current.attitude.ReadValue();
+            gyroscope = AttitudeSensor.current.attitude.ReadValue();
+            cube.localRotation = new Quaternion(gyroscope.y, -gyroscope.z, -gyroscope.x, gyroscope.w);
         }
         else if (GravitySensor.current != null && GravitySensor.current.lastUpdateTime > 0)
         {
-            acceleration = GravitySensor.current.gravity.ReadValue();
-            gravity = new(-acceleration.x, acceleration.y, acceleration.z);
+            gravity = GravitySensor.current.gravity.ReadValue();
+            gravityOriented = new(-gravity.x, gravity.y, gravity.z);
 
-            filteredGravity = Vector3.Lerp(
-                filteredGravity,
-                gravity,
+            gravityFiltered = Vector3.Lerp(
+                gravityFiltered,
+                gravityOriented,
                 1f - MathF.Exp(-21 * Time.deltaTime));
 
-            filteredGravity.Normalize();
-            cube.localRotation = Quaternion.FromToRotation(-cubeParent.up, filteredGravity);
+            gravityFiltered.Normalize();
+            cube.localRotation = Quaternion.FromToRotation(-cubeParent.up, gravityFiltered);
         }
     }
 }
