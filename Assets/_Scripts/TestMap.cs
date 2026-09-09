@@ -15,11 +15,19 @@ public class TestMap : MonoBehaviour
         "&key={3}";
 
     [SerializeField] private RawImage rawImage;
+    [SerializeField] private RectTransform pointInMap;
     [SerializeField] private RectTransform circleAccuracy;
     [SerializeField] private float mapZoom;
+    [SerializeField] private float displacementMulti;
     [SerializeField] private float circleZoom;
     private float circleScale;
     [SerializeField] private TextMeshProUGUI text;
+
+    private bool mapDownloaded = false;
+
+    [SerializeField] private double lastLatitude;
+    [SerializeField] private double lastLongitude;
+    private Vector2 lastDifference = Vector2.zero;
 
     public void DownloadMap()
     {
@@ -30,8 +38,16 @@ public class TestMap : MonoBehaviour
 
     private async UniTaskVoid DownloadImage()
     {
+        mapDownloaded = false;
+
+        if (PreciseLocation.Latitude != 0 && PreciseLocation.Longitude != 0)
+        {
+            lastLatitude = PreciseLocation.Latitude;
+            lastLongitude = PreciseLocation.Longitude;
+        }
+
         using UnityWebRequest request = UnityWebRequestTexture.GetTexture(
-            string.Format(url, PreciseLocation.Latitude, PreciseLocation.Longitude, mapZoom, MapsStaticAPIKey));
+            string.Format(url, lastLatitude, lastLongitude, mapZoom, MapsStaticAPIKey));
 
         text.SetText("Descargando mapa...");
         await request.SendWebRequest();
@@ -43,6 +59,7 @@ public class TestMap : MonoBehaviour
         }
         else
         {
+            mapDownloaded = true;
             text.SetText("Mapa listo.");
             rawImage.texture = DownloadHandlerTexture.GetContent(request);
         }
@@ -50,10 +67,17 @@ public class TestMap : MonoBehaviour
 
     private void Update()
     {
-        if (Input.location.status == LocationServiceStatus.Running)
+        if (mapDownloaded && Input.location.status == LocationServiceStatus.Running)
         {
             circleScale = (mapZoom * Input.location.lastData.horizontalAccuracy) * circleZoom;
             circleAccuracy.sizeDelta = new Vector2(circleScale, circleScale);
+
+            lastDifference.x = (float)((PreciseLocation.Longitude - lastLongitude) * displacementMulti);
+            lastDifference.y = (float)((PreciseLocation.Latitude - lastLatitude) * displacementMulti);
+
+            text.SetText($"CenterMapDifference: {lastDifference}");
+
+            pointInMap.anchoredPosition = lastDifference;
         }
     }
 }

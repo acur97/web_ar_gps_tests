@@ -17,11 +17,14 @@ public class TestLocation : MonoBehaviour
 
     public void LocationStart()
     {
-        float desiredAccuracyInMeters = 1f;
-        float updateDistanceInMeters = 0f;
-
         PreciseLocation.Install();
-        Input.location.Start(desiredAccuracyInMeters, updateDistanceInMeters);
+
+        if (Input.location.status == LocationServiceStatus.Failed)
+        {
+            Input.location.Stop();
+        }
+
+        Input.location.Start(1, 0);
         text.SetText("Initializing.");
     }
 
