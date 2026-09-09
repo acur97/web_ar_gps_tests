@@ -17,10 +17,10 @@ PlayerSettings:
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
-  m_ShowUnitySplashScreen: 0
+  m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 0
   m_SplashScreenOverlayOpacity: 0
-  m_SplashScreenAnimation: 1
+  m_SplashScreenAnimation: 0
   m_SplashScreenLogoStyle: 1
   m_SplashScreenDrawMode: 0
   m_SplashScreenBackgroundAnimationZoom: 1
@@ -43,7 +43,7 @@ PlayerSettings:
   m_VirtualRealitySplashScreen: {fileID: 0}
   defaultScreenWidth: 1024
   defaultScreenHeight: 768
-  defaultScreenWidthWeb: 960
+  defaultScreenWidthWeb: 480
   defaultScreenHeightWeb: 600
   m_StereoRenderingPath: 0
   m_ActiveColorSpace: 0
@@ -149,7 +149,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 0.1.62
+  bundleVersion: 0.1.63
   preloadedAssets:
   - {fileID: -944628639613478452, guid: 6433497f10c30d940be52e7e24a17faa, type: 3}
   - {fileID: 11400000, guid: dc96d84a4c62b334cb9c774d5af96733, type: 2}
@@ -779,7 +779,7 @@ PlayerSettings:
   webGLDebugSymbols: 0
   webGLEmscriptenArgs: 
   webGLModulesDirectory: 
-  webGLTemplate: APPLICATION:Minimal
+  webGLTemplate: PROJECT:Minimal2
   webGLAnalyzeBuildSize: 0
   webGLUseEmbeddedResources: 0
   webGLCompressionFormat: 0
@@ -806,13 +806,13 @@ PlayerSettings:
   scriptingBackend:
     Android: 1
   il2cppCompilerConfiguration:
-    WebGL: 2
-  il2cppCodeGeneration:
     WebGL: 0
+  il2cppCodeGeneration:
+    WebGL: 1
   il2cppLTOMode: {}
   il2cppStacktraceInformation: {}
   managedStrippingLevel:
-    WebGL: 1
+    WebGL: 2
   incrementalIl2cppBuild: {}
   suppressCommonWarnings: 1
   allowUnsafeCode: 0
@@ -822,7 +822,7 @@ PlayerSettings:
   gcIncremental: 1
   gcWBarrierValidation: 0
   managedCodeVariant:
-    WebGL: 3
+    WebGL: 0
   apiCompatibilityLevelPerPlatform: {}
   editorAssembliesCompatibilityLevel: 3
   m_RenderingPath: 1
