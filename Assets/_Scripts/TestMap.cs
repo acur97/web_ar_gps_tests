@@ -77,7 +77,7 @@ public class TestMap : MonoBehaviour
             targetDifference.x = (float)((lastLongitude - PreciseLocation.Longitude) * displacementMulti);
             targetDifference.y = (float)((lastLatitude - PreciseLocation.Latitude) * displacementMulti);
 
-            lastDifference = Vector2.Lerp(lastDifference, targetDifference, 1f - Mathf.Exp(-21f * Time.deltaTime));
+            lastDifference = Vector2.Lerp(lastDifference, targetDifference, 1f - Mathf.Exp(-10.5f * Time.deltaTime));
 
             text.SetText($"CenterMapDifference: {lastDifference}");
 
