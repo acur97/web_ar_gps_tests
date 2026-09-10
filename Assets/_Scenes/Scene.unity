@@ -1562,7 +1562,7 @@ RectTransform:
   m_AnchorMin: {x: 0.7, y: 0.75}
   m_AnchorMax: {x: 0.7, y: 0.75}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 320, y: 320}
+  m_SizeDelta: {x: 400, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &806712466
 MonoBehaviour:
@@ -2860,11 +2860,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestMap
   rawImage: {fileID: 1888230446}
-  pointInMap: {fileID: 1809700825}
+  rawImageTransform: {fileID: 1888230445}
   circleAccuracy: {fileID: 2069187352}
-  mapZoom: 20
-  displacementMulti: 370000
-  circleZoom: 0.35
+  mapZoom: 18
+  displacementMulti: 240000
+  circleZoom: 5
   text: {fileID: 605977489}
   lastLatitude: 0
   lastLongitude: 0
@@ -4174,8 +4174,8 @@ RectTransform:
   m_GameObject: {fileID: 1888230444}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 806712465}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
