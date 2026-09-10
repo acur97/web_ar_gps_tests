@@ -29,6 +29,7 @@ public class TestMap : MonoBehaviour
     [SerializeField] private double lastLatitude;
     [SerializeField] private double lastLongitude;
     private Vector2 lastDifference = Vector2.zero;
+    private Vector2 targetDifference = Vector2.zero;
 
     public void DownloadMap()
     {
@@ -73,8 +74,10 @@ public class TestMap : MonoBehaviour
             circleScale = Input.location.lastData.horizontalAccuracy * circleZoom;
             circleAccuracy.sizeDelta = new Vector2(circleScale, circleScale);
 
-            lastDifference.x = (float)((lastLongitude - PreciseLocation.Longitude) * displacementMulti);
-            lastDifference.y = (float)((lastLatitude - PreciseLocation.Latitude) * displacementMulti);
+            targetDifference.x = (float)((lastLongitude - PreciseLocation.Longitude) * displacementMulti);
+            targetDifference.y = (float)((lastLatitude - PreciseLocation.Latitude) * displacementMulti);
+
+            lastDifference = Vector2.Lerp(lastDifference, targetDifference, 1f - Mathf.Exp(-21f * Time.deltaTime));
 
             text.SetText($"CenterMapDifference: {lastDifference}");
 
