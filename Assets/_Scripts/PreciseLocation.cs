@@ -16,12 +16,6 @@ public static class PreciseLocation
     private static extern double PreciseLocation_GetLongitude();
 
     [DllImport("__Internal")]
-    private static extern double PreciseLocation_GetAltitude();
-
-    [DllImport("__Internal")]
-    private static extern double PreciseLocation_GetAccuracy();
-
-    [DllImport("__Internal")]
     private static extern float PreciseCompass_GetAlpha();
 
     [DllImport("__Internal")]
@@ -57,30 +51,6 @@ public static class PreciseLocation
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
             return PreciseLocation_GetLongitude();
-#else
-            return 0.0;
-#endif
-        }
-    }
-
-    public static double Altitude
-    {
-        get
-        {
-#if UNITY_WEBGL && !UNITY_EDITOR
-            return PreciseLocation_GetAltitude();
-#else
-            return 0.0;
-#endif
-        }
-    }
-
-    public static double Accuracy
-    {
-        get
-        {
-#if UNITY_WEBGL && !UNITY_EDITOR
-            return PreciseLocation_GetAccuracy();
 #else
             return 0.0;
 #endif
