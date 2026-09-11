@@ -36,10 +36,11 @@ public class TestLocation : MonoBehaviour
             //    text.SetText("Initializing.");
             //    break;
             case LocationServiceStatus.Running:
-                text.SetText($"\nLocation: {Input.location.lastData.latitude} | {Input.location.lastData.longitude} | {Input.location.lastData.altitude} | {Input.location.lastData.horizontalAccuracy}" /*{Input.location.lastData.verticalAccuracy}"*/);
+                text.SetText($"\nLocation: {Input.location.lastData.latitude}° | {Input.location.lastData.longitude}° | {Input.location.lastData.altitude}m | {Input.location.lastData.horizontalAccuracy}m" /*{Input.location.lastData.verticalAccuracy}"*/);
                 //                                                                                                                                                            WebGL usa estos dos valores por igual
-                text.text += $"\nPrecise: {PreciseLocation.Latitude} | {PreciseLocation.Longitude}";
+                text.text += $"\nPrecise: {PreciseLocation.Latitude}° | {PreciseLocation.Longitude}°";
                 // Android tiene 7-9 numeros de precision, iOS y Pc tiene 15 de precision, una locura de diferencia
+                text.text += $"\n{PreciseLocation.Altitude}m | {PreciseLocation.Accuracy}m";
                 break;
             //case LocationServiceStatus.Stopped:
             //    text.SetText("Stopped.");

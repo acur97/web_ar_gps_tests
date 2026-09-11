@@ -19,7 +19,7 @@ public class TestMap : MonoBehaviour
     [SerializeField] private RectTransform rawImageTransform;
     [SerializeField] private RectTransform circleAccuracy;
     [SerializeField] private float mapZoom;
-    [SerializeField] private float displacementMulti;
+    [SerializeField] private Vector2 displacementMulti;
     [SerializeField] private float circleZoom;
     private float circleScale;
     [SerializeField] private TextMeshProUGUI text;
@@ -61,10 +61,31 @@ public class TestMap : MonoBehaviour
         }
         else
         {
-            mapDownloaded = true;
             text.SetText("Mapa listo.");
+
+            UpdateDifference();
+            lastDifference = targetDifference;
+
             rawImage.texture = DownloadHandlerTexture.GetContent(request);
+
+            mapDownloaded = true;
         }
+    }
+
+    private void UpdateDifference()
+    {
+        targetDifference.x = (float)((lastLongitude - PreciseLocation.Longitude) * displacementMulti.x);
+        targetDifference.y = (float)((lastLatitude - PreciseLocation.Latitude) * displacementMulti.y);
+    }
+
+    public void UpdateDisplacementX(string txt)
+    {
+        displacementMulti.x = float.Parse(txt);
+    }
+
+    public void UpdateDisplacementY(string txt)
+    {
+        displacementMulti.y = float.Parse(txt);
     }
 
     private void Update()
@@ -74,10 +95,9 @@ public class TestMap : MonoBehaviour
             circleScale = Input.location.lastData.horizontalAccuracy * circleZoom;
             circleAccuracy.sizeDelta = new Vector2(circleScale, circleScale);
 
-            targetDifference.x = (float)((lastLongitude - PreciseLocation.Longitude) * displacementMulti);
-            targetDifference.y = (float)((lastLatitude - PreciseLocation.Latitude) * displacementMulti);
+            UpdateDifference();
 
-            lastDifference = Vector2.Lerp(lastDifference, targetDifference, 1f - Mathf.Exp(-10.5f * Time.deltaTime));
+            lastDifference = Vector2.Lerp(lastDifference, targetDifference, 1f - Mathf.Exp(-5.25f * Time.deltaTime));
 
             text.SetText($"CenterMapDifference: {lastDifference}");
 
