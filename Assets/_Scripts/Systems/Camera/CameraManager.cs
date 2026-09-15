@@ -4,14 +4,14 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TestCamera : MonoBehaviour
+public class CameraManager : MonoBehaviour
 {
-    [SerializeField] private RawImage rImage;
+    [SerializeField] private RawImage rawImage;
     [SerializeField] private AspectRatioFitter aspectFitter;
 
     private WebCamDevice backCameraDevice;
 
-    [Space]
+    [Header("Runtime")]
     [SerializeField] private WebCamTexture backCameraTexture;
 
     private CancellationTokenSource token;
@@ -27,7 +27,7 @@ public class TestCamera : MonoBehaviour
         token?.Cancel();
         token = new CancellationTokenSource();
 
-        rImage.enabled = true;
+        rawImage.enabled = true;
         Debug.Log("RequestUserAuthorization");
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
 
@@ -53,9 +53,9 @@ public class TestCamera : MonoBehaviour
         backCameraDevice = WebCamTexture.devices.Last();
 
         Debug.Log($"backCameraDevice: {backCameraDevice.name}"); // camera 0, facing back
-        backCameraTexture = new WebCamTexture(backCameraDevice.name, 0, 0, 60); // mejor sin aumentar resolucion, no parece que funcione los fps (se puede intentar fps otra vez)
+        backCameraTexture = new WebCamTexture(backCameraDevice.name); // mejor sin aumentar resolucion, no parece que funcione los fps (quiza en ios?)
 
-        rImage.texture = backCameraTexture;
+        rawImage.texture = backCameraTexture;
         backCameraTexture.Play();
         cameraSet = false;
     }
@@ -63,8 +63,8 @@ public class TestCamera : MonoBehaviour
     public void StopCameras()
     {
         token?.Cancel();
-        rImage.enabled = false;
-        rImage.texture = null;
+        rawImage.enabled = false;
+        rawImage.texture = null;
         cameraSet = false;
 
         if (backCameraTexture != null)

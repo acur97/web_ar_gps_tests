@@ -3,21 +3,22 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class TestAccelerometer : MonoBehaviour
+public class SensorsManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
     private string _text = string.Empty;
 
     [Space]
-    [SerializeField] private Transform cube;
-    [SerializeField] private Transform cubeParent;
+    [SerializeField] private Transform cameraRoot;
+    [SerializeField] private Transform cameraParent;
 
     [Space]
-    [SerializeField] private Transform compassRoot;
     [SerializeField] private RectTransform compasstrueHeading;
     [SerializeField] private RectTransform compassalphaHeading;
     [SerializeField] private RectTransform compassGyro;
-    [SerializeField] private RectTransform mapTest;
+
+    [Space]
+    [SerializeField] private RectTransform mapRoot;
 
 
 
@@ -126,7 +127,7 @@ public class TestAccelerometer : MonoBehaviour
 
     private float GetAttitudeYaw()
     {
-        Vector3 forward = cube.localRotation * Vector3.forward;
+        Vector3 forward = cameraRoot.localRotation * Vector3.forward;
 
         Vector3 horizontalForward = Vector3.ProjectOnPlane(forward, Vector3.up).normalized;
 
@@ -172,8 +173,8 @@ public class TestAccelerometer : MonoBehaviour
 
             if (preciseCompass) // iOS
             {
-                //compassRoot.localEulerAngles = new Vector3(0, Input.compass.trueHeading, 0);
-                mapTest.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
+                //cameraParent.localEulerAngles = new Vector3(0, Input.compass.trueHeading, 0);
+                mapRoot.localEulerAngles = new Vector3(0, 0, Input.compass.trueHeading);
             }
             else // Android (o hata pc)
             {
@@ -185,7 +186,7 @@ public class TestAccelerometer : MonoBehaviour
 
                 _text += $"\ninProblemZone:{inProblemZone} | correctedAlphaHeading:{alphaHeading2}";
 
-                //compassRoot.localEulerAngles = new Vector3(0, alphaHeading2, 0);
+                //cameraParent.localEulerAngles = new Vector3(0, alphaHeading2, 0);
 
                 _text += $"\nAlpha:{PreciseLocation.Alpha} | Beta:{PreciseLocation.Beta} | Gamma:{PreciseLocation.Gamma}";
 
@@ -196,11 +197,11 @@ public class TestAccelerometer : MonoBehaviour
                     compassGyro.localEulerAngles = new Vector3(0, 0, gyroCalibratedYaw);
                     _text += $"\ngyroCalibratedYaw:{gyroCalibratedYaw}";
 
-                    mapTest.localEulerAngles = new Vector3(0, 0, gyroCalibratedYaw);
+                    mapRoot.localEulerAngles = new Vector3(0, 0, gyroCalibratedYaw);
                 }
                 else
                 {
-                    mapTest.localEulerAngles = new Vector3(0, 0, alphaHeading2);
+                    mapRoot.localEulerAngles = new Vector3(0, 0, alphaHeading2);
                 }
             }
         }
@@ -211,7 +212,7 @@ public class TestAccelerometer : MonoBehaviour
             gyroscope = new(gyroscopeOffset.x, gyroscopeOffset.y, -gyroscopeOffset.z, -gyroscopeOffset.w);
             //cube.localRotation = gyroscope;            
 
-            cube.localRotation = Quaternion.Euler(0f, compassOffsetLerp, 0f) * gyroscope;
+            cameraRoot.localRotation = Quaternion.Euler(0f, compassOffsetLerp, 0f) * gyroscope;
 
             CalibrateWithCompass();
             _text += $"\nGyroCompassOffset{compassOffset} | compassOffsetLerp:{compassOffsetLerp}";
@@ -227,7 +228,7 @@ public class TestAccelerometer : MonoBehaviour
                 1f - MathF.Exp(-21 * Time.deltaTime));
 
             gravityFiltered.Normalize();
-            cube.localRotation = Quaternion.FromToRotation(-cubeParent.up, gravityFiltered);
+            cameraRoot.localRotation = Quaternion.FromToRotation(-cameraParent.up, gravityFiltered);
         }
 
         text.SetText(_text);

@@ -357,8 +357,8 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1312154009}
-        m_TargetAssemblyTypeName: TestMap, Assembly-CSharp
+      - m_Target: {fileID: 1353010460}
+        m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: UpdateDisplacementX
         m_Mode: 0
         m_Arguments:
@@ -640,8 +640,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1312154009}
-        m_TargetAssemblyTypeName: TestMap, Assembly-CSharp
+      - m_Target: {fileID: 1353010460}
+        m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: DownloadMap
         m_Mode: 1
         m_Arguments:
@@ -1200,8 +1200,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1312154005}
-        m_TargetAssemblyTypeName: TestLocation, Assembly-CSharp
+      - m_Target: {fileID: 1353010461}
+        m_TargetAssemblyTypeName: LocationManager, Assembly-CSharp
         m_MethodName: LocationStop
         m_Mode: 1
         m_Arguments:
@@ -1323,8 +1323,16 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: b28156f0af749ec45bbb88f4a092b712, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: b28156f0af749ec45bbb88f4a092b712, type: 3}
       propertyPath: m_LightProbeUsage
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: b28156f0af749ec45bbb88f4a092b712, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b28156f0af749ec45bbb88f4a092b712, type: 3}
       propertyPath: m_Name
@@ -1747,8 +1755,8 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1312154009}
-        m_TargetAssemblyTypeName: TestMap, Assembly-CSharp
+      - m_Target: {fileID: 1353010460}
+        m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: UpdateDisplacementY
         m_Mode: 0
         m_Arguments:
@@ -2428,8 +2436,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1312154008}
-        m_TargetAssemblyTypeName: TestCamera, Assembly-CSharp
+      - m_Target: {fileID: 1353010459}
+        m_TargetAssemblyTypeName: CameraManager, Assembly-CSharp
         m_MethodName: StartCamera
         m_Mode: 1
         m_Arguments:
@@ -2611,19 +2619,19 @@ MonoBehaviour:
   m_VolumeFrameworkUpdateModeOption: 1
   m_RenderPostProcessing: 0
   m_Antialiasing: 0
-  m_AntialiasingQuality: 2
+  m_AntialiasingQuality: 0
   m_StopNaN: 0
   m_Dithering: 0
-  m_ClearDepth: 1
+  m_ClearDepth: 0
   m_AllowXRRendering: 0
-  m_AllowHDROutput: 1
+  m_AllowHDROutput: 0
   m_UseScreenCoordOverride: 0
   m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_TaaSettings:
-    m_Quality: 3
+    m_Quality: 0
     m_FrameInfluence: 0.1
     m_JitterScale: 1
     m_MipBias: 0
@@ -2713,8 +2721,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1312154008}
-        m_TargetAssemblyTypeName: TestCamera, Assembly-CSharp
+      - m_Target: {fileID: 1353010459}
+        m_TargetAssemblyTypeName: CameraManager, Assembly-CSharp
         m_MethodName: StopCameras
         m_Mode: 1
         m_Arguments:
@@ -2870,8 +2878,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1312154005}
-        m_TargetAssemblyTypeName: TestLocation, Assembly-CSharp
+      - m_Target: {fileID: 1353010461}
+        m_TargetAssemblyTypeName: LocationManager, Assembly-CSharp
         m_MethodName: IsEnabledByUser
         m_Mode: 1
         m_Arguments:
@@ -3560,11 +3568,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1312154006}
-  - component: {fileID: 1312154010}
-  - component: {fileID: 1312154005}
-  - component: {fileID: 1312154007}
-  - component: {fileID: 1312154008}
-  - component: {fileID: 1312154009}
   - component: {fileID: 1312154004}
   - component: {fileID: 1312154003}
   - component: {fileID: 1312154002}
@@ -3639,19 +3642,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &1312154005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1312154001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85e6335e519142f4fafa35acbc4abb8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestLocation
-  text: {fileID: 1971716266}
 --- !u!224 &1312154006
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3685,76 +3675,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1312154007
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1312154001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5638734965fe5db4c8beaaf89812397a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestAccelerometer
-  text: {fileID: 1529649777}
-  cube: {fileID: 1020947894}
-  cubeParent: {fileID: 1655365271}
-  compassRoot: {fileID: 1655365271}
-  compasstrueHeading: {fileID: 1232054660}
-  compassalphaHeading: {fileID: 942234751}
-  compassGyro: {fileID: 1945330809}
-  mapTest: {fileID: 806712465}
---- !u!114 &1312154008
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1312154001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 879e48cd5b613a046b72c36eea93d651, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestCamera
-  rImage: {fileID: 252968995}
-  aspectFitter: {fileID: 252968997}
-  backCameraTexture: {fileID: 0}
---- !u!114 &1312154009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1312154001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d64320343aaadc44db340307079da96b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestMap
-  rawImage: {fileID: 1888230446}
-  rawImageTransform: {fileID: 1888230445}
-  circleAccuracy: {fileID: 2069187352}
-  mapZoom: 18
-  displacementMulti: {x: 233450, y: 234900}
-  circleZoom: 5
-  text: {fileID: 605977489}
-  lastLatitude: 0
-  lastLongitude: 0
---- !u!114 &1312154010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1312154001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77247aafaeeba524bbacf2a79795107f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FPSCounter
-  textField: {fileID: 1585195309}
-  updateInterval: 0.2
 --- !u!1 &1348188360
 GameObject:
   m_ObjectHideFlags: 0
@@ -3807,6 +3727,124 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RectMask2D
   m_Padding: {x: -8, y: -5, z: -8, w: -5}
   m_Softness: {x: 0, y: 0}
+--- !u!1 &1353010456
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1353010457}
+  - component: {fileID: 1353010462}
+  - component: {fileID: 1353010461}
+  - component: {fileID: 1353010458}
+  - component: {fileID: 1353010460}
+  - component: {fileID: 1353010459}
+  m_Layer: 0
+  m_Name: Managers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1353010457
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353010456}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1353010458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353010456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5638734965fe5db4c8beaaf89812397a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestAccelerometer
+  text: {fileID: 1529649777}
+  cameraRoot: {fileID: 1020947894}
+  cameraParent: {fileID: 1655365271}
+  compasstrueHeading: {fileID: 1232054660}
+  compassalphaHeading: {fileID: 942234751}
+  compassGyro: {fileID: 1945330809}
+  mapRoot: {fileID: 806712465}
+--- !u!114 &1353010459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353010456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 879e48cd5b613a046b72c36eea93d651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestCamera
+  rawImage: {fileID: 252968995}
+  aspectFitter: {fileID: 252968997}
+  backCameraTexture: {fileID: 0}
+--- !u!114 &1353010460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353010456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d64320343aaadc44db340307079da96b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestMap
+  text: {fileID: 605977489}
+  rawImage: {fileID: 1888230446}
+  rawImageTransform: {fileID: 1888230445}
+  circleAccuracy: {fileID: 2069187352}
+  mapZoom: 18
+  displacementMulti: {x: 233450, y: 234900}
+  circleZoom: 5
+  lastLatitude: 0
+  lastLongitude: 0
+--- !u!114 &1353010461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353010456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85e6335e519142f4fafa35acbc4abb8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestLocation
+  text: {fileID: 1971716266}
+--- !u!114 &1353010462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353010456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77247aafaeeba524bbacf2a79795107f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FPSCounter
+  textField: {fileID: 1585195309}
+  updateInterval: 0.2
 --- !u!1 &1355863962
 GameObject:
   m_ObjectHideFlags: 0
@@ -4750,7 +4788,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1655365271}
   m_Layer: 0
-  m_Name: Compass
+  m_Name: Rotation root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4855,8 +4893,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1312154005}
-        m_TargetAssemblyTypeName: TestLocation, Assembly-CSharp
+      - m_Target: {fileID: 1353010461}
+        m_TargetAssemblyTypeName: LocationManager, Assembly-CSharp
         m_MethodName: LocationStart
         m_Mode: 1
         m_Arguments:
@@ -5237,8 +5275,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1312154007}
-        m_TargetAssemblyTypeName: TestAccelerometer, Assembly-CSharp
+      - m_Target: {fileID: 1353010458}
+        m_TargetAssemblyTypeName: SensorsManager, Assembly-CSharp
         m_MethodName: OnStart
         m_Mode: 1
         m_Arguments:
@@ -5676,6 +5714,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1655365271}
+  - {fileID: 1353010457}
   - {fileID: 1312154006}
   - {fileID: 739072752}
   - {fileID: 476487638}

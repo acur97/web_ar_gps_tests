@@ -1,10 +1,11 @@
 using Cysharp.Threading.Tasks;
 using TMPro;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class TestMap : MonoBehaviour
+public class MapManager : MonoBehaviour
 {
     private const string MapsStaticAPIKey = "AIzaSyDrLcl9TazRnbQe3QHLaDewmUUkd9B7K8w";
     private const string url = "https://maps.googleapis.com/maps/api/staticmap?center={0},{1}&zoom={2}" +
@@ -21,17 +22,24 @@ public class TestMap : MonoBehaviour
         mipmapChain = true
     };
 
+    [SerializeField] private TextMeshProUGUI text;
+
+    [Space]
     [SerializeField] private RawImage rawImage;
     [SerializeField] private RectTransform rawImageTransform;
+
+    [Space]
     [SerializeField] private RectTransform circleAccuracy;
+
+    [Space]
     [SerializeField] private float mapZoom;
     [SerializeField] private Vector2 displacementMulti;
     [SerializeField] private float circleZoom;
     private float circleScale;
-    [SerializeField] private TextMeshProUGUI text;
 
     private bool mapDownloaded = false;
 
+    [Header("Editor Values")]
     [SerializeField] private double lastLatitude;
     [SerializeField] private double lastLongitude;
     private Vector2 lastDifference = Vector2.zero;

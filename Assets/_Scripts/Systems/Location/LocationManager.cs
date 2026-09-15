@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class TestLocation : MonoBehaviour
+public class LocationManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
 
