@@ -57,7 +57,7 @@ public class CameraManager : MonoBehaviour
         }
 
         Debug.Log($"backCameraDevice: {backCameraDevice.name}"); // camera 0, facing back
-        backCameraTexture = new WebCamTexture(backCameraDevice.name, 0, 0, 60); // mejor sin aumentar resolucion, no parece que funcione los fps (quiza en ios?)
+        backCameraTexture = new WebCamTexture(backCameraDevice.name); // mejor sin aumentar resolucion, fps no se envian a webGl
 
         rawImage.texture = backCameraTexture;
         backCameraTexture.Play();
