@@ -39,16 +39,16 @@ public class CameraManager : MonoBehaviour
 
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0, cancellationToken: token.Token);
 
-        //Debug.Log("devices:");
-        //string desc;
-        //foreach (WebCamDevice device in WebCamTexture.devices)
-        //{
-        //    desc = $"name: {device.name}. type: {device.kind}. "; // name: camera 1, facing frony. type: WideAngle.
+        Debug.Log("devices:");
+        string desc;
+        foreach (WebCamDevice device in WebCamTexture.devices)
+        {
+            desc = $"name: {device.name}. type: {device.kind}. "; // name: camera 1, facing frony. type: WideAngle.
 
-        //    desc += $"Direction: {(device.isFrontFacing ? "Front" : "Rear")}. "; // Direction: Front.
+            desc += $"Direction: {(device.isFrontFacing ? "Front" : "Rear")}. "; // Direction: Front.
 
-        //    Debug.LogWarning(desc);
-        //}
+            Debug.LogWarning(desc);
+        }
 
         backCameraDevice = WebCamTexture.devices.Last();
 
@@ -83,7 +83,7 @@ public class CameraManager : MonoBehaviour
         // Skip making adjustment for incorrect camera data
         if (backCameraTexture.width < 100)
         {
-            Debug.LogWarning("Still waiting another frame for correct info...");
+            Debug.LogWarning($"Still waiting another frame for correct info. width:{backCameraTexture.width}");
             return;
         }
 
