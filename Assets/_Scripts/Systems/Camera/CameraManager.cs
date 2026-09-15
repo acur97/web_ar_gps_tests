@@ -92,11 +92,6 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
-#if UNITY_WEBGL && !UNITY_EDITOR
-        float cameraFPS = JS_WebCamVideo_GetFrameRate(backCameraIndex);
-        Debug.LogWarning(cameraFPS);
-#endif
-
         if (cameraSet || backCameraTexture == null)
             return;
 
@@ -106,6 +101,11 @@ public class CameraManager : MonoBehaviour
             Debug.LogWarning($"Still waiting another frame for correct info. width:{backCameraTexture.width}");
             return;
         }
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+        float cameraFPS = JS_WebCamVideo_GetFrameRate(backCameraIndex);
+        Debug.LogWarning(cameraFPS);
+#endif
 
         //Debug.LogWarning($"graphicsFormat:{backCameraTexture.graphicsFormat} isReadable:{backCameraTexture.isReadable} videoRotationAngle:{backCameraTexture.videoRotationAngle} videoVerticallyMirrored:{backCameraTexture.videoVerticallyMirrored}");
 
