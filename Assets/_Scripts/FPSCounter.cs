@@ -34,7 +34,7 @@ public class FPSCounter : MonoBehaviour
             fps = (int)accum / frames;
 
             stringBuilder.Append(fps);
-            textField.text = stringBuilder.ToString();
+            textField.SetText(stringBuilder);
 
             timeleft = updateInterval;
             accum = 0.0F;

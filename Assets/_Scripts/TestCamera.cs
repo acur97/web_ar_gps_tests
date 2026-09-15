@@ -9,14 +9,10 @@ public class TestCamera : MonoBehaviour
     [SerializeField] private RawImage rImage;
     [SerializeField] private AspectRatioFitter aspectFitter;
 
-    private WebCamDevice frontCameraDevice;
     private WebCamDevice backCameraDevice;
-    //private WebCamDevice activeCameraDevice;
 
     [Space]
-    [SerializeField] private WebCamTexture frontCameraTexture;
     [SerializeField] private WebCamTexture backCameraTexture;
-    [SerializeField] private WebCamTexture activeCameraTexture;
 
     private CancellationTokenSource token;
     private bool cameraSet = false;
@@ -54,34 +50,14 @@ public class TestCamera : MonoBehaviour
         //    Debug.LogWarning(desc);
         //}
 
-        frontCameraDevice = WebCamTexture.devices.First();
         backCameraDevice = WebCamTexture.devices.Last();
 
-        Debug.Log($"frontCameraDevice: {frontCameraDevice.name}"); // camera 1, facing front
         Debug.Log($"backCameraDevice: {backCameraDevice.name}"); // camera 0, facing back
-        frontCameraTexture = new WebCamTexture(frontCameraDevice.name); // mejor sin aumentar resolucion, no parece que funcione los fps (se puede intentar fps otra vez)
-        backCameraTexture = new WebCamTexture(backCameraDevice.name);
+        backCameraTexture = new WebCamTexture(backCameraDevice.name, 0, 0, 60); // mejor sin aumentar resolucion, no parece que funcione los fps (se puede intentar fps otra vez)
 
-        SetActiveCamera(backCameraTexture);
-    }
-
-    private void SetActiveCamera(WebCamTexture cameraToUse)
-    {
-        if (activeCameraTexture != null)
-            activeCameraTexture.Stop();
-
-        activeCameraTexture = cameraToUse;
-        //activeCameraDevice = cameraToUse.Equals(frontCameraTexture) ? frontCameraDevice : backCameraDevice;
-
-        rImage.texture = activeCameraTexture;
-
-        activeCameraTexture.Play();
+        rImage.texture = backCameraTexture;
+        backCameraTexture.Play();
         cameraSet = false;
-    }
-
-    public void SwitchCamera()
-    {
-        SetActiveCamera(activeCameraTexture.Equals(frontCameraTexture) ? backCameraTexture : frontCameraTexture);
     }
 
     public void StopCameras()
@@ -91,18 +67,6 @@ public class TestCamera : MonoBehaviour
         rImage.texture = null;
         cameraSet = false;
 
-        if (activeCameraTexture != null)
-        {
-            activeCameraTexture.Stop();
-            Destroy(activeCameraTexture);
-            //activeCameraDevice = default;
-        }
-        if (frontCameraTexture != null)
-        {
-            frontCameraTexture.Stop();
-            Destroy(frontCameraTexture);
-            frontCameraDevice = default;
-        }
         if (backCameraTexture != null)
         {
             backCameraTexture.Stop();
@@ -113,22 +77,24 @@ public class TestCamera : MonoBehaviour
 
     private void Update()
     {
-        if (cameraSet || activeCameraTexture == null)
+        if (cameraSet || backCameraTexture == null)
             return;
 
         // Skip making adjustment for incorrect camera data
-        if (activeCameraTexture.width < 100)
+        if (backCameraTexture.width < 100)
         {
             Debug.LogWarning("Still waiting another frame for correct info...");
             return;
         }
 
-        Debug.LogWarning($"currentResolution:{activeCameraTexture.width}x{activeCameraTexture.height} | UpdateThisFrame:{activeCameraTexture.didUpdateThisFrame} | isPlaying:{activeCameraTexture.isPlaying}");
+        //Debug.LogWarning($"graphicsFormat:{backCameraTexture.graphicsFormat} isReadable:{backCameraTexture.isReadable} videoRotationAngle:{backCameraTexture.videoRotationAngle} videoVerticallyMirrored:{backCameraTexture.videoVerticallyMirrored}");
+
+        Debug.LogWarning($"currentResolution:{backCameraTexture.width}x{backCameraTexture.height} | UpdateThisFrame:{backCameraTexture.didUpdateThisFrame} | isPlaying:{backCameraTexture.isPlaying}");
         // currentResolution:480x640 | UpdateThisFrame:True | isPlaying:True
         // currentResolution:480x640 | UpdateThisFrame:True | isPlaying:false
 
         // Set AspectRatioFitter's ratio
-        aspectFitter.aspectRatio = activeCameraTexture.width / (float)activeCameraTexture.height;
+        aspectFitter.aspectRatio = backCameraTexture.width / (float)backCameraTexture.height;
 
         cameraSet = true;
 

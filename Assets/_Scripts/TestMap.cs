@@ -15,6 +15,12 @@ public class TestMap : MonoBehaviour
         "&style=feature:transit|visibility:off" +
         "&key={3}";
 
+    private readonly DownloadedTextureParams downloadedParams = new()
+    {
+        readable = false,
+        mipmapChain = true
+    };
+
     [SerializeField] private RawImage rawImage;
     [SerializeField] private RectTransform rawImageTransform;
     [SerializeField] private RectTransform circleAccuracy;
@@ -42,6 +48,7 @@ public class TestMap : MonoBehaviour
     {
         mapDownloaded = false;
 
+        // Editor test only
         if (PreciseLocation.Latitude != 0 && PreciseLocation.Longitude != 0)
         {
             lastLatitude = PreciseLocation.Latitude;
@@ -49,7 +56,7 @@ public class TestMap : MonoBehaviour
         }
 
         using UnityWebRequest request = UnityWebRequestTexture.GetTexture(
-            string.Format(url, lastLatitude, lastLongitude, mapZoom, MapsStaticAPIKey));
+            string.Format(url, lastLatitude, lastLongitude, mapZoom, MapsStaticAPIKey), downloadedParams);
 
         text.SetText("Descargando mapa...");
         await request.SendWebRequest();
@@ -67,6 +74,7 @@ public class TestMap : MonoBehaviour
             lastDifference = targetDifference;
 
             rawImage.texture = DownloadHandlerTexture.GetContent(request);
+            //Debug.Log($"anisoLevel:{rawImage.texture.anisoLevel} filterMode:{rawImage.texture.filterMode} graphicsFormat:{rawImage.texture.graphicsFormat} isReadable:{rawImage.texture.isReadable} mipMapBias:{rawImage.texture.mipMapBias} mipmapCount:{rawImage.texture.mipmapCount}");
 
             mapDownloaded = true;
         }

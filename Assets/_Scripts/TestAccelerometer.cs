@@ -50,33 +50,21 @@ public class TestAccelerometer : MonoBehaviour
 
     public void OnStart()
     {
-        Debug.Log("Start Sensors...");
-
-        Debug.Log($"Supports Accelerometer: {SystemInfo.supportsAccelerometer}");
-        Debug.Log($"GravitySensor - {GravitySensor.current}");
         if (GravitySensor.current != null)
         {
             InputSystem.EnableDevice(GravitySensor.current);
-            Debug.Log($"Enabled {GravitySensor.current.description} {GravitySensor.current.samplingFrequency}Hz");
         }
 
-        Debug.Log($"Supports Gyroscope: {SystemInfo.supportsGyroscope}");
-        Debug.Log($"AttitudeSensor - {AttitudeSensor.current}");
         if (AttitudeSensor.current != null)
         {
             InputSystem.EnableDevice(AttitudeSensor.current);
-            Debug.Log($"Enabled {AttitudeSensor.current.description} {AttitudeSensor.current.samplingFrequency}Hz");
         }
 
-        Debug.Log($"Input.compass - {Input.compass}");
         if (Input.compass != null)
         {
             Input.compass.enabled = true;
-            Debug.Log($"Enabled {Input.compass}");
         }
         // con el gyro u otro sensor, tengo para subir y bajar la camara?, osea altura?, quiza con LinearAcceleration pero es muy inestable
-
-        Debug.Log("Finish Sensors.");
 
         enabledSensors = true;
     }
