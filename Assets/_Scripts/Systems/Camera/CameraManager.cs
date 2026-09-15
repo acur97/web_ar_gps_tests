@@ -1,14 +1,23 @@
 using Cysharp.Threading.Tasks;
+#if UNITY_WEBGL && !UNITY_EDITOR
+using System.Runtime.InteropServices;
+#endif
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CameraManager : MonoBehaviour
 {
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")]
+    private static extern float JS_WebCamVideo_GetFrameRate(int deviceId);
+#endif
+
     [SerializeField] private RawImage rawImage;
     [SerializeField] private AspectRatioFitter aspectFitter;
 
     private WebCamDevice backCameraDevice;
+    private int backCameraIndex = -1;
 
     [Header("Runtime")]
     [SerializeField] private WebCamTexture backCameraTexture;
@@ -49,10 +58,12 @@ public class CameraManager : MonoBehaviour
         //    Debug.LogWarning(desc);
         //}
 
-        backCameraDevice = WebCamTexture.devices[^1];
+        backCameraIndex = WebCamTexture.devices.Length - 1;
+        backCameraDevice = WebCamTexture.devices[backCameraIndex];
 
         if (backCameraDevice.isFrontFacing && !WebCamTexture.devices[0].isFrontFacing)
         {
+            backCameraIndex = 0;
             backCameraDevice = WebCamTexture.devices[0];
         }
 
@@ -81,6 +92,11 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        float cameraFPS = JS_WebCamVideo_GetFrameRate(backCameraIndex);
+        Debug.LogWarning(cameraFPS);
+#endif
+
         if (cameraSet || backCameraTexture == null)
             return;
 
