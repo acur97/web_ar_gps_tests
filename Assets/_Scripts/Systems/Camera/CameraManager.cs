@@ -23,7 +23,12 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private WebCamTexture backCameraTexture;
 
     private CancellationTokenSource token;
-    private bool cameraSet = false;
+    private bool cameraSet;
+
+    private void Awake()
+    {
+        ResetSettings();
+    }
 
     public void StartCamera()
     {
@@ -39,13 +44,19 @@ public class CameraManager : MonoBehaviour
         Debug.Log("RequestUserAuthorization");
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
 
+        await UniTask.WaitForSeconds(1);
+
         if (!Application.HasUserAuthorization(UserAuthorization.WebCam))
         {
             Debug.LogWarning("Authorization error");
             return;
         }
 
+        await UniTask.WaitForSeconds(1);
+
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0, cancellationToken: token.Token);
+
+        await UniTask.WaitForSeconds(1);
 
         //Debug.Log("devices:");
         //string desc;
@@ -70,9 +81,17 @@ public class CameraManager : MonoBehaviour
         Debug.Log($"backCameraDevice: {backCameraDevice.name}"); // camera 0, facing back
         backCameraTexture = new WebCamTexture(backCameraDevice.name); // mejor sin aumentar resolucion, fps no se envian a webGl
 
+        await UniTask.WaitForSeconds(1);
+
         rawImage.texture = backCameraTexture;
         backCameraTexture.Play();
+        ResetSettings();
+    }
+
+    private void ResetSettings()
+    {
         cameraSet = false;
+        Application.targetFrameRate = -1;
     }
 
     public void StopCameras()
@@ -80,7 +99,7 @@ public class CameraManager : MonoBehaviour
         token?.Cancel();
         rawImage.enabled = false;
         rawImage.texture = null;
-        cameraSet = false;
+        ResetSettings();
 
         if (backCameraTexture != null)
         {
@@ -104,7 +123,9 @@ public class CameraManager : MonoBehaviour
 
 #if UNITY_WEBGL && !UNITY_EDITOR
         float cameraFPS = JS_WebCamVideo_GetFrameRate(backCameraIndex);
-        Debug.LogWarning(cameraFPS);
+        Debug.Log(cameraFPS);
+
+        //Application.targetFrameRate = Mathf.RoundToInt(cameraFPS);
 #endif
 
         //Debug.LogWarning($"graphicsFormat:{backCameraTexture.graphicsFormat} isReadable:{backCameraTexture.isReadable} videoRotationAngle:{backCameraTexture.videoRotationAngle} videoVerticallyMirrored:{backCameraTexture.videoVerticallyMirrored}");
