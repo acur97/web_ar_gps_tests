@@ -38,16 +38,16 @@ public class CameraManager : MonoBehaviour
 
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0, cancellationToken: token.Token);
 
-        Debug.Log("devices:");
-        string desc;
-        foreach (WebCamDevice device in WebCamTexture.devices)
-        {
-            desc = $"name: {device.name}. type: {device.kind}. "; // name: camera 1, facing frony. type: WideAngle.
+        //Debug.Log("devices:");
+        //string desc;
+        //foreach (WebCamDevice device in WebCamTexture.devices)
+        //{
+        //    desc = $"name: {device.name}. type: {device.kind}. "; // name: camera 1, facing frony. type: WideAngle.
 
-            desc += $"Direction: {(device.isFrontFacing ? "Front" : "Rear")}. "; // Direction: Front.
+        //    desc += $"Direction: {(device.isFrontFacing ? "Front" : "Rear")}. "; // Direction: Front.
 
-            Debug.LogWarning(desc);
-        }
+        //    Debug.LogWarning(desc);
+        //}
 
         backCameraDevice = WebCamTexture.devices[^1];
 
@@ -57,7 +57,7 @@ public class CameraManager : MonoBehaviour
         }
 
         Debug.Log($"backCameraDevice: {backCameraDevice.name}"); // camera 0, facing back
-        backCameraTexture = new WebCamTexture(backCameraDevice.name); // mejor sin aumentar resolucion, no parece que funcione los fps (quiza en ios?)
+        backCameraTexture = new WebCamTexture(backCameraDevice.name, 0, 0, 60); // mejor sin aumentar resolucion, no parece que funcione los fps (quiza en ios?)
 
         rawImage.texture = backCameraTexture;
         backCameraTexture.Play();
