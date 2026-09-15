@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using System.Linq;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
@@ -50,7 +49,12 @@ public class CameraManager : MonoBehaviour
             Debug.LogWarning(desc);
         }
 
-        backCameraDevice = WebCamTexture.devices.Last();
+        backCameraDevice = WebCamTexture.devices[^1];
+
+        if (backCameraDevice.isFrontFacing && !WebCamTexture.devices[0].isFrontFacing)
+        {
+            backCameraDevice = WebCamTexture.devices[0];
+        }
 
         Debug.Log($"backCameraDevice: {backCameraDevice.name}"); // camera 0, facing back
         backCameraTexture = new WebCamTexture(backCameraDevice.name); // mejor sin aumentar resolucion, no parece que funcione los fps (quiza en ios?)
