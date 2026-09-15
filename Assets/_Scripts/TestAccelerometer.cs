@@ -199,13 +199,21 @@ public class TestAccelerometer : MonoBehaviour
 
                 //compassRoot.localEulerAngles = new Vector3(0, alphaHeading2, 0);
 
-                gyroCalibratedYaw = GetAttitudeYaw();
-                compassGyro.localEulerAngles = new Vector3(0, 0, gyroCalibratedYaw);
-                _text += $"\ngyroCalibratedYaw:{gyroCalibratedYaw}";
-
                 _text += $"\nAlpha:{PreciseLocation.Alpha} | Beta:{PreciseLocation.Beta} | Gamma:{PreciseLocation.Gamma}";
 
-                mapTest.localEulerAngles = new Vector3(0, 0, gyroCalibratedYaw);
+
+                if (AttitudeSensor.current != null && AttitudeSensor.current.lastUpdateTime > 0)
+                {
+                    gyroCalibratedYaw = GetAttitudeYaw();
+                    compassGyro.localEulerAngles = new Vector3(0, 0, gyroCalibratedYaw);
+                    _text += $"\ngyroCalibratedYaw:{gyroCalibratedYaw}";
+
+                    mapTest.localEulerAngles = new Vector3(0, 0, gyroCalibratedYaw);
+                }
+                else
+                {
+                    mapTest.localEulerAngles = new Vector3(0, 0, alphaHeading2);
+                }
             }
         }
 
