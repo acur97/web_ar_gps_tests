@@ -52,23 +52,25 @@ public class CameraManager : MonoBehaviour
 
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0, cancellationToken: token.Token);
 
-        Debug.Log("devices:");
-        string desc;
-        foreach (WebCamDevice device in WebCamTexture.devices)
-        {
-            desc = $"Name: {device.name}. Type: {device.kind}. "; // name: camera 1, facing frony. type: WideAngle.
+        await UniTask.WaitForSeconds(2); // slow phones fix
 
-            desc += $"Direction: {(device.isFrontFacing ? "Front" : "Rear")}."; // Direction: Front.
+        //Debug.Log("devices:");
+        //string desc;
+        //foreach (WebCamDevice device in WebCamTexture.devices)
+        //{
+        //    desc = $"Name: {device.name}. Type: {device.kind}. "; // name: camera 1, facing frony. type: WideAngle.
 
-            desc += $"\nAvailableResolutions:{device.availableResolutions.Length}";
+        //    desc += $"Direction: {(device.isFrontFacing ? "Front" : "Rear")}."; // Direction: Front.
 
-            foreach (Resolution resoluton in device.availableResolutions)
-            {
-                desc += $"\nResolution:{resoluton.width}x{resoluton.height} {resoluton.refreshRateRatio}Hz";
-            }
+        //    desc += $"\nAvailableResolutions:{device.availableResolutions.Length}";
 
-            Debug.LogWarning(desc);
-        }
+        //    foreach (Resolution resoluton in device.availableResolutions)
+        //    {
+        //        desc += $"\nResolution:{resoluton.width}x{resoluton.height} {resoluton.refreshRateRatio}Hz";
+        //    }
+
+        //    Debug.LogWarning(desc);
+        //}
 
         backCameraIndex = WebCamTexture.devices.Length - 1;
         backCameraDevice = WebCamTexture.devices[backCameraIndex];
@@ -81,8 +83,6 @@ public class CameraManager : MonoBehaviour
 
         Debug.Log($"backCameraDevice: {backCameraDevice.name}"); // camera 0, facing back
         backCameraTexture = new WebCamTexture(backCameraDevice.name); // mejor sin aumentar resolucion, fps no se envian a webGl
-
-        await UniTask.WaitForSeconds(2); // slow phones fix
 
         rawImage.texture = backCameraTexture;
         backCameraTexture.Play();
