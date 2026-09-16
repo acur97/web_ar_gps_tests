@@ -80,3 +80,11 @@ body {
     margin-top: 10px;
     background: url('progress-bar-full.png') no-repeat center;
 }
+
+#loading-status {
+    margin-top: 10px;
+    color: white;
+    font-size: 15px;
+    text-align: center;
+    white-space: nowrap;
+}

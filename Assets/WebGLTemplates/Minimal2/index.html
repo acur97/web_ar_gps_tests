@@ -20,6 +20,7 @@
           <div id="progress-bar-empty">
             <div id="progress-bar-full"></div>
           </div>
+        <div id="loading-status">Descargando datos...</div>
         </div>
       </div>
 #if SHOW_DIAGNOSTICS
@@ -33,6 +34,9 @@
       var canvas = document.querySelector("#unity-canvas");
       var loadingContainer = document.querySelector("#unity-loading-container");
       var progressBarFull = document.querySelector("#progress-bar-full");
+      var loadingStatus = document.querySelector("#loading-status");
+
+      var totalDownloadMB = 0.00;
 
 #if BACKGROUND_FILENAME
       canvas.style.background = "url('Build/{{{ BACKGROUND_FILENAME.replace(/'/g, '%27') }}}') center / cover";
@@ -65,6 +69,15 @@
         if (progress < 1) {
           loadingContainer.style.display = "block";
           progressBarFull.style.width = (100 * progress) + "%";
+
+          if (progress < 0.9) {
+            var downloadProgress = progress / 0.9;
+            var downloadedMB = totalDownloadMB * downloadProgress;
+            loadingStatus.textContent = "Descargando " + downloadedMB.toFixed(2) + " / " + totalDownloadMB.toFixed(2) + " MB";
+          } else {
+            loadingStatus.textContent = "Cargando motor Unity...";
+          }
+
         } else {
           loadingContainer.style.display = "none";
         }

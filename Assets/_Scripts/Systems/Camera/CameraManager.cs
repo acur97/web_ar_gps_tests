@@ -94,7 +94,7 @@ public class CameraManager : MonoBehaviour
     private void ResetSettings()
     {
         cameraSet = false;
-        Application.targetFrameRate = -1;
+        //Application.targetFrameRate = -1;
     }
 
     public void StopCameras()

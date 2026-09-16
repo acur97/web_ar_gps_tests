@@ -16,6 +16,7 @@
           <div id="progress-bar-empty">
             <div id="progress-bar-full"></div>
           </div>
+        <div id="loading-status">Descargando datos...</div>
         </div>
       </div>
     </div>
@@ -24,6 +25,9 @@
       var canvas = document.querySelector("#unity-canvas");
       var loadingContainer = document.querySelector("#unity-loading-container");
       var progressBarFull = document.querySelector("#progress-bar-full");
+      var loadingStatus = document.querySelector("#loading-status");
+
+      var totalDownloadMB = 8.51;
 
 
       createUnityInstance(canvas, {
@@ -34,7 +38,7 @@
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Urrego",
         productName: "web_ar_gps",
-        productVersion: "0.1.94",
+        productVersion: "0.1.95",
         webglContextAttributes: {
             alpha: false,
             preserveDrawingBuffer: false,
@@ -45,6 +49,15 @@
         if (progress < 1) {
           loadingContainer.style.display = "block";
           progressBarFull.style.width = (100 * progress) + "%";
+
+          if (progress < 0.9) {
+            var downloadProgress = progress / 0.9;
+            var downloadedMB = totalDownloadMB * downloadProgress;
+            loadingStatus.textContent = "Descargando " + downloadedMB.toFixed(2) + " / " + totalDownloadMB.toFixed(2) + " MB";
+          } else {
+            loadingStatus.textContent = "Cargando motor Unity...";
+          }
+
         } else {
           loadingContainer.style.display = "none";
         }
