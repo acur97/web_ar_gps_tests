@@ -44,19 +44,13 @@ public class CameraManager : MonoBehaviour
         Debug.Log("RequestUserAuthorization");
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
 
-        await UniTask.WaitForSeconds(1);
-
         if (!Application.HasUserAuthorization(UserAuthorization.WebCam))
         {
             Debug.LogWarning("Authorization error");
             return;
         }
 
-        await UniTask.WaitForSeconds(1);
-
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0, cancellationToken: token.Token);
-
-        await UniTask.WaitForSeconds(1);
 
         //Debug.Log("devices:");
         //string desc;
