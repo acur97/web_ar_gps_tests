@@ -2,10 +2,9 @@ using Cysharp.Threading.Tasks;
 #if UNITY_WEBGL && !UNITY_EDITOR
 using System.Runtime.InteropServices;
 #endif
-using System.Threading;
 using UnityEngine;
-using UnityEngine.LowLevel;
 using UnityEngine.UI;
+using UnityEngine.LowLevel;
 
 public class CameraManager : MonoBehaviour
 {
@@ -44,19 +43,13 @@ public class CameraManager : MonoBehaviour
         Debug.Log("RequestUserAuthorization");
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
 
-        await UniTask.NextFrame();
-
         if (!Application.HasUserAuthorization(UserAuthorization.WebCam))
         {
             Debug.LogWarning("Authorization error");
             return;
         }
 
-        await UniTask.NextFrame();
-
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0);
-
-        await UniTask.NextFrame();
 
         //Debug.Log("devices:");
         //string desc;
@@ -88,6 +81,7 @@ public class CameraManager : MonoBehaviour
         Debug.Log($"backCameraDevice: {backCameraDevice.name}"); // camera 0, facing back
         backCameraTexture = new WebCamTexture(backCameraDevice.name); // mejor sin aumentar resolucion, fps no se envian a webGl
 
+        await UniTask.WaitForSeconds(2);
         await UniTask.NextFrame();
 
         rawImage.texture = backCameraTexture;
