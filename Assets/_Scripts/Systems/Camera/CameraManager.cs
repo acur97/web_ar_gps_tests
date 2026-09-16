@@ -51,7 +51,7 @@ public class CameraManager : MonoBehaviour
             return;
         }
 
-        await UniTask.WaitForSeconds(2);
+        await UniTask.WaitForSeconds(1);
 
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0);
 
