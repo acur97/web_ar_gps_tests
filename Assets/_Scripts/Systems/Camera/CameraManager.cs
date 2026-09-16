@@ -16,6 +16,7 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private RawImage rawImage;
     [SerializeField] private AspectRatioFitter aspectFitter;
 
+    private WebCamDevice[] devices;
     private WebCamDevice backCameraDevice;
     private int backCameraIndex = -1;
 
@@ -24,7 +25,7 @@ public class CameraManager : MonoBehaviour
 
     private bool cameraSet;
 
-    private bool test = false;
+    //private bool test = false;
 
     private void Awake()
     {
@@ -41,7 +42,7 @@ public class CameraManager : MonoBehaviour
 
     public async UniTaskVoid StartAwaitCamera()
     {
-        test = true;
+        //test = true;
         rawImage.enabled = true;
         Debug.Log("RequestUserAuthorization");
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
@@ -52,15 +53,16 @@ public class CameraManager : MonoBehaviour
             return;
         }
 
-        await UniTask.WaitForSeconds(4); // delay for slow devices
+        //await UniTask.WaitForSeconds(4); // delay for slow devices
 
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0);
+        devices = WebCamTexture.devices;
 
-        test = false;
+        //test = false;
 
         //Debug.Log("devices:");
         //string desc;
-        //foreach (WebCamDevice device in WebCamTexture.devices)
+        //foreach (WebCamDevice device in devices)
         //{
         //    desc = $"Name: {device.name}. Type: {device.kind}. "; // name: camera 1, facing frony. type: WideAngle.
 
@@ -76,13 +78,13 @@ public class CameraManager : MonoBehaviour
         //    Debug.LogWarning(desc);
         //}
 
-        backCameraIndex = WebCamTexture.devices.Length - 1;
-        backCameraDevice = WebCamTexture.devices[backCameraIndex];
+        backCameraIndex = devices.Length - 1;
+        backCameraDevice = devices[backCameraIndex];
 
-        if (backCameraDevice.isFrontFacing && !WebCamTexture.devices[0].isFrontFacing)
+        if (backCameraDevice.isFrontFacing && !devices[0].isFrontFacing)
         {
             backCameraIndex = 0;
-            backCameraDevice = WebCamTexture.devices[0];
+            backCameraDevice = devices[0];
         }
 
         Debug.Log($"backCameraDevice: {backCameraDevice.name}"); // camera 0, facing back
@@ -115,10 +117,10 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
-        if (test)
-        {
-            Debug.Log($"{WebCamTexture.devices} {WebCamTexture.devices.Length}");
-        }
+        //if (test)
+        //{
+        //    Debug.Log($"{WebCamTexture.devices} {WebCamTexture.devices.Length}");
+        //}
 
         if (cameraSet || backCameraTexture == null)
             return;
