@@ -25,8 +25,6 @@ public class CameraManager : MonoBehaviour
 
     private bool cameraSet;
 
-    //private bool test = false;
-
     private void Awake()
     {
         PlayerLoopSystem loop = PlayerLoop.GetCurrentPlayerLoop();
@@ -42,7 +40,6 @@ public class CameraManager : MonoBehaviour
 
     public async UniTaskVoid StartAwaitCamera()
     {
-        //test = true;
         rawImage.enabled = true;
         Debug.Log("RequestUserAuthorization");
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
@@ -53,12 +50,11 @@ public class CameraManager : MonoBehaviour
             return;
         }
 
-        //await UniTask.WaitForSeconds(4); // delay for slow devices
+        Debug.Log("2 second delay");
+        await UniTask.WaitForSeconds(2); // delay for slow devices
 
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0);
         devices = WebCamTexture.devices;
-
-        //test = false;
 
         //Debug.Log("devices:");
         //string desc;
@@ -117,11 +113,6 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
-        //if (test)
-        //{
-        //    Debug.Log($"{WebCamTexture.devices} {WebCamTexture.devices.Length}");
-        //}
-
         if (cameraSet || backCameraTexture == null)
             return;
 
@@ -136,7 +127,7 @@ public class CameraManager : MonoBehaviour
         float cameraFPS = JS_WebCamVideo_GetFrameRate(backCameraIndex);
         Debug.Log(cameraFPS);
 
-        //Application.targetFrameRate = Mathf.RoundToInt(cameraFPS);
+        Application.targetFrameRate = Mathf.RoundToInt(cameraFPS);
 #endif
 
         //Debug.LogWarning($"graphicsFormat:{backCameraTexture.graphicsFormat} isReadable:{backCameraTexture.isReadable} videoRotationAngle:{backCameraTexture.videoRotationAngle} videoVerticallyMirrored:{backCameraTexture.videoVerticallyMirrored}");
