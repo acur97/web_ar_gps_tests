@@ -43,7 +43,7 @@ public class CameraManager : MonoBehaviour
         Debug.Log("RequestUserAuthorization");
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
 
-        await UniTask.WaitForSeconds(1);
+        //await UniTask.WaitForSeconds(1);
 
         if (!Application.HasUserAuthorization(UserAuthorization.WebCam))
         {
@@ -51,7 +51,7 @@ public class CameraManager : MonoBehaviour
             return;
         }
 
-        await UniTask.WaitForSeconds(1);
+        await UniTask.WaitForSeconds(2);
 
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0);
 
