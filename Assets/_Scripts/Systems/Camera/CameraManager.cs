@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 #endif
 using System.Threading;
 using UnityEngine;
+using UnityEngine.LowLevel;
 using UnityEngine.UI;
 
 public class CameraManager : MonoBehaviour
@@ -22,11 +23,13 @@ public class CameraManager : MonoBehaviour
     [Header("Runtime")]
     [SerializeField] private WebCamTexture backCameraTexture;
 
-    private CancellationTokenSource token;
     private bool cameraSet;
 
     private void Awake()
     {
+        PlayerLoopSystem loop = PlayerLoop.GetCurrentPlayerLoop();
+        PlayerLoopHelper.Initialize(ref loop, InjectPlayerLoopTimings.Minimum);
+
         ResetSettings();
     }
 
@@ -37,14 +40,11 @@ public class CameraManager : MonoBehaviour
 
     public async UniTaskVoid StartAwaitCamera()
     {
-        token?.Cancel();
-        token = new CancellationTokenSource();
-
-        await UniTask.SwitchToMainThread(token.Token);
-
         rawImage.enabled = true;
         Debug.Log("RequestUserAuthorization");
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
+
+        await UniTask.NextFrame();
 
         if (!Application.HasUserAuthorization(UserAuthorization.WebCam))
         {
@@ -52,9 +52,11 @@ public class CameraManager : MonoBehaviour
             return;
         }
 
-        await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0, cancellationToken: token.Token);
+        await UniTask.NextFrame();
 
-        await UniTask.WaitForSeconds(2); // slow phones fix
+        await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0);
+
+        await UniTask.NextFrame();
 
         //Debug.Log("devices:");
         //string desc;
@@ -86,6 +88,8 @@ public class CameraManager : MonoBehaviour
         Debug.Log($"backCameraDevice: {backCameraDevice.name}"); // camera 0, facing back
         backCameraTexture = new WebCamTexture(backCameraDevice.name); // mejor sin aumentar resolucion, fps no se envian a webGl
 
+        await UniTask.NextFrame();
+
         rawImage.texture = backCameraTexture;
         backCameraTexture.Play();
         ResetSettings();
@@ -99,7 +103,6 @@ public class CameraManager : MonoBehaviour
 
     public void StopCameras()
     {
-        token?.Cancel();
         rawImage.enabled = false;
         rawImage.texture = null;
         ResetSettings();
