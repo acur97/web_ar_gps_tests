@@ -40,6 +40,8 @@ public class CameraManager : MonoBehaviour
         token?.Cancel();
         token = new CancellationTokenSource();
 
+        await UniTask.SwitchToMainThread(token.Token);
+
         rawImage.enabled = true;
         Debug.Log("RequestUserAuthorization");
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
