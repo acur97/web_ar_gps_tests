@@ -125,7 +125,7 @@ public class CameraManager : MonoBehaviour
 
 #if UNITY_WEBGL && !UNITY_EDITOR
         float cameraFPS = JS_WebCamVideo_GetFrameRate(backCameraIndex);
-        Debug.Log(cameraFPS);
+        Debug.Log($"Fps: {cameraFPS}");
 
         //Application.targetFrameRate = Mathf.RoundToInt(cameraFPS);
 #endif

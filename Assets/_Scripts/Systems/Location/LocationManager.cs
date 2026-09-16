@@ -5,6 +5,8 @@ public class LocationManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
 
+    private LocationServiceStatus lastStatus;
+
     private void Awake()
     {
         text.SetText("Uninitialized.");
@@ -17,26 +19,49 @@ public class LocationManager : MonoBehaviour
 
     public void LocationStart()
     {
+        text.SetText("PreciseLocation");
         PreciseLocation.Install();
 
         if (Input.location.status == LocationServiceStatus.Failed)
+        {
+            text.SetText("Stop");
             Input.location.Stop();
+        }
 
+        text.SetText("Start");
         Input.location.Start(1, 0);
-        text.SetText("Initializing.");
     }
 
     private void Update()
     {
-        switch (Input.location.status)
+        if (Input.location.status == LocationServiceStatus.Running)
         {
-            case LocationServiceStatus.Running:
-                text.SetText($"\nLocation: {Input.location.lastData.latitude}° | {Input.location.lastData.longitude}° | {Input.location.lastData.altitude}m | {Input.location.lastData.horizontalAccuracy}m" +
-                    $"\nPrecise: {PreciseLocation.Latitude}° | {PreciseLocation.Longitude}°");
-                // Android tiene 7-9 numeros de precision, iOS y Pc tiene 15 de precision
+            text.SetText($"Location: {Input.location.lastData.latitude}° | {Input.location.lastData.longitude}° | {Input.location.lastData.altitude}m | {Input.location.lastData.horizontalAccuracy}m" +
+                $"\nPrecise: {PreciseLocation.Latitude}° | {PreciseLocation.Longitude}°");
+            // Android tiene 7-9 numeros de precision, iOS tiene 15
+        }
+
+        if (lastStatus != Input.location.status)
+        {
+            lastStatus = Input.location.status;
+            ChangedStatus();
+        }
+    }
+
+    private void ChangedStatus()
+    {
+        switch (lastStatus)
+        {
+            case LocationServiceStatus.Stopped:
+                text.text += "\nStopped.";
                 break;
+            case LocationServiceStatus.Initializing:
+                text.SetText("Initializing.");
+                break;
+            //case LocationServiceStatus.Running:
+            //    break;
             case LocationServiceStatus.Failed:
-                text.SetText("Failed.");
+                text.text += "\nFailed.";
                 break;
             default:
                 break;
@@ -45,9 +70,6 @@ public class LocationManager : MonoBehaviour
 
     public void LocationStop()
     {
-        if (Input.location.status == LocationServiceStatus.Running)
-            text.text += "\nStopped.";
-
         Input.location.Stop();
     }
 }

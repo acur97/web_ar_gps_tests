@@ -27,18 +27,19 @@
       var progressBarFull = document.querySelector("#progress-bar-full");
       var loadingStatus = document.querySelector("#loading-status");
 
-      var totalDownloadMB = 8.51;
+      var totalDownloadMB = 8.49;
 
 
       createUnityInstance(canvas, {
         arguments: [],
+        devicePixelRatio: 1,
         dataUrl: "Build/docs.data.unityweb",
         frameworkUrl: "Build/docs.framework.js.unityweb",
         codeUrl: "Build/docs.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Urrego",
         productName: "web_ar_gps",
-        productVersion: "0.1.95",
+        productVersion: "0.1.96",
         webglContextAttributes: {
             alpha: false,
             preserveDrawingBuffer: false,
