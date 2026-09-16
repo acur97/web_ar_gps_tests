@@ -127,7 +127,7 @@ public class CameraManager : MonoBehaviour
         float cameraFPS = JS_WebCamVideo_GetFrameRate(backCameraIndex);
         Debug.Log(cameraFPS);
 
-        Application.targetFrameRate = Mathf.RoundToInt(cameraFPS);
+        //Application.targetFrameRate = Mathf.RoundToInt(cameraFPS);
 #endif
 
         //Debug.LogWarning($"graphicsFormat:{backCameraTexture.graphicsFormat} isReadable:{backCameraTexture.isReadable} videoRotationAngle:{backCameraTexture.videoRotationAngle} videoVerticallyMirrored:{backCameraTexture.videoVerticallyMirrored}");
