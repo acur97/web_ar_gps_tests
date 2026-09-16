@@ -43,11 +43,15 @@ public class CameraManager : MonoBehaviour
         Debug.Log("RequestUserAuthorization");
         await Application.RequestUserAuthorization(UserAuthorization.WebCam);
 
+        await UniTask.WaitForSeconds(1);
+
         if (!Application.HasUserAuthorization(UserAuthorization.WebCam))
         {
             Debug.LogWarning("Authorization error");
             return;
         }
+
+        await UniTask.WaitForSeconds(1);
 
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0);
 
@@ -80,9 +84,6 @@ public class CameraManager : MonoBehaviour
 
         Debug.Log($"backCameraDevice: {backCameraDevice.name}"); // camera 0, facing back
         backCameraTexture = new WebCamTexture(backCameraDevice.name); // mejor sin aumentar resolucion, fps no se envian a webGl
-
-        await UniTask.WaitForSeconds(2);
-        await UniTask.NextFrame();
 
         rawImage.texture = backCameraTexture;
         backCameraTexture.Play();
