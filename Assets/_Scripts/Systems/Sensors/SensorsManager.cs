@@ -49,7 +49,9 @@ public class SensorsManager : MonoBehaviour
 
     private void Awake()
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
         WebGLInput.mobileKeyboardSupport = false;
+#endif
     }
 
     public void OnStart()

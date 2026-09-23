@@ -81,7 +81,8 @@ public class MapManager : MonoBehaviour
             lastDifference = targetDifference;
 
             rawImage.texture = DownloadHandlerTexture.GetContent(request);
-            //Debug.Log($"anisoLevel:{rawImage.texture.anisoLevel} filterMode:{rawImage.texture.filterMode} graphicsFormat:{rawImage.texture.graphicsFormat} isReadable:{rawImage.texture.isReadable} mipMapBias:{rawImage.texture.mipMapBias} mipmapCount:{rawImage.texture.mipmapCount}");
+            Debug.Log("Map texture");
+            Debug.Log($"anisoLevel:{rawImage.texture.anisoLevel} filterMode:{rawImage.texture.filterMode} graphicsFormat:{rawImage.texture.graphicsFormat} isReadable:{rawImage.texture.isReadable} mipMapBias:{rawImage.texture.mipMapBias} mipmapCount:{rawImage.texture.mipmapCount}");
 
             mapDownloaded = true;
         }

@@ -17,11 +17,11 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private AspectRatioFitter aspectFitter;
 
     private WebCamDevice[] devices;
-    private WebCamDevice backCameraDevice;
-    private int backCameraIndex = -1;
+    private WebCamDevice cameraDevice;
+    private int cameraIndex = -1;
 
     [Header("Runtime")]
-    [SerializeField] private WebCamTexture backCameraTexture;
+    [SerializeField] private WebCamTexture cameraTexture;
 
     private bool cameraSet;
 
@@ -48,8 +48,20 @@ public class CameraManager : MonoBehaviour
             return;
         }
 
-        Debug.Log("2 second delay");
-        await UniTask.WaitForSeconds(2); // delay for slow devices
+        if (FPSCounter.fps < 55)
+        {
+            await UniTask.WaitForSeconds(1);
+        }
+        else if (FPSCounter.fps <= 45)
+        {
+            Debug.Log("2 second delay");
+            await UniTask.WaitForSeconds(2); // delay for slow devices
+        }
+        else if (FPSCounter.fps <= 30)
+        {
+            Debug.Log("4 second delay");
+            await UniTask.WaitForSeconds(4); // delay for slow devices
+        }
 
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0);
         devices = WebCamTexture.devices;
@@ -72,20 +84,25 @@ public class CameraManager : MonoBehaviour
         //    Debug.LogWarning(desc);
         //}
 
-        backCameraIndex = devices.Length - 1;
-        backCameraDevice = devices[backCameraIndex];
+        cameraIndex = devices.Length - 1;
+        cameraDevice = devices[cameraIndex];
 
-        if (backCameraDevice.isFrontFacing && !devices[0].isFrontFacing)
+        if (cameraDevice.isFrontFacing && !devices[0].isFrontFacing) // fix for inverse order of camera array
         {
-            backCameraIndex = 0;
-            backCameraDevice = devices[0];
+            cameraIndex = 0;
+            cameraDevice = devices[0];
         }
 
-        Debug.Log($"backCameraDevice: {backCameraDevice.name}"); // camera 0, facing back
-        backCameraTexture = new WebCamTexture(backCameraDevice.name); // mejor sin aumentar resolucion, fps no se envian a webGl
+        if (cameraDevice.isFrontFacing)
+        {
+            Debug.LogWarning($"Camera ´{cameraDevice.name}´ is Front Facing!");
+        }
 
-        rawImage.texture = backCameraTexture;
-        backCameraTexture.Play();
+        Debug.Log($"cameraDevice: {cameraDevice.name}"); // camera 0, facing back
+        cameraTexture = new WebCamTexture(cameraDevice.name); // mejor sin aumentar resolucion, fps no se envian a webGl
+
+        rawImage.texture = cameraTexture;
+        cameraTexture.Play();
         cameraSet = false;
     }
 
@@ -95,39 +112,39 @@ public class CameraManager : MonoBehaviour
         rawImage.texture = null;
         cameraSet = false;
 
-        if (backCameraTexture != null)
+        if (cameraTexture != null)
         {
-            backCameraTexture.Stop();
-            Destroy(backCameraTexture);
-            backCameraDevice = default;
+            cameraTexture.Stop();
+            Destroy(cameraTexture);
+            cameraDevice = default;
         }
     }
 
     private void Update()
     {
-        if (cameraSet || backCameraTexture == null)
+        if (cameraSet || cameraTexture == null)
             return;
 
         // Skip making adjustment for incorrect camera data
-        if (backCameraTexture.width < 100)
+        if (cameraTexture.width < 100)
         {
-            Debug.LogWarning($"Still waiting another frame for correct info. width:{backCameraTexture.width}");
+            Debug.LogWarning($"Still waiting another frame for correct info. width:{cameraTexture.width}");
             return;
+            // si dura muchisimo tiempo aqui, hay que intentar de nuevo habilitar la camara, con mas delay de espera
         }
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-        float cameraFPS = JS_WebCamVideo_GetFrameRate(backCameraIndex);
+        float cameraFPS = JS_WebCamVideo_GetFrameRate(cameraIndex);
         Debug.Log($"Fps: {cameraFPS}");
 #endif
 
-        //Debug.LogWarning($"graphicsFormat:{backCameraTexture.graphicsFormat} isReadable:{backCameraTexture.isReadable} videoRotationAngle:{backCameraTexture.videoRotationAngle} videoVerticallyMirrored:{backCameraTexture.videoVerticallyMirrored}");
-
-        Debug.LogWarning($"currentResolution:{backCameraTexture.width}x{backCameraTexture.height} | UpdateThisFrame:{backCameraTexture.didUpdateThisFrame} | isPlaying:{backCameraTexture.isPlaying}");
+        Debug.Log($"graphicsFormat:{cameraTexture.graphicsFormat} isReadable:{cameraTexture.isReadable} videoRotationAngle:{cameraTexture.videoRotationAngle} videoVerticallyMirrored:{cameraTexture.videoVerticallyMirrored}");
+        Debug.Log($"currentResolution:{cameraTexture.width}x{cameraTexture.height} | UpdateThisFrame:{cameraTexture.didUpdateThisFrame} | isPlaying:{cameraTexture.isPlaying}");
         // currentResolution:480x640 | UpdateThisFrame:True | isPlaying:True
         // currentResolution:480x640 | UpdateThisFrame:True | isPlaying:false
 
         // Set AspectRatioFitter's ratio
-        aspectFitter.aspectRatio = backCameraTexture.width / (float)backCameraTexture.height;
+        aspectFitter.aspectRatio = cameraTexture.width / (float)cameraTexture.height;
 
         cameraSet = true;
 
