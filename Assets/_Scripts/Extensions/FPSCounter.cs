@@ -7,15 +7,15 @@ public class FPSCounter : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI textField;
 
-    private float _deltaTime = 0.0f;
-    private float msec = 0.0f;
-    private float fps = 0.0f;
+    private float _deltaTime = 0.01666f;
+    private float msec = 16.66f;
+    private float fps = 60f;
 
     private void Update()
     {
         _deltaTime += (Time.deltaTime - _deltaTime) * 0.1f;
-        msec = _deltaTime * 1000.0f;
-        fps = 1.0f / _deltaTime;
+        msec = _deltaTime * 1000f;
+        fps = 1f / _deltaTime;
         textField.SetText(format, msec, fps);
     }
 }
