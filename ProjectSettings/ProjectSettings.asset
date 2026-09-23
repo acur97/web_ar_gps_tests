@@ -149,7 +149,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 0.1.97
+  bundleVersion: 0.1.98
   preloadedAssets:
   - {fileID: -944628639613478452, guid: 6433497f10c30d940be52e7e24a17faa, type: 3}
   - {fileID: 11400000, guid: dc96d84a4c62b334cb9c774d5af96733, type: 2}
@@ -772,7 +772,7 @@ PlayerSettings:
   blurSplashScreenBackground: 0
   spritePackerPolicy: 
   webGLMemorySize: 32
-  webGLExceptionSupport: 1
+  webGLExceptionSupport: 0
   webGLNameFilesAsHashes: 0
   webGLShowDiagnostics: 0
   webGLDataCaching: 0
@@ -797,7 +797,7 @@ PlayerSettings:
   webGLWebAssemblyTable: 1
   webGLWebAssemblyBigInt: 1
   webGLCloseOnQuit: 0
-  webWasm2023: 1
+  webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   webProgressiveAssetLoading: 0
   scriptingDefineSymbols: {}

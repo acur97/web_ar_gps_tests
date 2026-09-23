@@ -1,44 +1,21 @@
-using System.Text;
 using TMPro;
 using UnityEngine;
 
 public class FPSCounter : MonoBehaviour
 {
+    private const string format = "{1:0.} fps\n{0:0.0} ms";
+
     [SerializeField] private TextMeshProUGUI textField;
-    [SerializeField] private float updateInterval = 0.5F;
 
-    private float accum = 0;
-    private int frames = 0;
-    private float deltaTime;
-    private float timeleft;
-    private int fps;
-
-    private readonly StringBuilder stringBuilder = new(3);
-
-    private void Awake()
-    {
-        timeleft = updateInterval;
-    }
+    private float _deltaTime = 0.0f;
+    private float msec = 0.0f;
+    private float fps = 0.0f;
 
     private void Update()
     {
-        deltaTime = Time.deltaTime;
-        timeleft -= deltaTime;
-        accum += Time.timeScale / deltaTime;
-        ++frames;
-
-        if (timeleft <= 0.0)
-        {
-            stringBuilder.Remove(0, stringBuilder.Length);
-
-            fps = (int)accum / frames;
-
-            stringBuilder.Append(fps);
-            textField.SetText(stringBuilder);
-
-            timeleft = updateInterval;
-            accum = 0.0F;
-            frames = 0;
-        }
+        _deltaTime += (Time.deltaTime - _deltaTime) * 0.1f;
+        msec = _deltaTime * 1000.0f;
+        fps = 1.0f / _deltaTime;
+        textField.SetText(format, msec, fps);
     }
 }
