@@ -9,7 +9,7 @@ public class FPSCounter : MonoBehaviour
 
     private float _deltaTime = 0.01666f;
     private float msec = 16.66f;
-    public static float fps = 60f;
+    public float fps = 60f;
 
     private void Update()
     {

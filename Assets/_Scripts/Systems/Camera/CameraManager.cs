@@ -48,18 +48,7 @@ public class CameraManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"current fps: {FPSCounter.fps}");
-        // delay for slow devices
-        if (FPSCounter.fps < 55 && FPSCounter.fps >= 45)
-        {
-            Debug.Log("2 second delay");
-            await UniTask.WaitForSeconds(2);
-        }
-        else if (FPSCounter.fps < 45)
-        {
-            Debug.Log("4 second delay");
-            await UniTask.WaitForSeconds(4);
-        }
+        await UniTask.WaitForSeconds(2); // delay for slow devices
 
         await UniTask.WaitUntil(() => WebCamTexture.devices.Length > 0);
         devices = WebCamTexture.devices;
