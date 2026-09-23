@@ -47,7 +47,10 @@ public class SensorsManager : MonoBehaviour
     private float compassOffsetLerp;
     private float gyroCalibratedYaw;
 
-
+    private void Awake()
+    {
+        WebGLInput.mobileKeyboardSupport = false;
+    }
 
     public void OnStart()
     {
