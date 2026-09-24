@@ -56,6 +56,12 @@ public class SensorsManager : MonoBehaviour
 
     public void OnStart()
     {
+        // la mayoria de pcs no tienen nada, solo el portatil con giroscopio :v
+        // android opera mini viejo, muere aqui
+        // android brave, no muestra nada
+        // android duckduckgo, no muestra nada
+        // android firefox, respuesta lenta
+
         if (GravitySensor.current != null)
         {
             InputSystem.EnableDevice(GravitySensor.current);

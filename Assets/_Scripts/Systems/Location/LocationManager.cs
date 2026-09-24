@@ -39,6 +39,8 @@ public class LocationManager : MonoBehaviour
             text.SetText($"Location: {Input.location.lastData.latitude}° | {Input.location.lastData.longitude}° | {Input.location.lastData.altitude}m | {Input.location.lastData.horizontalAccuracy}m" +
                 $"\nPrecise: {PreciseLocation.Latitude}° | {PreciseLocation.Longitude}°");
             // Android tiene 7-9 numeros de precision, iOS tiene 15
+            // la ubicacion aproximada da Doubles muy grandes, pero altitude 0 y accuracy 2000+
+            // horizontalAccuracy de 200+ viene de pc´s
         }
 
         if (lastStatus != Input.location.status)

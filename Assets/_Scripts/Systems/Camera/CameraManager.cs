@@ -80,12 +80,8 @@ public class CameraManager : MonoBehaviour
             cameraDevice = devices[0];
         }
 
-        if (cameraDevice.isFrontFacing)
-        {
-            Debug.LogWarning($"Camera ´{cameraDevice.name}´ is Front Facing!");
-        }
-
         Debug.Log($"cameraDevice: {cameraDevice.name}"); // camera 0, facing back
+        Debug.Log($"isFrontFacing: {cameraDevice.isFrontFacing} | Type: {cameraDevice.kind}");
         cameraTexture = new WebCamTexture(cameraDevice.name); // mejor sin aumentar resolucion, fps no se envian a webGl
 
         rawImage.texture = cameraTexture;
@@ -125,7 +121,7 @@ public class CameraManager : MonoBehaviour
         Debug.Log($"Fps: {cameraFPS}");
 #endif
 
-        Debug.Log($"graphicsFormat:{cameraTexture.graphicsFormat} isReadable:{cameraTexture.isReadable} videoRotationAngle:{cameraTexture.videoRotationAngle} videoVerticallyMirrored:{cameraTexture.videoVerticallyMirrored}");
+        Debug.Log($"videoRotationAngle:{cameraTexture.videoRotationAngle} | videoVerticallyMirrored:{cameraTexture.videoVerticallyMirrored}");
         Debug.Log($"currentResolution:{cameraTexture.width}x{cameraTexture.height} | UpdateThisFrame:{cameraTexture.didUpdateThisFrame} | isPlaying:{cameraTexture.isPlaying}");
         // currentResolution:480x640 | UpdateThisFrame:True | isPlaying:True
         // currentResolution:480x640 | UpdateThisFrame:True | isPlaying:false
